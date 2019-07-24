@@ -5,8 +5,11 @@
  */
 package dao;
 
+import br.com.intranet.cenopservicoscwb.model.entidade.Calculo;
 import br.com.intranet.cenopservicoscwb.model.entidade.Npj;
+import br.com.intranet.cenopservicoscwb.model.entidade.ProtocoloGsv;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.List;
 import javax.persistence.EntityManager;
 import jpa.EntityManagerUtil;
@@ -15,51 +18,88 @@ import jpa.EntityManagerUtil;
  *
  * @author PC_LENOVO
  */
-public class DAOGenerico implements Serializable {
+public class DAOGenerico<T> implements Serializable {
 
-    protected EntityManager em;
+    private EntityManager em;
+    private Class<T> classePersistente;
     
     public DAOGenerico() {
 
         em = EntityManagerUtil.getEntityManager();
     }    
 
-    public void salvar(Npj npj) {
+    public void salvar(T objeto) {
         try {
-            em.getTransaction().begin();
-            em.persist(npj);
-            em.getTransaction().commit();            
+            getEm().getTransaction().begin();
+            getEm().persist(objeto);
+            getEm().getTransaction().commit();            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    
+    public void atualizar(T objeto) {
+        try {
+            getEm().getTransaction().begin();
+            getEm().merge(objeto);
+            getEm().getTransaction().commit();            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }    
+    
+    public void apagar (T objeto) {
+        try {
+            getEm().getTransaction().begin();
+            getEm().remove(objeto);
+            getEm().getTransaction().commit();            
         } catch (Exception e) {
             System.out.println(e);
         }
 
     }
     
-    public void atualizar(Npj npj) {
-        try {
-            em.getTransaction().begin();
-            em.merge(npj);
-            em.getTransaction().commit();            
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
+    public List<T> buscar (){
+        String jpql = "From " + classePersistente;
+        return getEm().createQuery(jpql).getResultList();
     }
     
-    public void apagar (Npj npj) {
-        try {
-            em.getTransaction().begin();
-            em.remove(npj);
-            em.getTransaction().commit();            
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
+    public T buscarObjeto (Long id){
+        T objeto = (T) getEm().find(classePersistente, id);
+        return objeto;
     }
     
-    public List<Npj> buscar (){
-        String jpql = "From Npj";
-        return em.createQuery(jpql).getResultList();
+    public T buscarObjeto (Integer id){
+        T objeto = (T) getEm().find(classePersistente, id);
+        return objeto;
+    }
+
+    /**
+     * @return the em
+     */
+    public EntityManager getEm() {
+        return em;
+    }
+
+    /**
+     * @param em the em to set
+     */
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
+
+    /**
+     * @return the classePersistente
+     */
+    public Class<T> getClassePersistente() {
+        return classePersistente;
+    }
+
+    /**
+     * @param classePersistente the classePersistente to set
+     */
+    public void setClassePersistente(Class<T> classePersistente) {
+        this.classePersistente = classePersistente;
     }
 
 }

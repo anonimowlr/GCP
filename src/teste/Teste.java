@@ -38,8 +38,8 @@ public class Teste {
         p2.setCdPrc(48745689);
         npj.adicionarProtocolo(p2);
         
-//        d.atualizar(npj);
-        d.salvar(npj);
+        d.atualizar(npj);
+//        d.salvar(npj);
         
         } catch (Exception e) {
             System.out.println(e);

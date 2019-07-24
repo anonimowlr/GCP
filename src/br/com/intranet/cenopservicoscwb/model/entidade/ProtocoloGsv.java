@@ -6,12 +6,15 @@
 package br.com.intranet.cenopservicoscwb.model.entidade;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -28,7 +31,14 @@ public class ProtocoloGsv implements Serializable{
     @ManyToOne()
     @JoinColumn(name = "nrPrc")
     private Npj npj;
+    
+    @OneToMany(mappedBy = "protocoloGsv", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Calculo> listaCalculo;    
 
+    public void adicionarCalculo(Calculo calculo){
+        calculo.setProtocoloGsv(this);
+        listaCalculo.add(calculo);        
+    }
     /**
      * @return the cdPrc
      */
@@ -80,6 +90,20 @@ public class ProtocoloGsv implements Serializable{
      */
     public void setNpj(Npj npj) {
         this.npj = npj;
+    }
+
+    /**
+     * @return the listaCalculo
+     */
+    public List<Calculo> getListaCalculo() {
+        return listaCalculo;
+    }
+
+    /**
+     * @param listaCalculo the listaCalculo to set
+     */
+    public void setListaCalculo(List<Calculo> listaCalculo) {
+        this.listaCalculo = listaCalculo;
     }
     
     
