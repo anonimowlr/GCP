@@ -6,13 +6,15 @@
 package teste;
 
 import br.com.intranet.cenopservicoscwb.model.entidade.Calculo;
+import br.com.intranet.cenopservicoscwb.model.entidade.Cliente;
 import br.com.intranet.cenopservicoscwb.model.entidade.Funcionario;
+import br.com.intranet.cenopservicoscwb.model.entidade.Metodologia;
 import br.com.intranet.cenopservicoscwb.model.entidade.Npj;
+import br.com.intranet.cenopservicoscwb.model.entidade.PlanoEconomico;
 import br.com.intranet.cenopservicoscwb.model.entidade.ProtocoloGsv;
 import br.com.intranet.cenopservicoscwb.model.util.Utils;
 import dao.DAOGenerico;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.Date;
 
@@ -25,17 +27,20 @@ public class TesteCalculo {
     DAOGenerico<Calculo> d = new DAOGenerico<>();
     DAOGenerico<Funcionario> d2 = new DAOGenerico<>();
     DAOGenerico<Npj> d3 = new DAOGenerico<>();
+    DAOGenerico<Cliente> d4 = new DAOGenerico<>();
+    DAOGenerico<Metodologia> d5 = new DAOGenerico<>();
+    DAOGenerico<PlanoEconomico> d6 = new DAOGenerico<>();
 
     public void calcular(Calculo calculo) {
-        BigDecimal remuneracaoBasica = calculo.getSaldoBase().multiply(new BigDecimal("0.223591")).setScale(2, RoundingMode.DOWN);
+        BigDecimal remuneracaoBasica = calculo.getSaldoBase().multiply(calculo.getPlanoEconomico().getIndiceCorrMonPraticado()).setScale(2, RoundingMode.DOWN);
         calculo.setRemuneracaoBasica(remuneracaoBasica);
-        BigDecimal jurosCreditado = (calculo.getSaldoBase().add(remuneracaoBasica)).multiply(new BigDecimal("0.005")).setScale(2, RoundingMode.DOWN);
+        BigDecimal jurosCreditado = (calculo.getSaldoBase().add(remuneracaoBasica)).multiply(calculo.getPlanoEconomico().getIndiceJurosRemuneracao()).setScale(2, RoundingMode.DOWN);
         calculo.setJurosCreditado(jurosCreditado);
         BigDecimal totRendCreditado = remuneracaoBasica.add(jurosCreditado);
         calculo.setTotRendCreditado(totRendCreditado);
-        BigDecimal remuneracaoReclamada = calculo.getSaldoBase().multiply(new BigDecimal("0.4272")).setScale(2, RoundingMode.DOWN);
+        BigDecimal remuneracaoReclamada = calculo.getSaldoBase().multiply(calculo.getPlanoEconomico().getIndiceCorrMonReal()).setScale(2, RoundingMode.DOWN);
         calculo.setRemuneracaoReclamada(remuneracaoReclamada);
-        BigDecimal jurosReclamado = (calculo.getSaldoBase().add(remuneracaoReclamada)).multiply(new BigDecimal("0.005")).setScale(2, RoundingMode.DOWN);
+        BigDecimal jurosReclamado = (calculo.getSaldoBase().add(remuneracaoReclamada)).multiply(calculo.getPlanoEconomico().getIndiceJurosRemuneracao()).setScale(2, RoundingMode.DOWN);
         calculo.setJurosReclamado(jurosReclamado);
         BigDecimal totRendReclamado = remuneracaoReclamada.add(jurosReclamado);
         calculo.setTotRendReclamado(totRendReclamado);
@@ -48,11 +53,20 @@ public class TesteCalculo {
         try {
             d3.setClassePersistente(Npj.class);
             Npj npj = d3.buscarObjeto(new Long("20165558899"));
-            ProtocoloGsv protocoloGsv = npj.getListaProtocoloGsv().get(0);
-          
+            ProtocoloGsv protocoloGsv = npj.getListaProtocoloGsv().get(1);
+            protocoloGsv.setNpj(npj);
 
             d2.setClassePersistente(Funcionario.class);
             Funcionario funcionario = d2.buscarObjeto(1);
+            
+            d4.setClassePersistente(Cliente.class);
+            Cliente cliente = d4.buscarObjeto(1);
+            
+            d5.setClassePersistente(Metodologia.class);
+            Metodologia metodologia = d5.buscarObjeto(1);
+            
+            d6.setClassePersistente(PlanoEconomico.class);
+            PlanoEconomico planoEconomico = d6.buscarObjeto(2);
 
             Calculo calculo = new Calculo();
             calculo.setDataBase(Utils.getDataAtualFormatoMysql());
@@ -64,6 +78,9 @@ public class TesteCalculo {
             calculo.setDataValorFinal(new Date("10/07/2018"));
             calculo.setProtocoloGsv(protocoloGsv);
             calculo.setFuncionario(funcionario);
+            calculo.setMetodologia(metodologia);
+            calculo.setCliente(cliente);
+            calculo.setPlanoEconomico(planoEconomico);
             calcular(calculo);
 
             Calculo calculo2 = new Calculo();
@@ -76,12 +93,14 @@ public class TesteCalculo {
             calculo2.setDataValorFinal(new Date("01/25/2017"));
             calculo2.setProtocoloGsv(protocoloGsv);
             calculo2.setFuncionario(funcionario);
+            calculo2.setMetodologia(metodologia);
+            calculo2.setCliente(cliente);
+            calculo2.setPlanoEconomico(planoEconomico);
             calcular(calculo2);
 
             protocoloGsv.adicionarCalculo(calculo);
             protocoloGsv.adicionarCalculo(calculo2);
-            funcionario.adicionarCalculo(calculo);
-            funcionario.adicionarCalculo(calculo2);
+
 
             d3.atualizar(npj);
 

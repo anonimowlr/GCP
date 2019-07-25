@@ -7,8 +7,9 @@ package br.com.intranet.cenopservicoscwb.model.entidade;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,11 +17,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -84,6 +87,26 @@ public class Calculo implements Serializable{
     @ManyToOne
     @JoinColumn(name = "CD_FUNCI", referencedColumnName = "id")
     private Funcionario funcionario;
+    
+    @ManyToOne
+    @JoinColumn(name = "CD_CLI", referencedColumnName = "id")
+    private Cliente cliente;
+    
+    @ManyToOne
+    @JoinColumn(name = "CD_METODOLOGIA", referencedColumnName = "id")
+    private Metodologia metodologia;
+    
+    @ManyToOne
+    @JoinColumn(name = "CD_PLANO_ECONOMICO", referencedColumnName = "id")
+    private PlanoEconomico planoEconomico;
+    
+    @ManyToMany
+    @JoinTable(name = "tb_calculo_has_indice", joinColumns = 
+    {@JoinColumn(name = "ID_CALCULO", referencedColumnName = "id")},
+    inverseJoinColumns = 
+    {@JoinColumn(name = "ID_INDICE", referencedColumnName = "id")})
+    private List<Indice> listaIndice = new ArrayList<>();
+    
     
 
     /**
@@ -361,6 +384,62 @@ public class Calculo implements Serializable{
      */
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;
+    }
+
+    /**
+     * @return the cliente
+     */
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    /**
+     * @param cliente the cliente to set
+     */
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    /**
+     * @return the metodologia
+     */
+    public Metodologia getMetodologia() {
+        return metodologia;
+    }
+
+    /**
+     * @param metodologia the metodologia to set
+     */
+    public void setMetodologia(Metodologia metodologia) {
+        this.metodologia = metodologia;
+    }
+
+    /**
+     * @return the planoEconomico
+     */
+    public PlanoEconomico getPlanoEconomico() {
+        return planoEconomico;
+    }
+
+    /**
+     * @param planoEconomico the planoEconomico to set
+     */
+    public void setPlanoEconomico(PlanoEconomico planoEconomico) {
+        this.planoEconomico = planoEconomico;
+    }
+
+    /**
+     * @return the listaIndice
+     */
+    public List<Indice> getListaIndice() {
+        return listaIndice;
+    }
+
+    /**
+     * @param listaIndice the listaIndice to set
+     */
+    public void setListaIndice(List<Indice> listaIndice) {
+        this.listaIndice = listaIndice;
     }
     
     

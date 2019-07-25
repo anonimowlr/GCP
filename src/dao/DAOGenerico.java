@@ -5,11 +5,7 @@
  */
 package dao;
 
-import br.com.intranet.cenopservicoscwb.model.entidade.Calculo;
-import br.com.intranet.cenopservicoscwb.model.entidade.Npj;
-import br.com.intranet.cenopservicoscwb.model.entidade.ProtocoloGsv;
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.List;
 import javax.persistence.EntityManager;
 import jpa.EntityManagerUtil;

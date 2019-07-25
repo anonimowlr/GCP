@@ -23,32 +23,28 @@ import javax.persistence.Table;
  * @author f5078775
  */
 @Entity
-@Table(name = "tb_funci")
-public class Funcionario implements Serializable{
+@Table(name = "tb_cliente")
+public class Cliente implements Serializable{
     
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    @Column(name = "MATRICULA", nullable = false, unique = true)
-    private Integer matriculaFunci;
+    @Column(name = "NM_CLIENTE", nullable = false)
+    private String nomeCliente;
     
-    @Column(name = "CHAVE", nullable = false, unique = true)
-    private String chaveFunci;
+    @Column(name = "CPF", unique = true)
+    private String cpf;
     
-    @Column(name = "NM_FUNCI", nullable = false)
-    private String nomeFunci;
-    
-    @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Calculo> listaCalculo = new ArrayList<>();
     
-    public void adicionarCalculo(Calculo calculo){
-        calculo.setFuncionario(this);
-        getListaCalculo().add(calculo);
+    public void adicionarCalculo (Calculo calculo){
+        calculo.setCliente(this);
+        listaCalculo.add(calculo);
     }
 
-    
     /**
      * @return the id
      */
@@ -64,54 +60,39 @@ public class Funcionario implements Serializable{
     }
 
     /**
-     * @return the matriculaFunci
+     * @return the nomeCliente
      */
-    public Integer getMatriculaFunci() {
-        return matriculaFunci;
+    public String getNomeCliente() {
+        return nomeCliente;
     }
 
     /**
-     * @param matriculaFunci the matriculaFunci to set
+     * @param nomeCliente the nomeCliente to set
      */
-    public void setMatriculaFunci(Integer matriculaFunci) {
-        this.matriculaFunci = matriculaFunci;
+    public void setNomeCliente(String nomeCliente) {
+        this.nomeCliente = nomeCliente;
     }
 
     /**
-     * @return the chaveFunci
+     * @return the cpf
      */
-    public String getChaveFunci() {
-        return chaveFunci;
+    public String getCpf() {
+        return cpf;
     }
 
     /**
-     * @param chaveFunci the chaveFunci to set
+     * @param cpf the cpf to set
      */
-    public void setChaveFunci(String chaveFunci) {
-        this.chaveFunci = chaveFunci;
-    }
-
-    /**
-     * @return the nomeFunci
-     */
-    public String getNomeFunci() {
-        return nomeFunci;
-    }
-
-    /**
-     * @param nomeFunci the nomeFunci to set
-     */
-    public void setNomeFunci(String nomeFunci) {
-        this.nomeFunci = nomeFunci;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 73 * hash + Objects.hashCode(this.getId());
-        hash = 73 * hash + Objects.hashCode(this.getMatriculaFunci());
-        hash = 73 * hash + Objects.hashCode(this.getChaveFunci());
-        hash = 73 * hash + Objects.hashCode(this.getNomeFunci());
+        int hash = 5;
+        hash = 37 * hash + Objects.hashCode(this.getId());
+        hash = 37 * hash + Objects.hashCode(this.getNomeCliente());
+        hash = 37 * hash + Objects.hashCode(this.getCpf());
         return hash;
     }
 
@@ -126,17 +107,14 @@ public class Funcionario implements Serializable{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Funcionario other = (Funcionario) obj;
-        if (!Objects.equals(this.chaveFunci, other.chaveFunci)) {
+        final Cliente other = (Cliente) obj;
+        if (!Objects.equals(this.nomeCliente, other.nomeCliente)) {
             return false;
         }
-        if (!Objects.equals(this.nomeFunci, other.nomeFunci)) {
+        if (!Objects.equals(this.cpf, other.cpf)) {
             return false;
         }
         if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        if (!Objects.equals(this.matriculaFunci, other.matriculaFunci)) {
             return false;
         }
         return true;

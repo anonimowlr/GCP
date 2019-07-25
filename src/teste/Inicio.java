@@ -11,8 +11,12 @@ package teste;
  */
 public class Inicio {
     public static void main(String[] args) {
-        TesteCalculo t = new TesteCalculo();
+        //TesteCalculo t = new TesteCalculo();
         //TesteFuncionario t = new TesteFuncionario();
+        //TesteCliente t = new TesteCliente();
+        //TesteMetodologia t = new TesteMetodologia();
+        //TestePlanoEconomico t = new TestePlanoEconomico();
+        TesteIndice t = new TesteIndice();
         t.iniciar();
     }
 }
