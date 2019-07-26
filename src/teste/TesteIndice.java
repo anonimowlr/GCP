@@ -18,9 +18,9 @@ public class TesteIndice {
     
     public void iniciar (){
         Indice indice = new Indice();
-        indice.setCodigoIndice(2587);
-        indice.setNomeIndice("alfa");
-        
+        indice.setCodigoIndice(6587);
+        indice.setNomeIndice("beta");
+                        
         d.salvar(indice);
     }       
 }

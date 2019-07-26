@@ -6,12 +6,16 @@
 package br.com.intranet.cenopservicoscwb.model.entidade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -33,7 +37,14 @@ public class Indice implements Serializable{
     @Column(name = "NM_INDICE", nullable = false, unique = true)
     private String nomeIndice;
 
-        
+    @OneToMany(mappedBy = "indice", cascade = CascadeType.ALL, orphanRemoval = false)
+    private List<ValorIndice> listaValorIndice = new ArrayList<>();
+    
+    
+    public void adicionarValorIndice(ValorIndice valorIndice){
+        valorIndice.setIndice(this);
+        listaValorIndice.add(valorIndice);
+    }    
     
     /**
      * @return the id
@@ -80,9 +91,9 @@ public class Indice implements Serializable{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.id);
-        hash = 67 * hash + Objects.hashCode(this.codigoIndice);
-        hash = 67 * hash + Objects.hashCode(this.nomeIndice);
+        hash = 67 * hash + Objects.hashCode(this.getId());
+        hash = 67 * hash + Objects.hashCode(this.getCodigoIndice());
+        hash = 67 * hash + Objects.hashCode(this.getNomeIndice());
         return hash;
     }
 
@@ -108,6 +119,20 @@ public class Indice implements Serializable{
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return the listaValorIndice
+     */
+    public List<ValorIndice> getListaValorIndice() {
+        return listaValorIndice;
+    }
+
+    /**
+     * @param listaValorIndice the listaValorIndice to set
+     */
+    public void setListaValorIndice(List<ValorIndice> listaValorIndice) {
+        this.listaValorIndice = listaValorIndice;
     }
     
     
