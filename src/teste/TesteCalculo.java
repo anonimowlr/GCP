@@ -55,7 +55,7 @@ public class TesteCalculo {
         BigDecimal diferenca = totRendReclamado.subtract(totRendCreditado);
 
         calculo.setValorDiferenca(diferenca);
-        atualizar(calculo);
+       // atualizar(calculo);
     }
     
     
@@ -85,7 +85,7 @@ public class TesteCalculo {
                 
                 System.out.println("=========================================================================================================================");
                 
-                calculo.setValorDiferenca(calculo.getValorDiferenca().add(atualizacao.getValorAtualizacaoMonetaria()));
+                //calculo.setValorDiferenca(calculo.getValorDiferenca().add(atualizacao.getValorAtualizacaoMonetaria()));
                 
                 i++;
                 dataInicial.add(dataInicial.MONTH, 1);  
@@ -115,7 +115,7 @@ public class TesteCalculo {
             PlanoEconomico planoEconomico = d6.buscarObjeto(2);
             
             d7.setClassePersistente(Indice.class);
-            Indice indice = d7.buscarObjeto(1);           
+            Indice indice = d7.buscarObjeto(2);           
                        
             
             //indice.adicionarValorIndice(valorIndice);
