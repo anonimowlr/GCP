@@ -8,14 +8,12 @@ package br.com.intranet.cenopservicoscwb.model.util;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.io.File;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import javax.swing.JOptionPane;
 
 
 public class Utils {
@@ -483,6 +481,42 @@ public static String tratarConta(String v) {
         
 
       
-    }       
+    }
+    
+    public static void main(String[] args) throws Exception {                
+        diferencaDataMes2(new Date("01/25/2003"), new Date("01/01/2015"));
+    }
+    
+    public static double diferencaDataMes(Date dataInicial, Date dataFinal) throws ParseException{
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		Date dataInicio = dataInicial;
+		Date dataFim = dataFinal;
+
+		/*
+		 * valor de um mes em milisegundos, sendo que os valores sao:
+		 * 30 dias no mes, 24 horas no dia, 60 minutos por hora, 60 segundos por minuto e 1000 milisegundos  
+		 */
+		final double MES_EM_MILISEGUNDOS = 30.0 * 24.0 * 60.0 * 60.0 * 1000.0;
+		//final double MES_EM_MILISEGUNDOS = 2592000000.0;
+		
+		double numeroDeMeses = (double)((dataFim.getTime() - dataInicio.getTime())/MES_EM_MILISEGUNDOS);
+		
+		System.out.println("numero de meses: "+numeroDeMeses);
+                return numeroDeMeses;
+    }
+    
+    public static int diferencaDataMes2(Date dataInicial, Date dataFinal) throws ParseException{        
+        Calendar cal = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+            cal.setTime(dataInicial);
+            cal2.setTime(dataFinal);		
+		
+            int numeroDeMeses = cal2.get(Calendar.MONTH)-cal.get(Calendar.MONTH);
+            int numeroDeMAnos = (cal2.get(Calendar.YEAR)-cal.get(Calendar.YEAR))*12;
+            
+		
+            System.out.println("numero de meses: "+(numeroDeMeses + numeroDeMAnos));
+            return numeroDeMeses;
+    }
     
 }

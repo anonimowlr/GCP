@@ -8,7 +8,6 @@ package br.com.intranet.cenopservicoscwb.model.entidade;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -21,9 +20,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
@@ -98,6 +96,13 @@ public class Calculo implements Serializable{
     {@JoinColumn(name = "ID_PERIDO", referencedColumnName = "id")})
     private List<PeriodoCalculo> listaPeriodoCalculo = new ArrayList<>();
     
+    @OneToMany(mappedBy = "calculo", cascade = CascadeType.ALL)
+    private List<Atualizacao> listaAtualizacao = new ArrayList<>();
+    
+    public void adicionarAtualizacao(Atualizacao atualizacao){
+        atualizacao.setCalculo(this);
+        listaAtualizacao.add(atualizacao);
+    }
     
     public void adicionarPeriodoCalculo(PeriodoCalculo periodoCalculo){
         getListaPeriodoCalculo().add(periodoCalculo);

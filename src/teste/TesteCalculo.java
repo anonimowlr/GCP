@@ -5,6 +5,7 @@
  */
 package teste;
 
+import br.com.intranet.cenopservicoscwb.model.entidade.Atualizacao;
 import br.com.intranet.cenopservicoscwb.model.entidade.Calculo;
 import br.com.intranet.cenopservicoscwb.model.entidade.Cliente;
 import br.com.intranet.cenopservicoscwb.model.entidade.Funcionario;
@@ -19,9 +20,8 @@ import br.com.intranet.cenopservicoscwb.model.util.Utils;
 import dao.DAOGenerico;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  *
@@ -55,6 +55,44 @@ public class TesteCalculo {
         BigDecimal diferenca = totRendReclamado.subtract(totRendCreditado);
 
         calculo.setValorDiferenca(diferenca);
+        atualizar(calculo);
+    }
+    
+    
+    
+    public void atualizar(Calculo calculo){        
+        int i = 0;
+        for (PeriodoCalculo periodoCalculo : calculo.getListaPeriodoCalculo()) {
+            Calendar dataInicial = Calendar.getInstance();
+            Calendar dataFinal = Calendar.getInstance();
+            dataInicial.setTime(periodoCalculo.getDataInicioCalculo());
+            dataFinal.setTime(periodoCalculo.getDataFinalCalculo());
+            
+            System.out.println(calculo.getValorDiferenca().toString());
+            
+            System.out.println("Mês/Ano: " + "Índice %: " + "Atualização Monetária: " + "Juros: " + "Diferença: " );
+            
+            while(dataInicial.before(dataFinal)){
+                Atualizacao atualizacao = new Atualizacao();
+                atualizacao.setDataApuracao(dataInicial.getTime());
+                atualizacao.setFatorAtualizacao(new BigDecimal("0.1014"));
+                atualizacao.setSaldoAtualizadoDiferenca(calculo.getValorDiferenca());
+                atualizacao.setValorAtualizacaoMonetaria(atualizacao.getFatorAtualizacao().multiply(atualizacao.getSaldoAtualizadoDiferenca()).setScale(2, RoundingMode.DOWN));
+                atualizacao.setValorJuros(new BigDecimal("0"));                
+                
+                System.out.println(atualizacao.getDataApuracao() + " " + atualizacao.getFatorAtualizacao() + " " + atualizacao.getValorAtualizacaoMonetaria() 
+                        + " " + atualizacao.getValorJuros() + " " + atualizacao.getSaldoAtualizadoDiferenca());
+                
+                System.out.println("=========================================================================================================================");
+                
+                calculo.setValorDiferenca(calculo.getValorDiferenca().add(atualizacao.getValorAtualizacaoMonetaria()));
+                
+                i++;
+                dataInicial.add(dataInicial.MONTH, 1);  
+                calculo.adicionarAtualizacao(atualizacao);
+            }
+        }
+        
     }
 
     public void iniciar() {
@@ -83,8 +121,8 @@ public class TesteCalculo {
             //indice.adicionarValorIndice(valorIndice);
             
             PeriodoCalculo periodo = new PeriodoCalculo();            
-            periodo.setDataInicioCalculo(new Date("04/01/1990"));
-            periodo.setDataFinalCalculo(new Date(Utils.getDataAtual()));
+            periodo.setDataInicioCalculo(new Date("06/01/1993"));
+            periodo.setDataFinalCalculo(new Date("12/31/2002"));
             periodo.setIndice(indice);
             
             PeriodoCalculo periodo2 = new PeriodoCalculo();
