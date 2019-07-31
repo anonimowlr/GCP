@@ -19,6 +19,8 @@ public class Inicio {
         //TesteIndice t = new TesteIndice();
         //TestePeriodo t = new TestePeriodo();
         //TesteValorIndice t = new TesteValorIndice();
+        //TesteArquivo t = new TesteArquivo();
+        //TesteExpurgo t = new TesteExpurgo();
         t.iniciar();
     }
 }

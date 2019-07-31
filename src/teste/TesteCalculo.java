@@ -5,9 +5,11 @@
  */
 package teste;
 
+import br.com.intranet.cenopservicoscwb.model.entidade.Arquivo;
 import br.com.intranet.cenopservicoscwb.model.entidade.Atualizacao;
 import br.com.intranet.cenopservicoscwb.model.entidade.Calculo;
 import br.com.intranet.cenopservicoscwb.model.entidade.Cliente;
+import br.com.intranet.cenopservicoscwb.model.entidade.Expurgo;
 import br.com.intranet.cenopservicoscwb.model.entidade.Funcionario;
 import br.com.intranet.cenopservicoscwb.model.entidade.Indice;
 import br.com.intranet.cenopservicoscwb.model.entidade.Metodologia;
@@ -37,6 +39,8 @@ public class TesteCalculo {
     DAOGenerico<PlanoEconomico> d6 = new DAOGenerico<>();
     DAOGenerico<Indice> d7 = new DAOGenerico<>();
     DAOGenerico<ValorIndice> d8 = new DAOGenerico<>();
+    DAOGenerico<Arquivo> d9 = new DAOGenerico<>();
+    DAOGenerico<Expurgo> d10 = new DAOGenerico<>();
     
 
     public void calcular(Calculo calculo) {
@@ -55,12 +59,14 @@ public class TesteCalculo {
         BigDecimal diferenca = totRendReclamado.subtract(totRendCreditado);
 
         calculo.setValorDiferenca(diferenca);
-       // atualizar(calculo);
+        
     }
     
     
     
     public void atualizar(Calculo calculo){        
+        BigDecimal indice = null;
+        
         int i = 0;
         for (PeriodoCalculo periodoCalculo : calculo.getListaPeriodoCalculo()) {
             Calendar dataInicial = Calendar.getInstance();
@@ -72,10 +78,36 @@ public class TesteCalculo {
             
             System.out.println("Mês/Ano: " + "Índice %: " + "Atualização Monetária: " + "Juros: " + "Diferença: " );
             
+                        
             while(dataInicial.before(dataFinal)){
+                
+                for (ValorIndice valorIndice : periodoCalculo.getIndice().getListaValorIndice()) {
+                    if(valorIndice.getDataValorIndice().equals(dataInicial.getTime())){
+                        indice = valorIndice.getValorIndice();
+                        break;
+                    }
+                }
+                
+                if(indice == null){
+                    i++;
+                    dataInicial.add(dataInicial.MONTH, 1);
+                    continue;
+                }
+                
+                
+                
                 Atualizacao atualizacao = new Atualizacao();
+                
+                if(dataInicial.get(Calendar.MONTH) == 8 && dataInicial.get(Calendar.YEAR) == 1993){
+                    atualizacao.setSaldoAtualizadoDiferenca(atualizacao.getSaldoAtualizadoDiferenca().divide(new BigDecimal("1000")));
+                }
+                
+                if(dataInicial.get(Calendar.MONTH) == 7 && dataInicial.get(Calendar.YEAR) == 1994){
+                    atualizacao.setSaldoAtualizadoDiferenca(atualizacao.getSaldoAtualizadoDiferenca().divide(new BigDecimal("2750")));
+                }
+                
                 atualizacao.setDataApuracao(dataInicial.getTime());
-                atualizacao.setFatorAtualizacao(new BigDecimal("0.1014"));
+                atualizacao.setFatorAtualizacao(indice);
                 atualizacao.setSaldoAtualizadoDiferenca(calculo.getValorDiferenca());
                 atualizacao.setValorAtualizacaoMonetaria(atualizacao.getFatorAtualizacao().multiply(atualizacao.getSaldoAtualizadoDiferenca()).setScale(2, RoundingMode.DOWN));
                 atualizacao.setValorJuros(new BigDecimal("0"));                
@@ -85,7 +117,7 @@ public class TesteCalculo {
                 
                 System.out.println("=========================================================================================================================");
                 
-                //calculo.setValorDiferenca(calculo.getValorDiferenca().add(atualizacao.getValorAtualizacaoMonetaria()));
+                calculo.setValorDiferenca(calculo.getValorDiferenca().add(atualizacao.getValorAtualizacaoMonetaria()));
                 
                 i++;
                 dataInicial.add(dataInicial.MONTH, 1);  
@@ -115,13 +147,18 @@ public class TesteCalculo {
             PlanoEconomico planoEconomico = d6.buscarObjeto(2);
             
             d7.setClassePersistente(Indice.class);
-            Indice indice = d7.buscarObjeto(2);           
+            Indice indice = d7.buscarObjeto(1);
+            
+            d9.setClassePersistente(Arquivo.class);
+            Arquivo arquivo = d9.buscarObjeto(1);
                        
+            d10.setClassePersistente(Expurgo.class);
+            Expurgo expurgo = d10.buscarObjeto(1);
             
             //indice.adicionarValorIndice(valorIndice);
             
             PeriodoCalculo periodo = new PeriodoCalculo();            
-            periodo.setDataInicioCalculo(new Date("06/01/1993"));
+            periodo.setDataInicioCalculo(new Date("06/01/1996"));
             periodo.setDataFinalCalculo(new Date("12/31/2002"));
             periodo.setIndice(indice);
             
@@ -144,7 +181,10 @@ public class TesteCalculo {
             calculo.setCliente(cliente);
             calculo.setPlanoEconomico(planoEconomico);
             calculo.adicionarPeriodoCalculo(periodo);
-            calculo.adicionarPeriodoCalculo(periodo2);            
+            calculo.adicionarPeriodoCalculo(periodo2);
+            calculo.setDataRealizacaoCalculo(Calendar.getInstance().getTime());
+            calculo.adicionarArquivo(arquivo);
+            calculo.setExpurgo(expurgo);
             calcular(calculo);
 
             Calculo calculo2 = new Calculo();
@@ -162,13 +202,16 @@ public class TesteCalculo {
             calculo2.setPlanoEconomico(planoEconomico);
             calculo2.adicionarPeriodoCalculo(periodo);
             calculo2.adicionarPeriodoCalculo(periodo2);
+            calculo2.setDataRealizacaoCalculo(Calendar.getInstance().getTime());
+            calculo2.adicionarArquivo(arquivo);
+            calculo2.setExpurgo(expurgo);
             calcular(calculo2);
 
             protocoloGsv.adicionarCalculo(calculo);
             protocoloGsv.adicionarCalculo(calculo2);
-
-
             d3.atualizar(npj);
+            atualizar(calculo);
+           
 
         } catch (Exception e) {
             System.out.println(e);

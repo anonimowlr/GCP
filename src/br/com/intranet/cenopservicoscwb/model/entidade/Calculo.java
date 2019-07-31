@@ -8,6 +8,7 @@ package br.com.intranet.cenopservicoscwb.model.entidade;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -21,7 +22,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -67,8 +71,12 @@ public class Calculo implements Serializable{
     
     @Column(name = "TOT_RNDTO_RCLMD", nullable = false)
     private BigDecimal totRendReclamado;
-        
     
+    @Column(name = "DT_RLZC_CALCULO", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataRealizacaoCalculo;
+        
+        
     @ManyToOne
     @JoinColumn(name = "CD_PRC", referencedColumnName = "CD_PRC")
     private ProtocoloGsv protocoloGsv;
@@ -90,24 +98,43 @@ public class Calculo implements Serializable{
     private PlanoEconomico planoEconomico;
     
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "tb_calculo_has_periodo_calculo", joinColumns = 
+    @JoinTable(name = "tb_calculo_has_tb_periodo_calculo", joinColumns = 
     {@JoinColumn(name = "ID_CALCULO", referencedColumnName = "id")},
     inverseJoinColumns = 
-    {@JoinColumn(name = "ID_PERIDO", referencedColumnName = "id")})
+    {@JoinColumn(name = "ID_PERIODO", referencedColumnName = "id")})
     private List<PeriodoCalculo> listaPeriodoCalculo = new ArrayList<>();
     
     @OneToMany(mappedBy = "calculo", cascade = CascadeType.ALL)
     private List<Atualizacao> listaAtualizacao = new ArrayList<>();
     
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "tb_calculo_has_tb_arquivo", joinColumns = 
+    {@JoinColumn(name = "ID_CALCULO", referencedColumnName = "id")},
+    inverseJoinColumns = 
+    {@JoinColumn(name = "ID_ARQUIVO", referencedColumnName = "id")})
+    private List<Arquivo> listaArquivo = new ArrayList<>();
+    
+    @OneToOne
+    @JoinColumn(name = "EXPURGO")
+    private Expurgo expurgo;
+    
+    
+    
     public void adicionarAtualizacao(Atualizacao atualizacao){
         atualizacao.setCalculo(this);
-        listaAtualizacao.add(atualizacao);
+        getListaAtualizacao().add(atualizacao);
     }
     
     public void adicionarPeriodoCalculo(PeriodoCalculo periodoCalculo){
         getListaPeriodoCalculo().add(periodoCalculo);
     }
+    
+    public void adicionarArquivo(Arquivo arquivo){
+        getListaArquivo().add(arquivo);
+    }
 
+    
+    
     /**
      * @return the id
      */
@@ -363,24 +390,24 @@ public class Calculo implements Serializable{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.id);
-        hash = 59 * hash + Objects.hashCode(this.saldoBase);
-        hash = 59 * hash + Objects.hashCode(this.numeroConta);
-        hash = 59 * hash + Objects.hashCode(this.numeroAgencia);
-        hash = 59 * hash + Objects.hashCode(this.valorDiferenca);
-        hash = 59 * hash + Objects.hashCode(this.valorFinal);
-        hash = 59 * hash + Objects.hashCode(this.remuneracaoBasica);
-        hash = 59 * hash + Objects.hashCode(this.jurosCreditado);
-        hash = 59 * hash + Objects.hashCode(this.totRendCreditado);
-        hash = 59 * hash + Objects.hashCode(this.remuneracaoReclamada);
-        hash = 59 * hash + Objects.hashCode(this.jurosReclamado);
-        hash = 59 * hash + Objects.hashCode(this.totRendReclamado);
-        hash = 59 * hash + Objects.hashCode(this.protocoloGsv);
-        hash = 59 * hash + Objects.hashCode(this.funcionario);
-        hash = 59 * hash + Objects.hashCode(this.cliente);
-        hash = 59 * hash + Objects.hashCode(this.metodologia);
-        hash = 59 * hash + Objects.hashCode(this.planoEconomico);
-        hash = 59 * hash + Objects.hashCode(this.listaPeriodoCalculo);
+        hash = 59 * hash + Objects.hashCode(this.getId());
+        hash = 59 * hash + Objects.hashCode(this.getSaldoBase());
+        hash = 59 * hash + Objects.hashCode(this.getNumeroConta());
+        hash = 59 * hash + Objects.hashCode(this.getNumeroAgencia());
+        hash = 59 * hash + Objects.hashCode(this.getValorDiferenca());
+        hash = 59 * hash + Objects.hashCode(this.getValorFinal());
+        hash = 59 * hash + Objects.hashCode(this.getRemuneracaoBasica());
+        hash = 59 * hash + Objects.hashCode(this.getJurosCreditado());
+        hash = 59 * hash + Objects.hashCode(this.getTotRendCreditado());
+        hash = 59 * hash + Objects.hashCode(this.getRemuneracaoReclamada());
+        hash = 59 * hash + Objects.hashCode(this.getJurosReclamado());
+        hash = 59 * hash + Objects.hashCode(this.getTotRendReclamado());
+        hash = 59 * hash + Objects.hashCode(this.getProtocoloGsv());
+        hash = 59 * hash + Objects.hashCode(this.getFuncionario());
+        hash = 59 * hash + Objects.hashCode(this.getCliente());
+        hash = 59 * hash + Objects.hashCode(this.getMetodologia());
+        hash = 59 * hash + Objects.hashCode(this.getPlanoEconomico());
+        hash = 59 * hash + Objects.hashCode(this.getListaPeriodoCalculo());
         return hash;
     }
 
@@ -451,6 +478,62 @@ public class Calculo implements Serializable{
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return the dataRealizacaoCalculo
+     */
+    public Date getDataRealizacaoCalculo() {
+        return dataRealizacaoCalculo;
+    }
+
+    /**
+     * @param dataRealizacaoCalculo the dataRealizacaoCalculo to set
+     */
+    public void setDataRealizacaoCalculo(Date dataRealizacaoCalculo) {
+        this.dataRealizacaoCalculo = dataRealizacaoCalculo;
+    }
+
+    /**
+     * @return the listaAtualizacao
+     */
+    public List<Atualizacao> getListaAtualizacao() {
+        return listaAtualizacao;
+    }
+
+    /**
+     * @param listaAtualizacao the listaAtualizacao to set
+     */
+    public void setListaAtualizacao(List<Atualizacao> listaAtualizacao) {
+        this.listaAtualizacao = listaAtualizacao;
+    }
+
+    /**
+     * @return the listaArquivo
+     */
+    public List<Arquivo> getListaArquivo() {
+        return listaArquivo;
+    }
+
+    /**
+     * @param listaArquivo the listaArquivo to set
+     */
+    public void setListaArquivo(List<Arquivo> listaArquivo) {
+        this.listaArquivo = listaArquivo;
+    }
+
+    /**
+     * @return the expurgo
+     */
+    public Expurgo getExpurgo() {
+        return expurgo;
+    }
+
+    /**
+     * @param expurgo the expurgo to set
+     */
+    public void setExpurgo(Expurgo expurgo) {
+        this.expurgo = expurgo;
     }
     
 
