@@ -48,7 +48,7 @@ public class Calculo implements Serializable{
     @Column(name = "NR_AGE")
     private Integer numeroAgencia;
     
-    @Column(name = "VLR_DIF", nullable = false)
+    @Column(name = "VLR_DIF", nullable = false, scale = 20, precision = 20)
     private BigDecimal valorDiferenca;
     
     @Column(name = "VLR_FINAL", nullable = false)    

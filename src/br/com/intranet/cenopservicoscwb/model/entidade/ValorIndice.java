@@ -33,7 +33,7 @@ public class ValorIndice implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    @Column(name = "VLR_INDICE", nullable = false, scale = 6, precision = 6)
+    @Column(name = "VLR_INDICE", nullable = false, scale = 20, precision = 20)
     private BigDecimal valorIndice;
     
     @Column(name = "DT_VLR_INDICE", nullable = false)

@@ -21,6 +21,7 @@ public class Inicio {
         //TesteValorIndice t = new TesteValorIndice();
         //TesteArquivo t = new TesteArquivo();
         //TesteExpurgo t = new TesteExpurgo();
+        //TesteValorExpurgo t = new TesteValorExpurgo();
         t.iniciar();
     }
 }
