@@ -132,7 +132,7 @@ public class Calculo implements Serializable{
     private Mora mora;
     
     @OneToOne
-    @JoinColumn(name = "ID_HONORARIO", nullable = false)
+    @JoinColumn(name = "ID_HONORARIO")
     private Honorario honorario;
     
     

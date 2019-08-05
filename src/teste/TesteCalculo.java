@@ -45,6 +45,8 @@ public class TesteCalculo {
     DAOGenerico<ValorIndice> d8 = new DAOGenerico<>();
     DAOGenerico<Arquivo> d9 = new DAOGenerico<>();
     DAOGenerico<Expurgo> d10 = new DAOGenerico<>();
+    DAOGenerico<Mora> d11 = new DAOGenerico<>();
+    DAOGenerico<Honorario> d12 = new DAOGenerico<>();
 
     public void calcular(Calculo calculo) {
         BigDecimal remuneracaoBasica = calculo.getSaldoBase().multiply(calculo.getPlanoEconomico().getIndiceCorrMonPraticado()).setScale(2, RoundingMode.UP);
@@ -244,13 +246,14 @@ public class TesteCalculo {
             honorario.setValorHonorario(new BigDecimal("10000"));
 
             
-            
+            d12.salvar(honorario);
             calculo.setHonorario(honorario);
 
             Mora mora = new Mora();
             mora.setDataInicio(new Date("08/02/1989"));
             mora.setValorMoraPos(new BigDecimal("2222"));
             mora.setValorMoraPre(new BigDecimal("52222"));
+            d11.salvar(mora);
             calculo.setMora(mora);
 
             protocoloGsv.adicionarCalculo(calculo);
