@@ -11,8 +11,10 @@ import br.com.intranet.cenopservicoscwb.model.entidade.Calculo;
 import br.com.intranet.cenopservicoscwb.model.entidade.Cliente;
 import br.com.intranet.cenopservicoscwb.model.entidade.Expurgo;
 import br.com.intranet.cenopservicoscwb.model.entidade.Funcionario;
+import br.com.intranet.cenopservicoscwb.model.entidade.Honorario;
 import br.com.intranet.cenopservicoscwb.model.entidade.Indice;
 import br.com.intranet.cenopservicoscwb.model.entidade.Metodologia;
+import br.com.intranet.cenopservicoscwb.model.entidade.Mora;
 import br.com.intranet.cenopservicoscwb.model.entidade.Npj;
 import br.com.intranet.cenopservicoscwb.model.entidade.PeriodoCalculo;
 import br.com.intranet.cenopservicoscwb.model.entidade.PlanoEconomico;
@@ -26,7 +28,6 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Date;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -44,7 +45,6 @@ public class TesteCalculo {
     DAOGenerico<ValorIndice> d8 = new DAOGenerico<>();
     DAOGenerico<Arquivo> d9 = new DAOGenerico<>();
     DAOGenerico<Expurgo> d10 = new DAOGenerico<>();
-    
 
     public void calcular(Calculo calculo) {
         BigDecimal remuneracaoBasica = calculo.getSaldoBase().multiply(calculo.getPlanoEconomico().getIndiceCorrMonPraticado()).setScale(2, RoundingMode.UP);
@@ -62,107 +62,102 @@ public class TesteCalculo {
         BigDecimal diferenca = totRendReclamado.subtract(totRendCreditado);
 
         calculo.setValorDiferenca(diferenca);
-        
+
     }
-    
-    
-    
-    public void atualizar(Calculo calculo){        
+
+    public void atualizar(Calculo calculo) {
         BigDecimal indice = null;
-        
+        BigDecimal valorDiferenca = calculo.getValorDiferenca();
+
         int i = 0;
         for (PeriodoCalculo periodoCalculo : calculo.getListaPeriodoCalculo()) {
             Calendar dataInicial = Calendar.getInstance();
             Calendar dataFinal = Calendar.getInstance();
             dataInicial.setTime(periodoCalculo.getDataInicioCalculo());
             dataFinal.setTime(periodoCalculo.getDataFinalCalculo());
-            
+
             System.out.println(calculo.getValorDiferenca().toString());
-            
-            System.out.println("Mês/Ano: " + "Índice %: " + "Atualização Monetária: " + "Juros: " + "Diferença: " );
-            
+
+            System.out.println("Mês/Ano: " + "Índice %: " + "Atualização Monetária: " + "Juros: " + "Diferença: ");
+
             System.out.println(calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo().getTime() + " " + calculo.getValorDiferenca().toString());
-            
-            
-            
-            while(dataInicial.before(dataFinal)){
+
+            while (dataInicial.before(dataFinal)) {
+
+                if (i == 0) {
+                    System.out.println("===========================================");
+                    i++;
+                    continue;
+                }
+
                 dataInicial.add(dataInicial.MONTH, 1);
-                
-                
-                
-                
+
                 for (ValorIndice valorIndice : periodoCalculo.getIndice().getListaValorIndice()) {
                     indice = null;
-                    
-                   
-                    
-                    if(Utils.converteData(valorIndice.getDataValorIndice()).equals(Utils.converteData(dataInicial.getTime()))){
+
+                    if (Utils.converteData(valorIndice.getDataValorIndice()).equals(Utils.converteData(dataInicial.getTime()))) {
                         indice = valorIndice.getValorIndice();
                         break;
                     }
                 }
-                
-                
-                
-                if(indice == null){
-                    
+
+                if (indice == null) {
+
                     i++;
                     dataInicial.add(dataInicial.MONTH, 1);
                     continue;
                 }
-                
-                
-                
+
                 Atualizacao atualizacao = new Atualizacao();
-                
-                if (calculo.getExpurgo().getMarcador().equals("S")){
-                                       
-                    
-                        for (ValorExpurgo valorExpurgo : calculo.getExpurgo().getListaValorExpurgo()) {
-                            
-                            if(Utils.converteData(valorExpurgo.getDataExpurgo()).subSequence(4, 10).equals(Utils.converteData(dataInicial.getTime()).subSequence(4, 10))){
-                                indice = valorExpurgo.getIndiceExpurgo();
-                                break;
-                                
-                            }
+
+                if (calculo.getExpurgo().getMarcador().equals("S")) {
+
+                    for (ValorExpurgo valorExpurgo : calculo.getExpurgo().getListaValorExpurgo()) {
+
+                        if (Utils.converteData(valorExpurgo.getDataExpurgo()).subSequence(3, 10).equals(Utils.converteData(dataInicial.getTime()).subSequence(3, 10))) {
+                            indice = valorExpurgo.getIndiceExpurgo();
+                            break;
+
                         }
-                    
+                    }
+
                 }
-                
-                if(dataInicial.get(Calendar.MONTH) == 8 && dataInicial.get(Calendar.YEAR) == 1993){
-                    calculo.setValorDiferenca(calculo.getValorDiferenca().divide(new BigDecimal("1000")).setScale(2,RoundingMode.DOWN));
+
+                if (dataInicial.get(Calendar.MONTH) == 8 && dataInicial.get(Calendar.YEAR) == 1993) {
+                    valorDiferenca = (valorDiferenca.divide(new BigDecimal("1000")).setScale(2, RoundingMode.DOWN));
                 }
-                
-                if(dataInicial.getTime().equals(new Date("08/08/2000"))){
+
+                if (dataInicial.getTime().equals(new Date("08/08/2000"))) {
                     System.out.println("Ops");
                 }
-                
-                
-                if(dataInicial.get(Calendar.MONTH) == 7 && dataInicial.get(Calendar.YEAR) == 1994){
-                    calculo.setValorDiferenca(calculo.getValorDiferenca().divide(new BigDecimal("2750"),MathContext.DECIMAL128).setScale(2, RoundingMode.DOWN));
-                    
+
+                if (dataInicial.get(Calendar.MONTH) == 7 && dataInicial.get(Calendar.YEAR) == 1994) {
+                    valorDiferenca = (valorDiferenca.divide(new BigDecimal("2750"), MathContext.DECIMAL128).setScale(2, RoundingMode.DOWN));
+
                     System.out.println(calculo.getValorDiferenca());
                 }
-                
+
                 atualizacao.setDataApuracao(dataInicial.getTime());
                 atualizacao.setFatorAtualizacao(indice);
-                atualizacao.setSaldoAtualizadoDiferenca(calculo.getValorDiferenca());
+
                 atualizacao.setValorAtualizacaoMonetaria(atualizacao.getFatorAtualizacao().multiply(calculo.getValorDiferenca().divide(new BigDecimal("100"))).setScale(2, RoundingMode.DOWN));
-                atualizacao.setValorJuros(new BigDecimal("0"));                
-                
-                System.out.println(Utils.converteData(atualizacao.getDataApuracao()) + " " + atualizacao.getFatorAtualizacao() + " " + atualizacao.getValorAtualizacaoMonetaria() 
+                valorDiferenca = (valorDiferenca.add(atualizacao.getValorAtualizacaoMonetaria()));
+                atualizacao.setValorJuros(new BigDecimal("0"));
+                atualizacao.setSaldoAtualizadoDiferenca(valorDiferenca);
+
+                System.out.println(Utils.converteData(atualizacao.getDataApuracao()) + " " + atualizacao.getFatorAtualizacao() + " " + atualizacao.getValorAtualizacaoMonetaria()
                         + " " + atualizacao.getValorJuros() + " " + atualizacao.getSaldoAtualizadoDiferenca());
-                
+
                 System.out.println("=========================================================================================================================");
-                
-                calculo.setValorDiferenca(calculo.getValorDiferenca().add(atualizacao.getValorAtualizacaoMonetaria()));
-                
+
                 i++;
-                
+
                 calculo.adicionarAtualizacao(atualizacao);
+
             }
+
         }
-        
+
     }
 
     public void iniciar() {
@@ -174,37 +169,35 @@ public class TesteCalculo {
 
             d2.setClassePersistente(Funcionario.class);
             Funcionario funcionario = d2.buscarObjeto(1);
-            
+
             d4.setClassePersistente(Cliente.class);
             Cliente cliente = d4.buscarObjeto(1);
-            
+
             d5.setClassePersistente(Metodologia.class);
             Metodologia metodologia = d5.buscarObjeto(1);
-            
+
             d6.setClassePersistente(PlanoEconomico.class);
             PlanoEconomico planoEconomico = d6.buscarObjeto(1);
-            
+
             d7.setClassePersistente(Indice.class);
             Indice indice = d7.buscarObjeto(1);
-            
+
             d9.setClassePersistente(Arquivo.class);
             Arquivo arquivo = d9.buscarObjeto(1);
-                       
+
             d10.setClassePersistente(Expurgo.class);
-            Expurgo expurgo = d10.buscarObjeto(2);
-            
+            Expurgo expurgo = d10.buscarObjeto(1);
+
             //indice.adicionarValorIndice(valorIndice);
-            
-            PeriodoCalculo periodo = new PeriodoCalculo();            
+            PeriodoCalculo periodo = new PeriodoCalculo();
             periodo.setDataInicioCalculo(new Date("02/08/1989"));
             periodo.setDataFinalCalculo(new Date("08/08/2019"));
             periodo.setIndice(indice);
-            
+
 //            PeriodoCalculo periodo2 = new PeriodoCalculo();
 //            periodo2.setDataInicioCalculo(new Date("04/09/1992"));
 //            periodo2.setDataFinalCalculo(new Date(Utils.getDataAtual()));
 //            periodo2.setIndice(indice);
-
             Calculo calculo = new Calculo();
             //calculo.setDataBase(Utils.getDataAtualFormatoMysql());
             calculo.setSaldoBase(new BigDecimal("3778.63"));
@@ -244,12 +237,27 @@ public class TesteCalculo {
 //            calculo2.adicionarArquivo(arquivo);
 //            calculo2.setExpurgo(expurgo);
 //            calcular(calculo2);
+            calculo.setValorAtualizadoComMora(new BigDecimal("25845.22"));
+            calculo.setValorDiferencaAtualizado(new BigDecimal("54545454"));
+            Honorario honorario = new Honorario();
+            honorario.setTaxaHonorario(new BigDecimal("5"));
+            honorario.setValorHonorario(new BigDecimal("10000"));
+
+            
+            
+            calculo.setHonorario(honorario);
+
+            Mora mora = new Mora();
+            mora.setDataInicio(new Date("08/02/1989"));
+            mora.setValorMoraPos(new BigDecimal("2222"));
+            mora.setValorMoraPre(new BigDecimal("52222"));
+            calculo.setMora(mora);
 
             protocoloGsv.adicionarCalculo(calculo);
             //protocoloGsv.adicionarCalculo(calculo2);
+
             d3.atualizar(npj);
             atualizar(calculo);
-           
 
         } catch (Exception e) {
             System.out.println(e);

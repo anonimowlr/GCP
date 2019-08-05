@@ -36,6 +36,7 @@ public class DAOGenerico<T> implements Serializable {
     
     public void atualizar(T objeto) {
         try {
+            getEm().flush();
             getEm().getTransaction().begin();
             getEm().merge(objeto);
             getEm().getTransaction().commit();            

@@ -75,7 +75,15 @@ public class Calculo implements Serializable{
     @Column(name = "DT_RLZC_CALCULO", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dataRealizacaoCalculo;
+    
+    @Column(name = "VLR_DIF_ATLZD", nullable = false)
+    private BigDecimal valorDiferencaAtualizado;
+    
+    @Column(name = "VLR_ATLZD_C_MORA", nullable = false)
+    private BigDecimal valorAtualizadoComMora;
         
+    
+    
         
     @ManyToOne
     @JoinColumn(name = "CD_PRC", referencedColumnName = "CD_PRC")
@@ -116,7 +124,16 @@ public class Calculo implements Serializable{
     
     @OneToOne
     @JoinColumn(name = "EXPURGO")
-    private Expurgo expurgo;
+    private Expurgo expurgo;    
+   
+     
+    @OneToOne
+    @JoinColumn(name = "ID_MORA")
+    private Mora mora;
+    
+    @OneToOne
+    @JoinColumn(name = "ID_HONORARIO", nullable = false)
+    private Honorario honorario;
     
     
     
@@ -534,6 +551,62 @@ public class Calculo implements Serializable{
      */
     public void setExpurgo(Expurgo expurgo) {
         this.expurgo = expurgo;
+    }
+
+    /**
+     * @return the valorAtualizadoComMora
+     */
+    public BigDecimal getValorAtualizadoComMora() {
+        return valorAtualizadoComMora;
+    }
+
+    /**
+     * @param valorAtualizadoComMora the valorAtualizadoComMora to set
+     */
+    public void setValorAtualizadoComMora(BigDecimal valorAtualizadoComMora) {
+        this.valorAtualizadoComMora = valorAtualizadoComMora;
+    }
+
+    /**
+     * @return the valorDiferencaAtualizado
+     */
+    public BigDecimal getValorDiferencaAtualizado() {
+        return valorDiferencaAtualizado;
+    }
+
+    /**
+     * @param valorDiferencaAtualizado the valorDiferencaAtualizado to set
+     */
+    public void setValorDiferencaAtualizado(BigDecimal valorDiferencaAtualizado) {
+        this.valorDiferencaAtualizado = valorDiferencaAtualizado;
+    }
+
+    /**
+     * @return the mora
+     */
+    public Mora getMora() {
+        return mora;
+    }
+
+    /**
+     * @param mora the mora to set
+     */
+    public void setMora(Mora mora) {
+        this.mora = mora;
+    }
+
+    /**
+     * @return the honorario
+     */
+    public Honorario getHonorario() {
+        return honorario;
+    }
+
+    /**
+     * @param honorario the honorario to set
+     */
+    public void setHonorario(Honorario honorario) {
+        this.honorario = honorario;
     }
     
 
