@@ -461,7 +461,7 @@ public class Utils {
         int numeroDeMAnos = (cal2.get(Calendar.YEAR) - cal.get(Calendar.YEAR)) * 12;
 
         System.out.println("numero de meses: " + (numeroDeMeses + numeroDeMAnos));
-        return numeroDeMeses;
+        return numeroDeMAnos;
     }
 
     public static String converteData(Date date) {

@@ -14,6 +14,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,6 +48,9 @@ public class Calculo implements Serializable{
     
     @Column(name = "NR_AGE")
     private Integer numeroAgencia;
+    
+    @Column(name = "NM_BCO")
+    private Integer nomeBanco;
     
     @Column(name = "VLR_DIF", nullable = false, scale = 20, precision = 20)
     private BigDecimal valorDiferenca;
@@ -127,11 +131,11 @@ public class Calculo implements Serializable{
     private Expurgo expurgo;    
    
      
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_MORA")
     private Mora mora;
     
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_HONORARIO")
     private Honorario honorario;
     

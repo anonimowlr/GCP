@@ -33,14 +33,14 @@ public class Mora implements Serializable{
     @Column(name = "id")
     private Integer id;
     
-    @Column(name = "DT_INICIO", nullable = false)
+    @Column(name = "DT_INICIO", nullable = true)
     @Temporal(TemporalType.DATE)
     private Date dataInicio;
     
-    @Column(name = "VLR_MORA_PRE", nullable = false)
+    @Column(name = "VLR_MORA_PRE", nullable = true)
     private BigDecimal valorMoraPre;
     
-    @Column(name = "VLR_MORA_POS", nullable = false)
+    @Column(name = "VLR_MORA_POS", nullable = true)
     private BigDecimal valorMoraPos;
 
     /**
