@@ -15,6 +15,7 @@ import br.com.intranet.cenopservicoscwb.model.entidade.Honorario;
 import br.com.intranet.cenopservicoscwb.model.entidade.Indice;
 import br.com.intranet.cenopservicoscwb.model.entidade.Metodologia;
 import br.com.intranet.cenopservicoscwb.model.entidade.Mora;
+import br.com.intranet.cenopservicoscwb.model.entidade.Multa;
 import br.com.intranet.cenopservicoscwb.model.entidade.Npj;
 import br.com.intranet.cenopservicoscwb.model.entidade.PeriodoCalculo;
 import br.com.intranet.cenopservicoscwb.model.entidade.PlanoEconomico;
@@ -29,7 +30,6 @@ import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -127,94 +127,66 @@ public class TesteCalculo {
 
                 }
 
-                if (dataInicial.get(Calendar.MONTH) == 8 && dataInicial.get(Calendar.YEAR) == 1993) {
+                if (dataInicial.get(Calendar.MONTH) == 7 && dataInicial.get(Calendar.YEAR) == 1993) { //  a sequencia numerica de meses em calendar é de 0 a 11
                     valorDiferenca = (valorDiferenca.divide(new BigDecimal("1000")).setScale(2, RoundingMode.DOWN));
-                    System.out.println(valorDiferenca);
-                    
+
                 }
 
-
-                if (dataInicial.get(Calendar.MONTH) == 7 && dataInicial.get(Calendar.YEAR) == 1994) {
+                if (dataInicial.get(Calendar.MONTH) == 6 && dataInicial.get(Calendar.YEAR) == 1994) { //  a sequencia numerica de meses em calendar é de 0 a 11
                     valorDiferenca = (valorDiferenca.divide(new BigDecimal("2750"), MathContext.DECIMAL128).setScale(2, RoundingMode.DOWN));
 
-                    System.out.println(calculo.getValorDiferenca());
                 }
 
                 atualizacao.setDataApuracao(dataInicial.getTime());
                 atualizacao.setFatorAtualizacao(indice);
 
                 atualizacao.setValorAtualizacaoMonetaria(atualizacao.getFatorAtualizacao().multiply(valorDiferenca.divide(new BigDecimal("100"))).setScale(2, RoundingMode.DOWN));
-                
+
                 atualizacao.setValorJuros(new BigDecimal("0"));
                 atualizacao.setSaldoAtualizadoDiferenca(valorDiferenca);
-                
+
                 valorDiferenca = (valorDiferenca.add(atualizacao.getValorAtualizacaoMonetaria()));
-                
-                System.out.println(valorDiferenca);
 
                 System.out.println(Utils.converteData(atualizacao.getDataApuracao()) + " " + atualizacao.getFatorAtualizacao() + " " + atualizacao.getValorAtualizacaoMonetaria()
                         + " " + atualizacao.getValorJuros() + " " + valorDiferenca);
 
                 System.out.println("=========================================================================================================================");
 
-                
-                
                 calculo.adicionarAtualizacao(atualizacao);
                 calculo.setValorDiferencaAtualizado(atualizacao.getSaldoAtualizadoDiferenca());
-                
-                i++;
 
-               
-           
+                i++;
 
             }
 
-            
-            
-            
         }
 
     }
-    
-    public void atualizaMoraHonorarioMulta(Calculo calculo) throws ParseException{
-        
-          
-            Mora mora = new Mora();
-            mora.setDataInicio(new Date("05/08/2000"));
-            mora.setValorMoraPre(new BigDecimal("0.00"));
-            calculo.setMora(mora);
-           
-            
-            calcularMora(calculo);
-            
-            
-            
-            calculo.setValorAtualizadoComMora(calculo.getValorDiferencaAtualizado().add(mora.getValorMoraPre().add(mora.getValorMoraPos())));
-            
-            
-            Honorario honorario = new Honorario();
-            honorario.setTaxaHonorario(new BigDecimal("0.005"));
-            honorario.setValorHonorario(honorario.getTaxaHonorario().multiply(calculo.getValorAtualizadoComMora()));
-            calculo.setHonorario(honorario);
-            
-            
-            
-            
-           
-            
-            calculo.setValorAtualizadoComMora(calculo.getValorDiferencaAtualizado().add(calculo.getMora().getValorMoraPre()).add(calculo.getMora().getValorMoraPos()));
-            
-            
-            
-            
-            calculo.getListaAtualizacao().clear();
-            
-            
-            
+
+    public void atualizaMoraHonorarioMulta(Calculo calculo) throws ParseException {
+
+        Mora mora = new Mora();
+        mora.setDataInicio(new Date("08/08/2007"));
+        mora.setValorMoraPre(new BigDecimal("0.00"));
+        calculo.setMora(mora);
+        calcularMora(calculo);
+        calculo.setValorAtualizadoComMora(calculo.getValorDiferencaAtualizado().add(mora.getValorMoraPre().add(mora.getValorMoraPos())));
+        calculo.setValorAtualizadoComMora(calculo.getValorDiferencaAtualizado().add(calculo.getMora().getValorMoraPre()).add(calculo.getMora().getValorMoraPos()));
+
+        Honorario honorario = new Honorario();
+        honorario.setTaxaHonorario(new BigDecimal("0.005"));
+        honorario.setValorHonorario(honorario.getTaxaHonorario().multiply(calculo.getValorAtualizadoComMora()));
+        calculo.setHonorario(honorario);
+
+        Multa multa = new Multa();
+        multa.setTaxaMulta(new BigDecimal("0.05"));
+        multa.setValorMulta(multa.getTaxaMulta().multiply(calculo.getValorAtualizadoComMora().add(calculo.getHonorario().getValorHonorario())).setScale(2, RoundingMode.DOWN));
+        calculo.setMulta(multa);
+
+        calculo.setValorFinal(calculo.getValorAtualizadoComMora().add(calculo.getHonorario().getValorHonorario().add(calculo.getMulta().getValorMulta())));
+
+        calculo.getListaAtualizacao().clear();
     }
-    
-    
-    
 
     public void iniciar() {
         try {
@@ -242,67 +214,30 @@ public class TesteCalculo {
             Arquivo arquivo = d9.buscarObjeto(1);
 
             d10.setClassePersistente(Expurgo.class);
-            Expurgo expurgo = d10.buscarObjeto(1);
+            Expurgo expurgo = d10.buscarObjeto(2);
 
-            //indice.adicionarValorIndice(valorIndice);
             PeriodoCalculo periodo = new PeriodoCalculo();
             periodo.setDataInicioCalculo(new Date("02/08/1989"));
             periodo.setDataFinalCalculo(new Date("08/08/2019"));
             periodo.setIndice(indice);
 
-//            PeriodoCalculo periodo2 = new PeriodoCalculo();
-//            periodo2.setDataInicioCalculo(new Date("04/09/1992"));
-//            periodo2.setDataFinalCalculo(new Date(Utils.getDataAtual()));
-//            periodo2.setIndice(indice);
             Calculo calculo = new Calculo();
-            //calculo.setDataBase(Utils.getDataAtualFormatoMysql());
             calculo.setSaldoBase(new BigDecimal("3778.63"));
             calculo.setNumeroConta(new Long("5874585"));
             calculo.setNumeroAgencia(4587);
-            //calculo.setValorDiferenca(new BigDecimal("157.58"));
-            calculo.setValorFinal(new BigDecimal("11111.11"));
-            //calculo.setDataValorFinal(new Date("10/07/2018"));
             calculo.setProtocoloGsv(protocoloGsv);
             calculo.setFuncionario(funcionario);
             calculo.setMetodologia(metodologia);
             calculo.setCliente(cliente);
             calculo.setPlanoEconomico(planoEconomico);
             calculo.adicionarPeriodoCalculo(periodo);
-            //calculo.adicionarPeriodoCalculo(periodo2);
             calculo.setDataRealizacaoCalculo(Calendar.getInstance().getTime());
             calculo.adicionarArquivo(arquivo);
             calculo.setExpurgo(expurgo);
             calcular(calculo);
 
-//            Calculo calculo2 = new Calculo();
-//            //calculo2.setDataBase(Utils.getDataAtualFormatoMysql());
-//            calculo2.setSaldoBase(new BigDecimal("5487.21"));
-//            calculo2.setNumeroConta(new Long("5587"));
-//            calculo2.setNumeroAgencia(3457);
-//            //calculo2.setValorDiferenca(new BigDecimal("257.98"));
-//            calculo2.setValorFinal(new BigDecimal("15478.68"));
-//            //calculo2.setDataValorFinal(new Date("01/25/2017"));
-//            calculo2.setProtocoloGsv(protocoloGsv);
-//            calculo2.setFuncionario(funcionario);
-//            calculo2.setMetodologia(metodologia);
-//            calculo2.setCliente(cliente);
-//            calculo2.setPlanoEconomico(planoEconomico);
-//            calculo2.adicionarPeriodoCalculo(periodo);
-//            calculo2.adicionarPeriodoCalculo(periodo2);
-//            calculo2.setDataRealizacaoCalculo(Calendar.getInstance().getTime());
-//            calculo2.adicionarArquivo(arquivo);
-//            calculo2.setExpurgo(expurgo);
-//            calcular(calculo2);
-           
-           
-
-            
-            
-
             protocoloGsv.adicionarCalculo(calculo);
-            //protocoloGsv.adicionarCalculo(calculo2);
 
-            
             atualizar(calculo);
             atualizaMoraHonorarioMulta(calculo);
             d3.atualizar(npj);
@@ -313,48 +248,25 @@ public class TesteCalculo {
     }
 
     private void calcularMora(Calculo calculo) throws ParseException {
-        
-        int qtdMesPre= 0;
-        int qtdMesPos= 0;
-        
-       
-        
-       
-        
-      
+
+        int qtdMesPre = 0;
+        int qtdMesPos = 0;
+
         Date dataInicioPos = calculo.getMora().getDataInicio();
-        
-        
-        
-        if(calculo.getMora().getDataInicio().before(new Date ("01/10/2003"))){
-             qtdMesPre = Utils.diferencaDataMes2(calculo.getMora().getDataInicio(), new Date("01/10/2003"));
-             calculo.getMora().setValorMoraPre((new BigDecimal(Integer.toString(qtdMesPre)).multiply(new BigDecimal("0.005"))).multiply(calculo.getValorDiferencaAtualizado()).setScale(2, RoundingMode.DOWN));
-              System.out.println(calculo.getValorDiferencaAtualizado());
-        
-               System.out.println(calculo.getMora().getValorMoraPre().toString());
-             
+
+        if (calculo.getMora().getDataInicio().before(new Date("01/10/2003"))) {
+            qtdMesPre = Utils.diferencaDataMes2(calculo.getMora().getDataInicio(), new Date("01/10/2003"));
+            calculo.getMora().setValorMoraPre((new BigDecimal(Integer.toString(qtdMesPre)).multiply(new BigDecimal("0.005"))).multiply(calculo.getValorDiferencaAtualizado()).setScale(2, RoundingMode.DOWN));
+            System.out.println(calculo.getValorDiferencaAtualizado());
+
+            System.out.println(calculo.getMora().getValorMoraPre().toString());
+
             dataInicioPos = new Date("01/10/2003");
-            
+
         }
-        
-           
-        
-        
-        
-             qtdMesPos = Utils.diferencaDataMes2(dataInicioPos, calculo.getListaPeriodoCalculo().get(calculo.getListaPeriodoCalculo().size()-1).getDataFinalCalculo());
-             calculo.getMora().setValorMoraPos((new BigDecimal(Integer.toString(qtdMesPos)).multiply(new BigDecimal("0.01"))).multiply(calculo.getValorDiferencaAtualizado()).setScale(2, RoundingMode.DOWN));
-             
-            
-        
-        
-        
-        
-        
-        
 
-
-
-
+        qtdMesPos = Utils.diferencaDataMes2(dataInicioPos, calculo.getListaPeriodoCalculo().get(calculo.getListaPeriodoCalculo().size() - 1).getDataFinalCalculo());
+        calculo.getMora().setValorMoraPos((new BigDecimal(Integer.toString(qtdMesPos)).multiply(new BigDecimal("0.01"))).multiply(calculo.getValorDiferencaAtualizado()).setScale(2, RoundingMode.DOWN));
 
     }
 }

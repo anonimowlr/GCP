@@ -50,9 +50,9 @@ public class Calculo implements Serializable{
     private Integer numeroAgencia;
     
     @Column(name = "NM_BCO")
-    private Integer nomeBanco;
+    private String nomeBanco;
     
-    @Column(name = "VLR_DIF", nullable = false, scale = 20, precision = 20)
+    @Column(name = "VLR_DIF", nullable = false)
     private BigDecimal valorDiferenca;
     
     @Column(name = "VLR_FINAL", nullable = false)    
@@ -121,9 +121,9 @@ public class Calculo implements Serializable{
     
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "tb_calculo_has_tb_arquivo", joinColumns = 
-    {@JoinColumn(name = "ID_CALCULO", referencedColumnName = "id")},
+    {@JoinColumn(name = "CD_CALCULO", referencedColumnName = "id")},
     inverseJoinColumns = 
-    {@JoinColumn(name = "ID_ARQUIVO", referencedColumnName = "id")})
+    {@JoinColumn(name = "CD_ARQUIVO", referencedColumnName = "id")})
     private List<Arquivo> listaArquivo = new ArrayList<>();
     
     @OneToOne
@@ -132,12 +132,16 @@ public class Calculo implements Serializable{
    
      
     @OneToOne(cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_MORA")
+    @JoinColumn(name = "CD_MORA")
     private Mora mora;
     
     @OneToOne(cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_HONORARIO")
+    @JoinColumn(name = "CD_HONORARIO")
     private Honorario honorario;
+    
+    @OneToOne(cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
+    @JoinColumn(name = "CD_MULTA")
+    private Multa multa;
     
     
     
@@ -611,6 +615,34 @@ public class Calculo implements Serializable{
      */
     public void setHonorario(Honorario honorario) {
         this.honorario = honorario;
+    }
+
+    /**
+     * @return the nomeBanco
+     */
+    public String getNomeBanco() {
+        return nomeBanco;
+    }
+
+    /**
+     * @param nomeBanco the nomeBanco to set
+     */
+    public void setNomeBanco(String nomeBanco) {
+        this.nomeBanco = nomeBanco;
+    }
+
+    /**
+     * @return the multa
+     */
+    public Multa getMulta() {
+        return multa;
+    }
+
+    /**
+     * @param multa the multa to set
+     */
+    public void setMulta(Multa multa) {
+        this.multa = multa;
     }
     
 
