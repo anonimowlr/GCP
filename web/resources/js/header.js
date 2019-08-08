@@ -47,6 +47,22 @@ function  saltarContaBnc(param2){
    
     
 }
+
+
+function  uperCaseChave(param2){
+    var parametro2 = param2;
+    alert("teste");
+   alert(parametro2);
+    
+    
+   
+    
+   
+    
+}
+
+
+
 function  formataConta(param){
         var valor = param;
         var num;

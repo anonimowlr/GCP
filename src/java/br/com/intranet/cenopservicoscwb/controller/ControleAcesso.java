@@ -7,6 +7,9 @@ package br.com.intranet.cenopservicoscwb.controller;
 
 import br.com.intranet.cenopservicoscwb.dao.FuncionarioDAO;
 import br.com.intranet.cenopservicoscwb.model.entidade.Funcionario;
+import br.com.intranet.cenopservicoscwb.model.util.Utils;
+import br.com.intranet.cenopservicoscwb.util.Util;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
@@ -17,13 +20,80 @@ import javax.faces.bean.ViewScoped;
 @ManagedBean
 @ViewScoped
 public class ControleAcesso {
-    private FuncionarioDAO funcionarioDAO;
+
+    private FuncionarioDAO<Funcionario, Object> funcionarioDAO;
     private Funcionario funcionario;
     private String estadoTela = "buscar";
-    
-    
+
+    @PostConstruct
+    public void init() {
+        novo();
+    }
+
     public ControleAcesso() {
-        funcionarioDAO = new FuncionarioDAO();
+        funcionarioDAO = new FuncionarioDAO<>();
+    }
+
+    public void novo() {
+        setFuncionario(new Funcionario());
+    }
+
+    public boolean isBuscar() {
+        return "buscar".equals(estadoTela);
+    }
+
+    public void mudarParaBuscar() {
+        setEstadoTela("buscar");
+    }
+
+    public void mudarParaEditar() {
+        novo();
+        setEstadoTela("editar");
+    }
+
+    public boolean isEditar() {
+        return "editar".equals(estadoTela);
+    }
+
+    public void salvar() {
+        getFuncionarioDAO().salvar(getFuncionario());
+       
+    }
+
+    public void excluir(Funcionario funcionario) {
+        if (getFuncionarioDAO().deletar(funcionario)) {
+            Util.mensagemInformacao(getFuncionarioDAO().getMensagem());
+        } else {
+            Util.mensagemErro(getFuncionarioDAO().getMensagem());
+        }
+    }
+
+    public void complementar() {
+
+        if (getFuncionario().getNomeFunci().equals("")) {
+            Util.mensagemErro("Campo nome não pode ser  vazio");
+            return;
+        }
+        
+        getFuncionario().setChaveFunci(getFuncionario().getChaveFunci().toUpperCase());
+        getFuncionario().setNomeFunci(getFuncionario().getNomeFunci().toUpperCase());
+        
+        
+
+        try {
+
+            getFuncionario().setMatriculaFunci(Integer.parseInt(Utils.tratarVariavel(getFuncionario().getChaveFunci())));
+            salvar();
+           mudarParaBuscar();
+
+        } catch (Exception e) {
+            
+            Util.mensagemErro(Util.getMensagemErro(e));
+        }
+        
+        
+        
+
     }
 
     /**
@@ -67,6 +137,5 @@ public class ControleAcesso {
     public void setEstadoTela(String estadoTela) {
         this.estadoTela = estadoTela;
     }
-    
-    
+
 }

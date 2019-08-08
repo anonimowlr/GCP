@@ -11,7 +11,7 @@ import br.com.intranet.cenopservicoscwb.model.entidade.Funcionario;
  *
  * @author f5078775
  */
-public class FuncionarioDAO extends DAOGenerico<Funcionario, Object>{
+public class FuncionarioDAO<T,E> extends DAOGenerico<Funcionario, Object>{
 
     public FuncionarioDAO() {
         super();

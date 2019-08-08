@@ -2,7 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
     <ui:composition template="header.xhtml" >
 
@@ -12,7 +14,52 @@
 
 
         <ui:define name="conteudo">
-            <h1>Concessão de acessos</h1>
+            <h:form>
+                <p:messages></p:messages>
+                <h:panelGrid columns="2" rendered="#{controleAcesso.editar}">
+                    <h:outputLabel value="Chave: "></h:outputLabel>
+                    <h:inputText id="txtChave"   value="#{controleAcesso.funcionario.chaveFunci}"  required="true" requiredMessage="Chave Obrigatória!!" style="height: 40px"></h:inputText>
+                    <h:outputLabel value="Nome: "></h:outputLabel>
+                    <h:inputText value="#{controleAcesso.funcionario.nomeFunci}" style="height: 40px" required="true" requiredMessage="Nome Obrigatório"></h:inputText>                    
+                    
+                <h:commandButton value="Salvar" class="btn btn-primary">
+                    <f:ajax listener="#{controleAcesso.complementar()}" execute="@form" render="@form" event="click"></f:ajax>
+                </h:commandButton>
+                </h:panelGrid>
+                
+                            
+                <h:dataTable value="#{controleAcesso.funcionarioDAO.listaObjetos}" var="f" rendered="#{controleAcesso.isBuscar()}" class="table table-hover">
+                    <f:facet name="header">
+                        <h:commandLink actionListener="#{controleAcesso.mudarParaEditar()}" >
+                            <h:graphicImage  width="20px" library="img" name="add.png" title="Nova Funcionário" ></h:graphicImage>                                  
+                        </h:commandLink>
+                    </f:facet>
+                    <h:column>
+                        <f:facet name="header">Chave Funcionario</f:facet>
+                        
+                        <h:outputLabel value="#{f.chaveFunci}" onclick="window.open('https://humanograma.intranet.bb.com.br/#{f.chaveFunci}')" title="Verificar  a chave : #{f.chaveFunci}"></h:outputLabel>
+                                           
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Nome Funcionario</f:facet>
+                        #{f.nomeFunci}                    
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Ações</f:facet>
+                        <h:commandLink onclick="if (!confirm('Deseja realmente excluir?'))return false">
+                            <f:ajax listener="#{controleAcesso.excluir(f)}" execute="@form" render="@form" event="click" ></f:ajax>
+                            <h:graphicImage  width="20px" library="img" name="trash.png" title="Excluir funcionário" ></h:graphicImage>                                    
+                        </h:commandLink>                   
+                    </h:column>
+                </h:dataTable>
+                
+                
+                
+                
+            </h:form>
+            
         </ui:define>
 
 

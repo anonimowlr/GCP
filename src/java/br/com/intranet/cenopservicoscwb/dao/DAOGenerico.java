@@ -120,9 +120,9 @@ public class DAOGenerico<T, D> implements Serializable {
             return true;
         } catch (Exception e) {
             rollback();
-            atualizar(objeto);
-//            mensagem ="Erro ao salvar - "  + Util.getMensagemErro(e);
-//            Util.mensagemErro(mensagem);
+           
+            mensagem ="Erro ao salvar - "  + Util.getMensagemErro(e);
+            Util.mensagemErro(mensagem);
             return false;
         }
 
