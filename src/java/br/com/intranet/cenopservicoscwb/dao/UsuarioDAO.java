@@ -29,7 +29,7 @@ public class UsuarioDAO {
         try {
             if (tabela.next()) {
                 funci.setChaveFunci(chave);
-                funci.setNomeFunci(nomeFuncionario);
+                funci.setNomeFunci(tabela.getString("nome_guerra"));
                 funci.setMatriculaFunci(Integer.parseInt(Utils.tratarVariavel(chave)));
                 
 //                funci.setChave(chave);
@@ -43,10 +43,9 @@ public class UsuarioDAO {
 //                funci.setSecao(tabela.getString("secao"));
 //                funci.setQuadro(tabela.getString("Quadro"));
             } else{
-//               funci.setChave(chave);
-//               funci.setNome(nomeFuncionario.toUpperCase());
-//               funci.setUORHabitual(Integer.parseInt(uor));
-//               funci.setUORPosicao(Integer.parseInt(uor));
+               funci.setChaveFunci(chave);
+                funci.setNomeFunci(nomeFuncionario);
+                funci.setMatriculaFunci(Integer.parseInt(Utils.tratarVariavel(chave)));
                 
             }
             tabela.close();
