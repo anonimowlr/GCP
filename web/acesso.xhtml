@@ -18,9 +18,9 @@
                 <p:messages></p:messages>
                 <h:panelGrid columns="2" rendered="#{controleAcesso.editar}">
                     <h:outputLabel value="Chave: "></h:outputLabel>
-                    <h:inputText id="txtChave"   value="#{controleAcesso.funcionario.chaveFunci}"  required="true" requiredMessage="Chave Obrigatória!!" style="height: 40px"></h:inputText>
+                    <h:inputText id="txtChave"   value="#{controleAcesso.funcionario.chaveFunci}"  required="true" requiredMessage="Chave Obrigatória!!" style="height: 30px"></h:inputText>
                     <h:outputLabel value="Nome: "></h:outputLabel>
-                    <h:inputText value="#{controleAcesso.funcionario.nomeFunci}" style="height: 40px" required="true" requiredMessage="Nome Obrigatório"></h:inputText>                    
+                    <h:inputText value="#{controleAcesso.funcionario.nomeFunci}" style="height: 30px" required="true" requiredMessage="Nome Obrigatório"></h:inputText>                    
                     
                 <h:commandButton value="Salvar" class="btn btn-primary">
                     <f:ajax listener="#{controleAcesso.complementar()}" execute="@form" render="@form" event="click"></f:ajax>

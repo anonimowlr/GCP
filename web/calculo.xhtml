@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="header.xhtml" >
+
+        <ui:define name="titulo">
+            Calculo 
+        </ui:define>
+
+
+        <ui:define name="conteudo">
+            <h:form id="formPrincipal">
+                <p:messages></p:messages>
+                <h:panelGrid columns="7">
+                    <h:outputLabel value="NPJ: "></h:outputLabel>
+                    <h:inputText value="#{controleCalculo.npj.nrPrc}" style="height: 30px">
+                        <f:converter converterId="converterBigInt"></f:converter>
+                    </h:inputText>
+                    <h:outputLabel value="Protocolo: "></h:outputLabel>
+                    <h:inputText value="#{controleCalculo.protocoloGsv.cdPrc}" style="height: 30px"></h:inputText>                    
+                    
+                    <h:commandButton class="btn btn-primary" value="Novo">
+                        <f:ajax listener="#{controleCalculo.novo()}" execute="@this" render="@form" event="click"></f:ajax>
+                    </h:commandButton>
+                    
+                    <h:commandButton class="btn btn-primary" value="Nova Linha">
+                        <f:ajax listener="#{controleCalculo.duplicar()}" execute="@this" render=":formPrincipal" event="click"></f:ajax>
+                    </h:commandButton>
+                    
+                    <h:commandButton class="btn btn-primary" value="Salvar">
+                        <f:ajax listener="#{controleCalculo.calcular()}" execute="@form" render="@form" event="click"></f:ajax>
+                    </h:commandButton>
+                    
+                </h:panelGrid>
+                
+                
+                
+                <h:dataTable value="#{controleCalculo.protocoloGsv.listaCalculo}" var="c" class="table table-hover" id="listagem">
+                    <h:column>
+                        <f:facet name="header">Saldo Base</f:facet>
+                        <h:inputText value="#{c.saldoBase}" style="height: 30px"></h:inputText>                                               
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Número da Conta</f:facet>
+                        <h:inputText value="#{c.numeroConta}" style="height: 30px"></h:inputText>                                               
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Número da Agência</f:facet>
+                        <h:inputText value="#{c.numeroAgencia}" style="height: 30px"></h:inputText>                                               
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Banco</f:facet>
+                        <h:selectOneMenu value="#{c.nomeBanco}" style="height: 30px">
+                            <f:selectItem itemValue="BB" itemLabel="BB"></f:selectItem>
+                            <f:selectItem itemValue="BNC" itemLabel="BNC"></f:selectItem>
+                            <f:selectItem itemValue="BESC" itemLabel="BESC"></f:selectItem>                            
+                        </h:selectOneMenu>
+                    </h:column>
+                    
+                </h:dataTable>
+                
+            </h:form>
+            
+        </ui:define>
+
+
+    </ui:composition>
+
+</html>
+

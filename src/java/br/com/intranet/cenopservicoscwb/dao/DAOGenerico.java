@@ -122,15 +122,15 @@ public class DAOGenerico<T, D> implements Serializable {
             rollback();
            
             mensagem ="Erro ao salvar - "  + Util.getMensagemErro(e);
-            Util.mensagemErro(mensagem);
             return false;
         }
 
     }
 
     public boolean atualizar(T objeto) {
-        try {
+        try {            
             em.getTransaction().begin();
+            em.flush();
             em.merge(objeto);
             em.getTransaction().commit();
             mensagem = "Atualizado com sucesso";

@@ -9,7 +9,6 @@ import br.com.intranet.cenopservicoscwb.dao.FuncionarioDAO;
 import br.com.intranet.cenopservicoscwb.model.entidade.Funcionario;
 import br.com.intranet.cenopservicoscwb.model.util.Utils;
 import br.com.intranet.cenopservicoscwb.util.Util;
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
@@ -25,10 +24,6 @@ public class ControleAcesso {
     private Funcionario funcionario;
     private String estadoTela = "buscar";
 
-    @PostConstruct
-    public void init() {
-        novo();
-    }
 
     public ControleAcesso() {
         funcionarioDAO = new FuncionarioDAO<>();
