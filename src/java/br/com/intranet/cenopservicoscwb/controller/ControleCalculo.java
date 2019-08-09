@@ -6,6 +6,7 @@
 package br.com.intranet.cenopservicoscwb.controller;
 
 import br.com.intranet.cenopservicoscwb.dao.CalculoDAO;
+import br.com.intranet.cenopservicoscwb.dao.ClienteDAO;
 import br.com.intranet.cenopservicoscwb.dao.FuncionarioDAO;
 import br.com.intranet.cenopservicoscwb.dao.IndiceDAO;
 import br.com.intranet.cenopservicoscwb.dao.MetodologiaDAO;
@@ -44,6 +45,7 @@ public class ControleCalculo {
     private MetodologiaDAO<Metodologia, Object> metodologiaDAO;
     private IndiceDAO<Indice, Object> indiceDAO;
     private FuncionarioDAO<Funcionario, Object> funcionarioDAO;
+    private ClienteDAO<Cliente, Object> clienteDAO;
     private Npj npj;
     private ProtocoloGsv protocoloGsv;
     private Calculo calculo;
@@ -65,6 +67,7 @@ public class ControleCalculo {
         metodologiaDAO = new MetodologiaDAO<>();  
         indiceDAO = new IndiceDAO<>();
         funcionarioDAO = new FuncionarioDAO<>();
+        clienteDAO = new ClienteDAO<>();
     }
     
     
@@ -110,7 +113,8 @@ public class ControleCalculo {
         Cliente cliente = new Cliente();
         cliente.setCpf("111.222.888-77");
         cliente.setNomeCliente("Jose");
-        getCliente().adicionarCalculo(getCalculo());
+        getClienteDAO().salvar(cliente);
+        getCalculo().setCliente(cliente);
         
         Expurgo expurgo = new Expurgo();
         expurgo.setMarcador("S");
@@ -152,7 +156,7 @@ public class ControleCalculo {
         arquivo.setTipoArquivo(".pdf");
         getCalculo().adicionarArquivo(arquivo);
         
-        Funcionario funcionario = funcionarioDAO.localizar(20);
+        Funcionario funcionario = getFuncionarioDAO().localizar(20);
         getCalculo().setFuncionario(funcionario);
         
         salvar();
@@ -424,6 +428,20 @@ public class ControleCalculo {
      */
     public void setFuncionarioDAO(FuncionarioDAO<Funcionario, Object> funcionarioDAO) {
         this.funcionarioDAO = funcionarioDAO;
+    }
+
+    /**
+     * @return the clienteDAO
+     */
+    public ClienteDAO<Cliente, Object> getClienteDAO() {
+        return clienteDAO;
+    }
+
+    /**
+     * @param clienteDAO the clienteDAO to set
+     */
+    public void setClienteDAO(ClienteDAO<Cliente, Object> clienteDAO) {
+        this.clienteDAO = clienteDAO;
     }
     
     
