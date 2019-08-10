@@ -130,7 +130,6 @@ public class DAOGenerico<T, D> implements Serializable {
     public boolean atualizar(T objeto) {
         try {            
             em.getTransaction().begin();
-            em.flush();
             em.merge(objeto);
             em.getTransaction().commit();
             mensagem = "Atualizado com sucesso";
@@ -162,6 +161,10 @@ public class DAOGenerico<T, D> implements Serializable {
     }
 
     public T localizar(Integer id) {
+        T objeto = (T) em.find(classePersistente, id);
+        return objeto;
+    }
+    public T localizar(Long id) {
         T objeto = (T) em.find(classePersistente, id);
         return objeto;
     }

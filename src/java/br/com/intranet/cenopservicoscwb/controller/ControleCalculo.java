@@ -10,7 +10,9 @@ import br.com.intranet.cenopservicoscwb.dao.ClienteDAO;
 import br.com.intranet.cenopservicoscwb.dao.FuncionarioDAO;
 import br.com.intranet.cenopservicoscwb.dao.IndiceDAO;
 import br.com.intranet.cenopservicoscwb.dao.MetodologiaDAO;
+import br.com.intranet.cenopservicoscwb.dao.NpjDAO;
 import br.com.intranet.cenopservicoscwb.dao.PlanoEconomicoDAO;
+import br.com.intranet.cenopservicoscwb.dao.ProtocoloGsvDAO;
 import br.com.intranet.cenopservicoscwb.model.entidade.Arquivo;
 import br.com.intranet.cenopservicoscwb.model.entidade.Atualizacao;
 import br.com.intranet.cenopservicoscwb.model.entidade.Calculo;
@@ -28,7 +30,9 @@ import br.com.intranet.cenopservicoscwb.model.entidade.PlanoEconomico;
 import br.com.intranet.cenopservicoscwb.model.entidade.ProtocoloGsv;
 import br.com.intranet.cenopservicoscwb.util.Util;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
@@ -39,8 +43,10 @@ import javax.faces.bean.ViewScoped;
 @ManagedBean
 @ViewScoped
 public class ControleCalculo {
-    
-    private CalculoDAO<Npj, Object> calculoDAO;
+
+    private CalculoDAO<Calculo, Object> calculoDAO;
+    private ProtocoloGsvDAO<ProtocoloGsv, Object> protocoloGsvDAO;
+    private NpjDAO<Npj, Object> npjDAO;
     private PlanoEconomicoDAO<PlanoEconomico, Object> planoEconomicoDAO;
     private MetodologiaDAO<Metodologia, Object> metodologiaDAO;
     private IndiceDAO<Indice, Object> indiceDAO;
@@ -62,42 +68,47 @@ public class ControleCalculo {
     private PeriodoCalculo periodoCalculo;
 
     public ControleCalculo() {
+        npj= new Npj();
+        protocoloGsv = new ProtocoloGsv();
+        npjDAO = new NpjDAO<>();
         calculoDAO = new CalculoDAO<>();
+        protocoloGsvDAO= new ProtocoloGsvDAO<>();
         planoEconomicoDAO = new PlanoEconomicoDAO<>();
-        metodologiaDAO = new MetodologiaDAO<>();  
+        metodologiaDAO = new MetodologiaDAO<>();
         indiceDAO = new IndiceDAO<>();
         funcionarioDAO = new FuncionarioDAO<>();
         clienteDAO = new ClienteDAO<>();
     }
-    
-    
-    public void novo(){
-        setNpj(new Npj());
-        setProtocoloGsv(new ProtocoloGsv());
-        getNpj().adicionarProtocolo(getProtocoloGsv());
+
+    public void novo() {
+        setNpj(getNpjDAO().localizar(getNpj().getNrPrc()));
+        setProtocoloGsv(getProtocoloGsvDAO().localizar(getProtocoloGsv().getCdPrc()));
+        
+        
+        
+//        setProtocoloGsv(new ProtocoloGsv());
+//        getNpj().adicionarProtocolo(getProtocoloGsv());
+//        setCalculo(new Calculo());
+//        getProtocoloGsv().adicionarCalculo(getCalculo());
+    }
+
+    public void duplicar() {
+
         setCalculo(new Calculo());
         getProtocoloGsv().adicionarCalculo(getCalculo());
     }
 
-    public void duplicar(){
-        
-        setCalculo(new Calculo());
-        getProtocoloGsv().adicionarCalculo(getCalculo());
+    public void salvar() {
+
+        getNpjDAO().atualizar(getNpj());
+
+        Util.mensagemInformacao(getCalculoDAO().getMensagem());
+        novo();
+
     }
-    
-    public void salvar(){
-        
-       
-            
-        getCalculoDAO().atualizar(getNpj());
-       
-        Util.mensagemErro(getCalculoDAO().getMensagem());
-        
-        
-    }
-    
-    public void calcular (){
-        
+
+    public void calcular() {
+
         getCalculo().setDataRealizacaoCalculo(new Date("08/09/2019"));
         getCalculo().setJurosCreditado(new BigDecimal("1524.00"));
         getCalculo().setJurosReclamado(new BigDecimal("2564.00"));
@@ -109,73 +120,160 @@ public class ControleCalculo {
         getCalculo().setValorDiferenca(new BigDecimal("456.00"));
         getCalculo().setValorDiferencaAtualizado(new BigDecimal("45678.00"));
         getCalculo().setValorFinal(new BigDecimal("555555.00"));
-        
-        Cliente cliente = new Cliente();
-        cliente.setCpf("111.222.888-77");
-        cliente.setNomeCliente("Jose");
-        getClienteDAO().salvar(cliente);
+
+        Cliente cliente = getClienteDAO().localizarCliente("111.222.888-77");
+        if (cliente == null) {
+            cliente = new Cliente();
+            cliente.setCpf("111.222.888-77");
+            cliente.setNomeCliente("Jose");
+            getClienteDAO().salvar(cliente);
+        } 
+
         getCalculo().setCliente(cliente);
+
         
         Expurgo expurgo = new Expurgo();
         expurgo.setMarcador("S");
         getCalculo().setExpurgo(expurgo);
-        
+
         PlanoEconomico planoEconomico = getPlanoEconomicoDAO().localizar(1);
         getCalculo().setPlanoEconomico(planoEconomico);
-        
+
         Metodologia metodologia = getMetodologiaDAO().localizar(1);
         getCalculo().setMetodologia(metodologia);
-        
+
         Multa multa = new Multa();
         multa.setTaxaMulta(new BigDecimal("0.05"));
         multa.setValorMulta(new BigDecimal("50.00"));
         getCalculo().setMulta(multa);
-        
+
         Honorario honorario = new Honorario();
         honorario.setTaxaHonorario(new BigDecimal("0.10"));
         honorario.setValorHonorario(new BigDecimal("100.00"));
         getCalculo().setHonorario(honorario);
-        
+
         Mora mora = new Mora();
         mora.setDataInicio(new java.util.Date("05/25/2000"));
         mora.setValorMoraPre(new BigDecimal("150.00"));
         mora.setValorMoraPos(new BigDecimal("120.00"));
         getCalculo().setMora(mora);
-        
+
         Indice indice = getIndiceDAO().localizar(1);
         PeriodoCalculo periodoCalculo = new PeriodoCalculo();
         periodoCalculo.setDataInicioCalculo(new java.util.Date("04/08/1989"));
         periodoCalculo.setDataFinalCalculo(new java.util.Date("08/09/2019"));
         periodoCalculo.setIndice(indice);
         getCalculo().adicionarPeriodoCalculo(periodoCalculo);
-        
+
         Arquivo arquivo = new Arquivo();
         arquivo.setEnderecoArquivo("/qqcoisa");
         arquivo.setNomeArquivo("arquivoX");
         arquivo.setNpjArquivo(new Long("555555555"));
         arquivo.setTipoArquivo(".pdf");
         getCalculo().adicionarArquivo(arquivo);
-        
+
         Funcionario funcionario = getFuncionarioDAO().localizar(20);
         getCalculo().setFuncionario(funcionario);
-        
+
         salvar();
     }
-    
-    
-    
+
     /**
      * @return the calculoDAO
      */
-    public CalculoDAO<Npj, Object> getCalculoDAO() {
+    public CalculoDAO<Calculo, Object> getCalculoDAO() {
         return calculoDAO;
     }
 
     /**
      * @param calculoDAO the calculoDAO to set
      */
-    public void setCalculoDAO(CalculoDAO<Npj, Object> calculoDAO) {
+    public void setCalculoDAO(CalculoDAO<Calculo, Object> calculoDAO) {
         this.calculoDAO = calculoDAO;
+    }
+
+    /**
+     * @return the npjDAO
+     */
+    public NpjDAO<Npj, Object> getNpjDAO() {
+        return npjDAO;
+    }
+
+    /**
+     * @param npjDAO the npjDAO to set
+     */
+    public void setNpjDAO(NpjDAO<Npj, Object> npjDAO) {
+        this.npjDAO = npjDAO;
+    }
+
+    /**
+     * @return the planoEconomicoDAO
+     */
+    public PlanoEconomicoDAO<PlanoEconomico, Object> getPlanoEconomicoDAO() {
+        return planoEconomicoDAO;
+    }
+
+    /**
+     * @param planoEconomicoDAO the planoEconomicoDAO to set
+     */
+    public void setPlanoEconomicoDAO(PlanoEconomicoDAO<PlanoEconomico, Object> planoEconomicoDAO) {
+        this.planoEconomicoDAO = planoEconomicoDAO;
+    }
+
+    /**
+     * @return the metodologiaDAO
+     */
+    public MetodologiaDAO<Metodologia, Object> getMetodologiaDAO() {
+        return metodologiaDAO;
+    }
+
+    /**
+     * @param metodologiaDAO the metodologiaDAO to set
+     */
+    public void setMetodologiaDAO(MetodologiaDAO<Metodologia, Object> metodologiaDAO) {
+        this.metodologiaDAO = metodologiaDAO;
+    }
+
+    /**
+     * @return the indiceDAO
+     */
+    public IndiceDAO<Indice, Object> getIndiceDAO() {
+        return indiceDAO;
+    }
+
+    /**
+     * @param indiceDAO the indiceDAO to set
+     */
+    public void setIndiceDAO(IndiceDAO<Indice, Object> indiceDAO) {
+        this.indiceDAO = indiceDAO;
+    }
+
+    /**
+     * @return the funcionarioDAO
+     */
+    public FuncionarioDAO<Funcionario, Object> getFuncionarioDAO() {
+        return funcionarioDAO;
+    }
+
+    /**
+     * @param funcionarioDAO the funcionarioDAO to set
+     */
+    public void setFuncionarioDAO(FuncionarioDAO<Funcionario, Object> funcionarioDAO) {
+        this.funcionarioDAO = funcionarioDAO;
+    }
+
+    /**
+     * @return the clienteDAO
+     */
+    public ClienteDAO<Cliente, Object> getClienteDAO() {
+        return clienteDAO;
+    }
+
+    /**
+     * @param clienteDAO the clienteDAO to set
+     */
+    public void setClienteDAO(ClienteDAO<Cliente, Object> clienteDAO) {
+        this.clienteDAO = clienteDAO;
     }
 
     /**
@@ -375,74 +473,20 @@ public class ControleCalculo {
     }
 
     /**
-     * @return the planoEconomicoDAO
+     * @return the protocoloGsvDAO
      */
-    public PlanoEconomicoDAO<PlanoEconomico, Object> getPlanoEconomicoDAO() {
-        return planoEconomicoDAO;
+    public ProtocoloGsvDAO<ProtocoloGsv, Object> getProtocoloGsvDAO() {
+        return protocoloGsvDAO;
     }
 
     /**
-     * @param planoEconomicoDAO the planoEconomicoDAO to set
+     * @param protocoloGsvDAO the protocoloGsvDAO to set
      */
-    public void setPlanoEconomicoDAO(PlanoEconomicoDAO<PlanoEconomico, Object> planoEconomicoDAO) {
-        this.planoEconomicoDAO = planoEconomicoDAO;
+    public void setProtocoloGsvDAO(ProtocoloGsvDAO<ProtocoloGsv, Object> protocoloGsvDAO) {
+        this.protocoloGsvDAO = protocoloGsvDAO;
     }
 
-    /**
-     * @return the metodologiaDAO
-     */
-    public MetodologiaDAO<Metodologia, Object> getMetodologiaDAO() {
-        return metodologiaDAO;
-    }
-
-    /**
-     * @param metodologiaDAO the metodologiaDAO to set
-     */
-    public void setMetodologiaDAO(MetodologiaDAO<Metodologia, Object> metodologiaDAO) {
-        this.metodologiaDAO = metodologiaDAO;
-    }
-
-    /**
-     * @return the indiceDAO
-     */
-    public IndiceDAO<Indice, Object> getIndiceDAO() {
-        return indiceDAO;
-    }
-
-    /**
-     * @param indiceDAO the indiceDAO to set
-     */
-    public void setIndiceDAO(IndiceDAO<Indice, Object> indiceDAO) {
-        this.indiceDAO = indiceDAO;
-    }
-
-    /**
-     * @return the funcionarioDAO
-     */
-    public FuncionarioDAO<Funcionario, Object> getFuncionarioDAO() {
-        return funcionarioDAO;
-    }
-
-    /**
-     * @param funcionarioDAO the funcionarioDAO to set
-     */
-    public void setFuncionarioDAO(FuncionarioDAO<Funcionario, Object> funcionarioDAO) {
-        this.funcionarioDAO = funcionarioDAO;
-    }
-
-    /**
-     * @return the clienteDAO
-     */
-    public ClienteDAO<Cliente, Object> getClienteDAO() {
-        return clienteDAO;
-    }
-
-    /**
-     * @param clienteDAO the clienteDAO to set
-     */
-    public void setClienteDAO(ClienteDAO<Cliente, Object> clienteDAO) {
-        this.clienteDAO = clienteDAO;
-    }
+    
     
     
 }

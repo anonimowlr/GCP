@@ -18,14 +18,14 @@
                 <p:messages></p:messages>
                 <h:panelGrid columns="7">
                     <h:outputLabel value="NPJ: "></h:outputLabel>
-                    <h:inputText value="#{controleCalculo.npj.nrPrc}" style="height: 30px">
+                    <h:inputText id="npj" value="#{controleCalculo.npj.nrPrc}" style="height: 30px">
                         <f:converter converterId="converterBigInt"></f:converter>
                     </h:inputText>
                     <h:outputLabel value="Protocolo: "></h:outputLabel>
-                    <h:inputText value="#{controleCalculo.protocoloGsv.cdPrc}" style="height: 30px"></h:inputText>                    
+                    <h:inputText id="protocoloGsv" value="#{controleCalculo.protocoloGsv.cdPrc}" style="height: 30px"></h:inputText>                    
                     
                     <h:commandButton class="btn btn-primary" value="Novo">
-                        <f:ajax listener="#{controleCalculo.novo()}" execute="@this" render="@form" event="click"></f:ajax>
+                        <f:ajax listener="#{controleCalculo.novo()}" execute="@form" render="listagem" event="click"></f:ajax>
                     </h:commandButton>
                     
                     <h:commandButton class="btn btn-primary" value="Nova Linha">

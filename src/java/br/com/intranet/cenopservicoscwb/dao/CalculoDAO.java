@@ -5,19 +5,19 @@
  */
 package br.com.intranet.cenopservicoscwb.dao;
 
-import br.com.intranet.cenopservicoscwb.model.entidade.Npj;
+import br.com.intranet.cenopservicoscwb.model.entidade.Calculo;
 
 /**
  *
  * @author f5078775
  */
-public class CalculoDAO<T, E> extends DAOGenerico<Npj, Object>{
+public class CalculoDAO<T, E> extends DAOGenerico<Calculo, Object>{
 
     public CalculoDAO() {
         super();
         
-        classePersistente = Npj.class;
-        ordem = "nrPrc";
+        classePersistente = Calculo.class;
+        ordem = "id";
         maximoObjeto = 50;
     }
     
