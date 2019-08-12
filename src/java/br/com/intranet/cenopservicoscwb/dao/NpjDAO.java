@@ -5,7 +5,6 @@
  */
 package br.com.intranet.cenopservicoscwb.dao;
 
-import br.com.intranet.cenopservicoscwb.model.entidade.Calculo;
 import br.com.intranet.cenopservicoscwb.model.entidade.Npj;
 
 /**

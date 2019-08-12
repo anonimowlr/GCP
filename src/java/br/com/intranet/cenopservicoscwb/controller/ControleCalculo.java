@@ -7,6 +7,7 @@ package br.com.intranet.cenopservicoscwb.controller;
 
 import br.com.intranet.cenopservicoscwb.dao.CalculoDAO;
 import br.com.intranet.cenopservicoscwb.dao.ClienteDAO;
+import br.com.intranet.cenopservicoscwb.dao.ExpurgoDAO;
 import br.com.intranet.cenopservicoscwb.dao.FuncionarioDAO;
 import br.com.intranet.cenopservicoscwb.dao.IndiceDAO;
 import br.com.intranet.cenopservicoscwb.dao.MetodologiaDAO;
@@ -45,6 +46,7 @@ import javax.faces.bean.ViewScoped;
 public class ControleCalculo {
 
     private CalculoDAO<Calculo, Object> calculoDAO;
+    private ExpurgoDAO<Expurgo, Object> expurgoDAO;
     private ProtocoloGsvDAO<ProtocoloGsv, Object> protocoloGsvDAO;
     private NpjDAO<Npj, Object> npjDAO;
     private PlanoEconomicoDAO<PlanoEconomico, Object> planoEconomicoDAO;
@@ -68,114 +70,163 @@ public class ControleCalculo {
     private PeriodoCalculo periodoCalculo;
 
     public ControleCalculo() {
-        npj= new Npj();
+        npj = new Npj();
         protocoloGsv = new ProtocoloGsv();
         npjDAO = new NpjDAO<>();
         calculoDAO = new CalculoDAO<>();
-        protocoloGsvDAO= new ProtocoloGsvDAO<>();
+        expurgoDAO = new ExpurgoDAO<>();
+        protocoloGsvDAO = new ProtocoloGsvDAO<>();
         planoEconomicoDAO = new PlanoEconomicoDAO<>();
         metodologiaDAO = new MetodologiaDAO<>();
         indiceDAO = new IndiceDAO<>();
         funcionarioDAO = new FuncionarioDAO<>();
         clienteDAO = new ClienteDAO<>();
+        
     }
 
     public void novo() {
-        setNpj(getNpjDAO().localizar(getNpj().getNrPrc()));
-        setProtocoloGsv(getProtocoloGsvDAO().localizar(getProtocoloGsv().getCdPrc()));
         
+       
         
-        
-//        setProtocoloGsv(new ProtocoloGsv());
-//        getNpj().adicionarProtocolo(getProtocoloGsv());
-//        setCalculo(new Calculo());
-//        getProtocoloGsv().adicionarCalculo(getCalculo());
+
+        try {
+
+            Npj npj = getNpjDAO().localizar(getNpj().getNrPrc());
+            ProtocoloGsv protocoloGsv = getProtocoloGsvDAO().localizar(getProtocoloGsv().getCdPrc());
+
+            if (npj != null) {
+                setNpj(npj);
+            }
+
+            if (protocoloGsv != null) {
+                setProtocoloGsv(protocoloGsv);
+                setCalculo(new Calculo());
+                getProtocoloGsv().adicionarCalculo(getCalculo());
+
+            } else {
+                getNpj().adicionarProtocolo(getProtocoloGsv());
+                setCalculo(new Calculo());
+                getProtocoloGsv().adicionarCalculo(getCalculo());
+
+            }
+
+//            setCalculo(new Calculo());
+//            getProtocoloGsv().adicionarCalculo(getCalculo());
+
+        } catch (Exception e) {
+            Util.mensagemErro(Util.getMensagemErro(e));
+        }
+
     }
 
     public void duplicar() {
 
         setCalculo(new Calculo());
+        getNpj().adicionarProtocolo(getProtocoloGsv());
         getProtocoloGsv().adicionarCalculo(getCalculo());
     }
 
     public void salvar() {
 
-        getNpjDAO().atualizar(getNpj());
+        if(getNpjDAO().atualizar(getNpj())){
+            
+        Util.mensagemInformacao(getNpjDAO().getMensagem());
+        } else{
+            
+        Util.mensagemErro(getNpjDAO().getMensagem());
+        }
+        
 
-        Util.mensagemInformacao(getCalculoDAO().getMensagem());
-        novo();
 
+    }
+    
+    
+    public void removeLinhaCalculo(Calculo calculo){
+        getCalculoDAO().deletar(calculo);
+        calculo.getProtocoloGsv().getListaCalculo().remove(calculo);
+        
+    }
+    
+    
+    public void teste(){
+        Util.mensagemInformacao("Desenvolver o método");
     }
 
     public void calcular() {
 
-        getCalculo().setDataRealizacaoCalculo(new Date("08/09/2019"));
-        getCalculo().setJurosCreditado(new BigDecimal("1524.00"));
-        getCalculo().setJurosReclamado(new BigDecimal("2564.00"));
-        getCalculo().setRemuneracaoBasica(new BigDecimal("456.00"));
-        getCalculo().setRemuneracaoReclamada(new BigDecimal("780.00"));
-        getCalculo().setTotRendCreditado(new BigDecimal("55444.00"));
-        getCalculo().setTotRendReclamado(new BigDecimal("78500.00"));
-        getCalculo().setValorAtualizadoComMora(new BigDecimal("458746.00"));
-        getCalculo().setValorDiferenca(new BigDecimal("456.00"));
-        getCalculo().setValorDiferencaAtualizado(new BigDecimal("45678.00"));
-        getCalculo().setValorFinal(new BigDecimal("555555.00"));
+        try {
+            
+            for (Calculo  c : getProtocoloGsv().getListaCalculo()) {
+                setCalculo(c);
+            
+            
+            
+            
+            getCalculo().setDataRealizacaoCalculo(new Date("08/09/2019"));
+            getCalculo().setJurosCreditado(new BigDecimal("1524.00"));
+            getCalculo().setJurosReclamado(new BigDecimal("2564.00"));
+            getCalculo().setRemuneracaoBasica(new BigDecimal("456.00"));
+            getCalculo().setRemuneracaoReclamada(new BigDecimal("780.00"));
+            getCalculo().setTotRendCreditado(new BigDecimal("55444.00"));
+            getCalculo().setTotRendReclamado(new BigDecimal("78500.00"));
+            getCalculo().setValorAtualizadoComMora(new BigDecimal("458746.00"));
+            getCalculo().setValorDiferenca(new BigDecimal("456.00"));
+            getCalculo().setValorDiferencaAtualizado(new BigDecimal("45678.00"));
+            getCalculo().setValorFinal(new BigDecimal("555555.00"));
 
-        Cliente cliente = getClienteDAO().localizarCliente("111.222.888-77");
-        if (cliente == null) {
-            cliente = new Cliente();
-            cliente.setCpf("111.222.888-77");
-            cliente.setNomeCliente("Jose");
-            getClienteDAO().salvar(cliente);
-        } 
+            Cliente cliente = getClienteDAO().localizarCliente("111.222.888-77");
+            if (cliente == null) {
+                cliente = new Cliente();
+                cliente.setCpf("111.222.888-77");
+                cliente.setNomeCliente("Jose");
+                getClienteDAO().salvar(cliente);
+            }
 
-        getCalculo().setCliente(cliente);
+            getCalculo().setCliente(cliente);
 
-        
-        Expurgo expurgo = new Expurgo();
-        expurgo.setMarcador("S");
-        getCalculo().setExpurgo(expurgo);
 
-        PlanoEconomico planoEconomico = getPlanoEconomicoDAO().localizar(1);
-        getCalculo().setPlanoEconomico(planoEconomico);
 
-        Metodologia metodologia = getMetodologiaDAO().localizar(1);
-        getCalculo().setMetodologia(metodologia);
 
-        Multa multa = new Multa();
-        multa.setTaxaMulta(new BigDecimal("0.05"));
-        multa.setValorMulta(new BigDecimal("50.00"));
-        getCalculo().setMulta(multa);
+            Multa multa = new Multa();
+            multa.setTaxaMulta(new BigDecimal("0.05"));
+            multa.setValorMulta(new BigDecimal("50.00"));
+            getCalculo().setMulta(multa);
 
-        Honorario honorario = new Honorario();
-        honorario.setTaxaHonorario(new BigDecimal("0.10"));
-        honorario.setValorHonorario(new BigDecimal("100.00"));
-        getCalculo().setHonorario(honorario);
+            Honorario honorario = new Honorario();
+            honorario.setTaxaHonorario(new BigDecimal("0.10"));
+            honorario.setValorHonorario(new BigDecimal("100.00"));
+            getCalculo().setHonorario(honorario);
 
-        Mora mora = new Mora();
-        mora.setDataInicio(new java.util.Date("05/25/2000"));
-        mora.setValorMoraPre(new BigDecimal("150.00"));
-        mora.setValorMoraPos(new BigDecimal("120.00"));
-        getCalculo().setMora(mora);
+            Mora mora = new Mora();
+            mora.setDataInicio(new java.util.Date("05/25/2000"));
+            mora.setValorMoraPre(new BigDecimal("150.00"));
+            mora.setValorMoraPos(new BigDecimal("120.00"));
+            getCalculo().setMora(mora);
 
-        Indice indice = getIndiceDAO().localizar(1);
-        PeriodoCalculo periodoCalculo = new PeriodoCalculo();
-        periodoCalculo.setDataInicioCalculo(new java.util.Date("04/08/1989"));
-        periodoCalculo.setDataFinalCalculo(new java.util.Date("08/09/2019"));
-        periodoCalculo.setIndice(indice);
-        getCalculo().adicionarPeriodoCalculo(periodoCalculo);
+            Indice indice = getIndiceDAO().localizar(1);
+            PeriodoCalculo periodoCalculo = new PeriodoCalculo();
+            periodoCalculo.setDataInicioCalculo(new java.util.Date("04/08/1989"));
+            periodoCalculo.setDataFinalCalculo(new java.util.Date("08/09/2019"));
+            periodoCalculo.setIndice(indice);
+            getCalculo().adicionarPeriodoCalculo(periodoCalculo);
 
-        Arquivo arquivo = new Arquivo();
-        arquivo.setEnderecoArquivo("/qqcoisa");
-        arquivo.setNomeArquivo("arquivoX");
-        arquivo.setNpjArquivo(new Long("555555555"));
-        arquivo.setTipoArquivo(".pdf");
-        getCalculo().adicionarArquivo(arquivo);
+            Arquivo arquivo = new Arquivo();
+            arquivo.setEnderecoArquivo("/qqcoisa");
+            arquivo.setNomeArquivo("arquivoX");
+            arquivo.setNpjArquivo(new Long("555555555"));
+            arquivo.setTipoArquivo(".pdf");
+            getCalculo().adicionarArquivo(arquivo);
 
-        Funcionario funcionario = getFuncionarioDAO().localizar(20);
-        getCalculo().setFuncionario(funcionario);
+            Funcionario funcionario = getFuncionarioDAO().localizar(1);
+            getCalculo().setFuncionario(funcionario);
 
-        salvar();
+            salvar();
+            }
+
+        } catch (Exception e) {
+            Util.mensagemErro(Util.getMensagemErro(e));
+        }
+
     }
 
     /**
@@ -486,7 +537,18 @@ public class ControleCalculo {
         this.protocoloGsvDAO = protocoloGsvDAO;
     }
 
-    
-    
-    
+    /**
+     * @return the expurgoDAO
+     */
+    public ExpurgoDAO<Expurgo, Object> getExpurgoDAO() {
+        return expurgoDAO;
+    }
+
+    /**
+     * @param expurgoDAO the expurgoDAO to set
+     */
+    public void setExpurgoDAO(ExpurgoDAO<Expurgo, Object> expurgoDAO) {
+        this.expurgoDAO = expurgoDAO;
+    }
+
 }
