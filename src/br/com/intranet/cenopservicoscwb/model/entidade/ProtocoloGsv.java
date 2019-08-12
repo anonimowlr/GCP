@@ -12,6 +12,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -33,7 +34,7 @@ public class ProtocoloGsv implements Serializable{
     @JoinColumn(name = "nrPrc")
     private Npj npj;
     
-    @OneToMany(mappedBy = "protocoloGsv", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "protocoloGsv", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Calculo> listaCalculo = new ArrayList<>();    
 
     public void adicionarCalculo(Calculo calculo){

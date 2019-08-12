@@ -12,6 +12,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -27,7 +28,7 @@ public class Npj implements Serializable{
     @Column(name = "NR_PRC")
     private Long nrPrc;
     
-    @OneToMany(mappedBy = "npj", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "npj", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProtocoloGsv> listaProtocoloGsv = new ArrayList<>();
 
     public void adicionarProtocolo (ProtocoloGsv protocoloGsv){

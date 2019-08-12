@@ -219,9 +219,11 @@ public class TesteCalculo {
             PeriodoCalculo periodo = new PeriodoCalculo();
             periodo.setDataInicioCalculo(new Date("06/09/1989"));
             periodo.setDataFinalCalculo(new Date("05/08/2019"));
+            
             periodo.setIndice(indice);
 
             Calculo calculo = new Calculo();
+           
             calculo.setSaldoBase(new BigDecimal("3778.63"));
             calculo.setNumeroConta(new Long("5874585"));
             calculo.setNumeroAgencia(4587);
