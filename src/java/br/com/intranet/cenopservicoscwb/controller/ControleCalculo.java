@@ -110,6 +110,9 @@ public class ControleCalculo {
 
             }
 
+                setPeriodoCalculo(new PeriodoCalculo());
+                 getCalculo().adicionarPeriodoCalculo(getPeriodoCalculo());
+           
 //            setCalculo(new Calculo());
 //            getProtocoloGsv().adicionarCalculo(getCalculo());
 
@@ -122,8 +125,10 @@ public class ControleCalculo {
     public void duplicar() {
 
         setCalculo(new Calculo());
+        setPeriodoCalculo(new PeriodoCalculo());
         getNpj().adicionarProtocolo(getProtocoloGsv());
         getProtocoloGsv().adicionarCalculo(getCalculo());
+        getCalculo().adicionarPeriodoCalculo(getPeriodoCalculo());
     }
 
     public void salvar() {
@@ -204,11 +209,8 @@ public class ControleCalculo {
             getCalculo().setMora(mora);
 
             Indice indice = getIndiceDAO().localizar(1);
-            PeriodoCalculo periodoCalculo = new PeriodoCalculo();
-            periodoCalculo.setDataInicioCalculo(new java.util.Date("04/08/1989"));
-            periodoCalculo.setDataFinalCalculo(new java.util.Date("08/09/2019"));
-            periodoCalculo.setIndice(indice);
-            getCalculo().adicionarPeriodoCalculo(periodoCalculo);
+            
+            getCalculo().getListaPeriodoCalculo().get(0).setIndice(indice);
 
             Arquivo arquivo = new Arquivo();
             arquivo.setEnderecoArquivo("/qqcoisa");
