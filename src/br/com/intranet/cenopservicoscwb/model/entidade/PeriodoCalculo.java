@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -46,6 +47,13 @@ public class PeriodoCalculo implements Serializable{
     @OneToOne
     @JoinColumn(name = "CD_INDICE", referencedColumnName = "id")
     private Indice indice;
+    
+    
+    
+    @ManyToOne
+    @JoinColumn(name = "ID_CALCULO", referencedColumnName = "id")
+    private Calculo calculo;
+    
     
     
     
@@ -136,6 +144,20 @@ public class PeriodoCalculo implements Serializable{
      */
     public void setIndice(Indice indice) {
         this.indice = indice;
+    }
+
+    /**
+     * @return the calculo
+     */
+    public Calculo getCalculo() {
+        return calculo;
+    }
+
+    /**
+     * @param calculo the calculo to set
+     */
+    public void setCalculo(Calculo calculo) {
+        this.calculo = calculo;
     }
     
     

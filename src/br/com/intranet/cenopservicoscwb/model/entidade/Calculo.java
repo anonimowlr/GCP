@@ -89,7 +89,7 @@ public class Calculo implements Serializable{
     
     
         
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CD_PRC", referencedColumnName = "CD_PRC")
     private ProtocoloGsv protocoloGsv;
     
@@ -109,12 +109,18 @@ public class Calculo implements Serializable{
     @JoinColumn(name = "CD_PLANO_ECONOMICO", referencedColumnName = "id")
     private PlanoEconomico planoEconomico;
     
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "tb_calculo_has_tb_periodo_calculo", joinColumns = 
-    {@JoinColumn(name = "ID_CALCULO", referencedColumnName = "id")},
-    inverseJoinColumns = 
-    {@JoinColumn(name = "ID_PERIODO", referencedColumnName = "id")})
-    private List<PeriodoCalculo> listaPeriodoCalculo = new ArrayList<>();
+//    @ManyToMany(cascade = CascadeType.ALL)
+//    @JoinTable(name = "tb_calculo_has_tb_periodo_calculo", joinColumns = 
+//    {@JoinColumn(name = "ID_CALCULO", referencedColumnName = "id")},
+//    inverseJoinColumns = 
+//    {@JoinColumn(name = "ID_PERIODO", referencedColumnName = "id")})
+//    private List<PeriodoCalculo> listaPeriodoCalculo = new ArrayList<>();
+//    
+    
+    
+     @OneToMany(mappedBy = "calculo", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+     private List<PeriodoCalculo> listaPeriodoCalculo = new ArrayList<>();
+    
     
     @OneToMany(mappedBy = "calculo", cascade = CascadeType.ALL)
     private List<Atualizacao> listaAtualizacao = new ArrayList<>();
@@ -151,6 +157,7 @@ public class Calculo implements Serializable{
     }
     
     public void adicionarPeriodoCalculo(PeriodoCalculo periodoCalculo){
+        periodoCalculo.setCalculo(this);
         getListaPeriodoCalculo().add(periodoCalculo);
     }
     
@@ -158,8 +165,6 @@ public class Calculo implements Serializable{
         getListaArquivo().add(arquivo);
     }
 
-    
-    
     /**
      * @return the id
      */
@@ -214,6 +219,20 @@ public class Calculo implements Serializable{
      */
     public void setNumeroAgencia(Integer numeroAgencia) {
         this.numeroAgencia = numeroAgencia;
+    }
+
+    /**
+     * @return the nomeBanco
+     */
+    public String getNomeBanco() {
+        return nomeBanco;
+    }
+
+    /**
+     * @param nomeBanco the nomeBanco to set
+     */
+    public void setNomeBanco(String nomeBanco) {
+        this.nomeBanco = nomeBanco;
     }
 
     /**
@@ -329,6 +348,48 @@ public class Calculo implements Serializable{
     }
 
     /**
+     * @return the dataRealizacaoCalculo
+     */
+    public Date getDataRealizacaoCalculo() {
+        return dataRealizacaoCalculo;
+    }
+
+    /**
+     * @param dataRealizacaoCalculo the dataRealizacaoCalculo to set
+     */
+    public void setDataRealizacaoCalculo(Date dataRealizacaoCalculo) {
+        this.dataRealizacaoCalculo = dataRealizacaoCalculo;
+    }
+
+    /**
+     * @return the valorDiferencaAtualizado
+     */
+    public BigDecimal getValorDiferencaAtualizado() {
+        return valorDiferencaAtualizado;
+    }
+
+    /**
+     * @param valorDiferencaAtualizado the valorDiferencaAtualizado to set
+     */
+    public void setValorDiferencaAtualizado(BigDecimal valorDiferencaAtualizado) {
+        this.valorDiferencaAtualizado = valorDiferencaAtualizado;
+    }
+
+    /**
+     * @return the valorAtualizadoComMora
+     */
+    public BigDecimal getValorAtualizadoComMora() {
+        return valorAtualizadoComMora;
+    }
+
+    /**
+     * @param valorAtualizadoComMora the valorAtualizadoComMora to set
+     */
+    public void setValorAtualizadoComMora(BigDecimal valorAtualizadoComMora) {
+        this.valorAtualizadoComMora = valorAtualizadoComMora;
+    }
+
+    /**
      * @return the protocoloGsv
      */
     public ProtocoloGsv getProtocoloGsv() {
@@ -412,113 +473,6 @@ public class Calculo implements Serializable{
         this.listaPeriodoCalculo = listaPeriodoCalculo;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.getId());
-        hash = 59 * hash + Objects.hashCode(this.getSaldoBase());
-        hash = 59 * hash + Objects.hashCode(this.getNumeroConta());
-        hash = 59 * hash + Objects.hashCode(this.getNumeroAgencia());
-        hash = 59 * hash + Objects.hashCode(this.getValorDiferenca());
-        hash = 59 * hash + Objects.hashCode(this.getValorFinal());
-        hash = 59 * hash + Objects.hashCode(this.getRemuneracaoBasica());
-        hash = 59 * hash + Objects.hashCode(this.getJurosCreditado());
-        hash = 59 * hash + Objects.hashCode(this.getTotRendCreditado());
-        hash = 59 * hash + Objects.hashCode(this.getRemuneracaoReclamada());
-        hash = 59 * hash + Objects.hashCode(this.getJurosReclamado());
-        hash = 59 * hash + Objects.hashCode(this.getTotRendReclamado());
-        hash = 59 * hash + Objects.hashCode(this.getProtocoloGsv());
-        hash = 59 * hash + Objects.hashCode(this.getFuncionario());
-        hash = 59 * hash + Objects.hashCode(this.getCliente());
-        hash = 59 * hash + Objects.hashCode(this.getMetodologia());
-        hash = 59 * hash + Objects.hashCode(this.getPlanoEconomico());
-        hash = 59 * hash + Objects.hashCode(this.getListaPeriodoCalculo());
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Calculo other = (Calculo) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        if (!Objects.equals(this.saldoBase, other.saldoBase)) {
-            return false;
-        }
-        if (!Objects.equals(this.numeroConta, other.numeroConta)) {
-            return false;
-        }
-        if (!Objects.equals(this.numeroAgencia, other.numeroAgencia)) {
-            return false;
-        }
-        if (!Objects.equals(this.valorDiferenca, other.valorDiferenca)) {
-            return false;
-        }
-        if (!Objects.equals(this.valorFinal, other.valorFinal)) {
-            return false;
-        }
-        if (!Objects.equals(this.remuneracaoBasica, other.remuneracaoBasica)) {
-            return false;
-        }
-        if (!Objects.equals(this.jurosCreditado, other.jurosCreditado)) {
-            return false;
-        }
-        if (!Objects.equals(this.totRendCreditado, other.totRendCreditado)) {
-            return false;
-        }
-        if (!Objects.equals(this.remuneracaoReclamada, other.remuneracaoReclamada)) {
-            return false;
-        }
-        if (!Objects.equals(this.jurosReclamado, other.jurosReclamado)) {
-            return false;
-        }
-        if (!Objects.equals(this.totRendReclamado, other.totRendReclamado)) {
-            return false;
-        }
-        if (!Objects.equals(this.protocoloGsv, other.protocoloGsv)) {
-            return false;
-        }
-        if (!Objects.equals(this.funcionario, other.funcionario)) {
-            return false;
-        }
-        if (!Objects.equals(this.cliente, other.cliente)) {
-            return false;
-        }
-        if (!Objects.equals(this.metodologia, other.metodologia)) {
-            return false;
-        }
-        if (!Objects.equals(this.planoEconomico, other.planoEconomico)) {
-            return false;
-        }
-        if (!Objects.equals(this.listaPeriodoCalculo, other.listaPeriodoCalculo)) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * @return the dataRealizacaoCalculo
-     */
-    public Date getDataRealizacaoCalculo() {
-        return dataRealizacaoCalculo;
-    }
-
-    /**
-     * @param dataRealizacaoCalculo the dataRealizacaoCalculo to set
-     */
-    public void setDataRealizacaoCalculo(Date dataRealizacaoCalculo) {
-        this.dataRealizacaoCalculo = dataRealizacaoCalculo;
-    }
-
     /**
      * @return the listaAtualizacao
      */
@@ -562,34 +516,6 @@ public class Calculo implements Serializable{
     }
 
     /**
-     * @return the valorAtualizadoComMora
-     */
-    public BigDecimal getValorAtualizadoComMora() {
-        return valorAtualizadoComMora;
-    }
-
-    /**
-     * @param valorAtualizadoComMora the valorAtualizadoComMora to set
-     */
-    public void setValorAtualizadoComMora(BigDecimal valorAtualizadoComMora) {
-        this.valorAtualizadoComMora = valorAtualizadoComMora;
-    }
-
-    /**
-     * @return the valorDiferencaAtualizado
-     */
-    public BigDecimal getValorDiferencaAtualizado() {
-        return valorDiferencaAtualizado;
-    }
-
-    /**
-     * @param valorDiferencaAtualizado the valorDiferencaAtualizado to set
-     */
-    public void setValorDiferencaAtualizado(BigDecimal valorDiferencaAtualizado) {
-        this.valorDiferencaAtualizado = valorDiferencaAtualizado;
-    }
-
-    /**
      * @return the mora
      */
     public Mora getMora() {
@@ -618,20 +544,6 @@ public class Calculo implements Serializable{
     }
 
     /**
-     * @return the nomeBanco
-     */
-    public String getNomeBanco() {
-        return nomeBanco;
-    }
-
-    /**
-     * @param nomeBanco the nomeBanco to set
-     */
-    public void setNomeBanco(String nomeBanco) {
-        this.nomeBanco = nomeBanco;
-    }
-
-    /**
      * @return the multa
      */
     public Multa getMulta() {
@@ -644,8 +556,143 @@ public class Calculo implements Serializable{
     public void setMulta(Multa multa) {
         this.multa = multa;
     }
-    
 
-   
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 41 * hash + Objects.hashCode(this.id);
+        hash = 41 * hash + Objects.hashCode(this.saldoBase);
+        hash = 41 * hash + Objects.hashCode(this.numeroConta);
+        hash = 41 * hash + Objects.hashCode(this.numeroAgencia);
+        hash = 41 * hash + Objects.hashCode(this.nomeBanco);
+        hash = 41 * hash + Objects.hashCode(this.valorDiferenca);
+        hash = 41 * hash + Objects.hashCode(this.valorFinal);
+        hash = 41 * hash + Objects.hashCode(this.remuneracaoBasica);
+        hash = 41 * hash + Objects.hashCode(this.jurosCreditado);
+        hash = 41 * hash + Objects.hashCode(this.totRendCreditado);
+        hash = 41 * hash + Objects.hashCode(this.remuneracaoReclamada);
+        hash = 41 * hash + Objects.hashCode(this.jurosReclamado);
+        hash = 41 * hash + Objects.hashCode(this.totRendReclamado);
+        hash = 41 * hash + Objects.hashCode(this.dataRealizacaoCalculo);
+        hash = 41 * hash + Objects.hashCode(this.valorDiferencaAtualizado);
+        hash = 41 * hash + Objects.hashCode(this.valorAtualizadoComMora);
+        hash = 41 * hash + Objects.hashCode(this.protocoloGsv);
+        hash = 41 * hash + Objects.hashCode(this.funcionario);
+        hash = 41 * hash + Objects.hashCode(this.cliente);
+        hash = 41 * hash + Objects.hashCode(this.metodologia);
+        hash = 41 * hash + Objects.hashCode(this.planoEconomico);
+        hash = 41 * hash + Objects.hashCode(this.listaPeriodoCalculo);
+        hash = 41 * hash + Objects.hashCode(this.listaAtualizacao);
+        hash = 41 * hash + Objects.hashCode(this.listaArquivo);
+        hash = 41 * hash + Objects.hashCode(this.expurgo);
+        hash = 41 * hash + Objects.hashCode(this.mora);
+        hash = 41 * hash + Objects.hashCode(this.honorario);
+        hash = 41 * hash + Objects.hashCode(this.multa);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Calculo other = (Calculo) obj;
+        if (!Objects.equals(this.nomeBanco, other.nomeBanco)) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.saldoBase, other.saldoBase)) {
+            return false;
+        }
+        if (!Objects.equals(this.numeroConta, other.numeroConta)) {
+            return false;
+        }
+        if (!Objects.equals(this.numeroAgencia, other.numeroAgencia)) {
+            return false;
+        }
+        if (!Objects.equals(this.valorDiferenca, other.valorDiferenca)) {
+            return false;
+        }
+        if (!Objects.equals(this.valorFinal, other.valorFinal)) {
+            return false;
+        }
+        if (!Objects.equals(this.remuneracaoBasica, other.remuneracaoBasica)) {
+            return false;
+        }
+        if (!Objects.equals(this.jurosCreditado, other.jurosCreditado)) {
+            return false;
+        }
+        if (!Objects.equals(this.totRendCreditado, other.totRendCreditado)) {
+            return false;
+        }
+        if (!Objects.equals(this.remuneracaoReclamada, other.remuneracaoReclamada)) {
+            return false;
+        }
+        if (!Objects.equals(this.jurosReclamado, other.jurosReclamado)) {
+            return false;
+        }
+        if (!Objects.equals(this.totRendReclamado, other.totRendReclamado)) {
+            return false;
+        }
+        if (!Objects.equals(this.dataRealizacaoCalculo, other.dataRealizacaoCalculo)) {
+            return false;
+        }
+        if (!Objects.equals(this.valorDiferencaAtualizado, other.valorDiferencaAtualizado)) {
+            return false;
+        }
+        if (!Objects.equals(this.valorAtualizadoComMora, other.valorAtualizadoComMora)) {
+            return false;
+        }
+        if (!Objects.equals(this.protocoloGsv, other.protocoloGsv)) {
+            return false;
+        }
+        if (!Objects.equals(this.funcionario, other.funcionario)) {
+            return false;
+        }
+        if (!Objects.equals(this.cliente, other.cliente)) {
+            return false;
+        }
+        if (!Objects.equals(this.metodologia, other.metodologia)) {
+            return false;
+        }
+        if (!Objects.equals(this.planoEconomico, other.planoEconomico)) {
+            return false;
+        }
+        if (!Objects.equals(this.listaPeriodoCalculo, other.listaPeriodoCalculo)) {
+            return false;
+        }
+        if (!Objects.equals(this.listaAtualizacao, other.listaAtualizacao)) {
+            return false;
+        }
+        if (!Objects.equals(this.listaArquivo, other.listaArquivo)) {
+            return false;
+        }
+        if (!Objects.equals(this.expurgo, other.expurgo)) {
+            return false;
+        }
+        if (!Objects.equals(this.mora, other.mora)) {
+            return false;
+        }
+        if (!Objects.equals(this.honorario, other.honorario)) {
+            return false;
+        }
+        if (!Objects.equals(this.multa, other.multa)) {
+            return false;
+        }
+        return true;
+    }
+
     
+    
+    
+    
+   
 }

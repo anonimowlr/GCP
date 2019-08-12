@@ -9,9 +9,9 @@
         <properties>
             <!-- Propriedades JDBC -->
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.1.103:4040/calc_poupanca"/>
-            <property name="javax.persistence.jdbc.user" value="jocimar"/>
-            <property name="javax.persistence.jdbc.password" value="jwalter1983"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://172.20.0.33/calc_poupanca"/>
+            <property name="javax.persistence.jdbc.user" value="calculopoupanca"/>
+            <property name="javax.persistence.jdbc.password" value="calculopoupanca"/>
             <!-- Configurações específicas do Hibernate -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
            <property name="hibernate.hbm2ddl.auto" value="update"/>
