@@ -32,7 +32,7 @@
                     </h:inputText>                    
 
                     <h:commandButton class="btn btn-primary" value="Salvar">
-                        <f:ajax listener="#{controleCalculo.calcular()}" execute="@form" render=":formPrincipal" event="click"></f:ajax>
+                        <f:ajax listener="#{controleCalculo.calcular()}" execute="@form" render="formPrincipal" event="click"></f:ajax>
                     </h:commandButton>
 
                 </h:panelGrid>

@@ -31,9 +31,8 @@ import br.com.intranet.cenopservicoscwb.model.entidade.PlanoEconomico;
 import br.com.intranet.cenopservicoscwb.model.entidade.ProtocoloGsv;
 import br.com.intranet.cenopservicoscwb.util.Util;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
@@ -81,13 +80,10 @@ public class ControleCalculo {
         indiceDAO = new IndiceDAO<>();
         funcionarioDAO = new FuncionarioDAO<>();
         clienteDAO = new ClienteDAO<>();
-        
+
     }
 
     public void novo() {
-        
-       
-        
 
         try {
 
@@ -110,12 +106,11 @@ public class ControleCalculo {
 
             }
 
-                setPeriodoCalculo(new PeriodoCalculo());
-                 getCalculo().adicionarPeriodoCalculo(getPeriodoCalculo());
-           
+            setPeriodoCalculo(new PeriodoCalculo());
+            getCalculo().adicionarPeriodoCalculo(getPeriodoCalculo());
+
 //            setCalculo(new Calculo());
 //            getProtocoloGsv().adicionarCalculo(getCalculo());
-
         } catch (Exception e) {
             Util.mensagemErro(Util.getMensagemErro(e));
         }
@@ -133,97 +128,86 @@ public class ControleCalculo {
 
     public void salvar() {
 
-        if(getNpjDAO().atualizar(getNpj())){
-            
-        Util.mensagemInformacao(getNpjDAO().getMensagem());
-        } else{
-            
-        Util.mensagemErro(getNpjDAO().getMensagem());
-        }
-        
+        if (getNpjDAO().atualizar(getNpj())) {
 
+            Util.mensagemInformacao(getNpjDAO().getMensagem());
+        } else {
+
+            Util.mensagemErro(getNpjDAO().getMensagem());
+        }
 
     }
-    
-    
-    public void removeLinhaCalculo(Calculo calculo){
+
+    public void removeLinhaCalculo(Calculo calculo) {
         getCalculoDAO().deletar(calculo);
         calculo.getProtocoloGsv().getListaCalculo().remove(calculo);
-        
+
     }
-    
-    
-    public void teste(){
+
+    public void teste() {
         Util.mensagemInformacao("Desenvolver o método");
     }
 
     public void calcular() {
 
         try {
+
+           
+
+                getCalculo().setDataRealizacaoCalculo(Calendar.getInstance().getTime());
+                getCalculo().setJurosCreditado(new BigDecimal("1524.00"));
+                getCalculo().setJurosReclamado(new BigDecimal("2564.00"));
+                getCalculo().setRemuneracaoBasica(new BigDecimal("456.00"));
+                getCalculo().setRemuneracaoReclamada(new BigDecimal("780.00"));
+                getCalculo().setTotRendCreditado(new BigDecimal("55444.00"));
+                getCalculo().setTotRendReclamado(new BigDecimal("78500.00"));
+                getCalculo().setValorAtualizadoComMora(new BigDecimal("123456.00"));
+                getCalculo().setValorDiferenca(new BigDecimal("100.00"));
+                getCalculo().setValorDiferencaAtualizado(new BigDecimal("88888.00"));
+                getCalculo().setValorFinal(new BigDecimal("1"));
+
+                Cliente cliente = getClienteDAO().localizarCliente("111.222.888-77");
+                if (cliente == null) {
+                    cliente = new Cliente();
+                    cliente.setCpf("111.222.888-77");
+                    cliente.setNomeCliente("Jose");
+                    getClienteDAO().salvar(cliente);
+                }
+
+                getCalculo().setCliente(cliente);
+
+                Multa multa = new Multa();
+                multa.setTaxaMulta(new BigDecimal("0.05"));
+                multa.setValorMulta(new BigDecimal("50.00"));
+                getCalculo().setMulta(multa);
+
+                Honorario honorario = new Honorario();
+                honorario.setTaxaHonorario(new BigDecimal("0.10"));
+                honorario.setValorHonorario(new BigDecimal("100.00"));
+                getCalculo().setHonorario(honorario);
+
+                Mora mora = new Mora();
+                mora.setDataInicio(new java.util.Date("05/25/2000"));
+                mora.setValorMoraPre(new BigDecimal("150.00"));
+                mora.setValorMoraPos(new BigDecimal("120.00"));
+                getCalculo().setMora(mora);
+
+                Indice indice = getIndiceDAO().localizar(1);
+
+                getCalculo().getListaPeriodoCalculo().get(0).setIndice(indice);
+
+                Arquivo arquivo = new Arquivo();
+                arquivo.setEnderecoArquivo("/qqcoisa");
+                arquivo.setNomeArquivo("arquivoX");
+                arquivo.setNpjArquivo(new Long("555555555"));
+                arquivo.setTipoArquivo(".pdf");
+                getCalculo().adicionarArquivo(arquivo);
+
+                Funcionario funcionario = getFuncionarioDAO().localizar(1);
+                getCalculo().setFuncionario(funcionario);
+
+                salvar();
             
-            for (Calculo  c : getProtocoloGsv().getListaCalculo()) {
-                setCalculo(c);
-            
-            
-            
-            
-            getCalculo().setDataRealizacaoCalculo(new Date("08/09/2019"));
-            getCalculo().setJurosCreditado(new BigDecimal("1524.00"));
-            getCalculo().setJurosReclamado(new BigDecimal("2564.00"));
-            getCalculo().setRemuneracaoBasica(new BigDecimal("456.00"));
-            getCalculo().setRemuneracaoReclamada(new BigDecimal("780.00"));
-            getCalculo().setTotRendCreditado(new BigDecimal("55444.00"));
-            getCalculo().setTotRendReclamado(new BigDecimal("78500.00"));
-            getCalculo().setValorAtualizadoComMora(new BigDecimal("458746.00"));
-            getCalculo().setValorDiferenca(new BigDecimal("456.00"));
-            getCalculo().setValorDiferencaAtualizado(new BigDecimal("45678.00"));
-            getCalculo().setValorFinal(new BigDecimal("555555.00"));
-
-            Cliente cliente = getClienteDAO().localizarCliente("111.222.888-77");
-            if (cliente == null) {
-                cliente = new Cliente();
-                cliente.setCpf("111.222.888-77");
-                cliente.setNomeCliente("Jose");
-                getClienteDAO().salvar(cliente);
-            }
-
-            getCalculo().setCliente(cliente);
-
-
-
-
-            Multa multa = new Multa();
-            multa.setTaxaMulta(new BigDecimal("0.05"));
-            multa.setValorMulta(new BigDecimal("50.00"));
-            getCalculo().setMulta(multa);
-
-            Honorario honorario = new Honorario();
-            honorario.setTaxaHonorario(new BigDecimal("0.10"));
-            honorario.setValorHonorario(new BigDecimal("100.00"));
-            getCalculo().setHonorario(honorario);
-
-            Mora mora = new Mora();
-            mora.setDataInicio(new java.util.Date("05/25/2000"));
-            mora.setValorMoraPre(new BigDecimal("150.00"));
-            mora.setValorMoraPos(new BigDecimal("120.00"));
-            getCalculo().setMora(mora);
-
-            Indice indice = getIndiceDAO().localizar(1);
-            
-            getCalculo().getListaPeriodoCalculo().get(0).setIndice(indice);
-
-            Arquivo arquivo = new Arquivo();
-            arquivo.setEnderecoArquivo("/qqcoisa");
-            arquivo.setNomeArquivo("arquivoX");
-            arquivo.setNpjArquivo(new Long("555555555"));
-            arquivo.setTipoArquivo(".pdf");
-            getCalculo().adicionarArquivo(arquivo);
-
-            Funcionario funcionario = getFuncionarioDAO().localizar(1);
-            getCalculo().setFuncionario(funcionario);
-
-            salvar();
-            }
 
         } catch (Exception e) {
             Util.mensagemErro(Util.getMensagemErro(e));
