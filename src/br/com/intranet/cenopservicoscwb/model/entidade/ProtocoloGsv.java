@@ -6,6 +6,7 @@
 package br.com.intranet.cenopservicoscwb.model.entidade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -33,7 +34,7 @@ public class ProtocoloGsv implements Serializable{
     private Npj npj;
     
     @OneToMany(mappedBy = "protocoloGsv", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Calculo> listaCalculo;    
+    private List<Calculo> listaCalculo = new ArrayList<>();    
 
     public void adicionarCalculo(Calculo calculo){
         calculo.setProtocoloGsv(this);

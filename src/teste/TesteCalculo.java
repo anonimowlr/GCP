@@ -217,8 +217,8 @@ public class TesteCalculo {
             Expurgo expurgo = d10.buscarObjeto(2);
 
             PeriodoCalculo periodo = new PeriodoCalculo();
-            periodo.setDataInicioCalculo(new Date("02/08/1989"));
-            periodo.setDataFinalCalculo(new Date("08/08/2019"));
+            periodo.setDataInicioCalculo(new Date("06/09/1989"));
+            periodo.setDataFinalCalculo(new Date("05/08/2019"));
             periodo.setIndice(indice);
 
             Calculo calculo = new Calculo();

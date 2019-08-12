@@ -11,6 +11,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,8 +43,8 @@ public class PeriodoCalculo implements Serializable{
     private Date dataFinalCalculo;
 
     
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ID_INDICE", referencedColumnName = "id")
+    @OneToOne
+    @JoinColumn(name = "CD_INDICE", referencedColumnName = "id")
     private Indice indice;
     
     
