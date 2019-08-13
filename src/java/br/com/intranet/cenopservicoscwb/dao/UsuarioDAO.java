@@ -1,12 +1,7 @@
 package br.com.intranet.cenopservicoscwb.dao;;
-import br.com.intranet.cenopservicoscwb.conexao.ConnectionFactory;
 import br.com.intranet.cenopservicoscwb.model.entidade.Funcionario;
-import br.com.intranet.cenopservicoscwb.model.util.Utils;
 import br.com.intranet.cenopservicoscwb.util.ErroSistema;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 
 public class UsuarioDAO {
@@ -55,10 +50,10 @@ public class UsuarioDAO {
 //            try{busca.close();} catch(SQLException e){}
 //            try{con.close();} catch(SQLException e){}
 //        }
-////        
 //        
-//              
-//    
+        
+              
+    
 
     funci.setChaveFunci("F5078775");
     funci.setNomeFunci("funci teste nao continuar");

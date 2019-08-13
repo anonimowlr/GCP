@@ -31,9 +31,7 @@ import br.com.intranet.cenopservicoscwb.model.entidade.PlanoEconomico;
 import br.com.intranet.cenopservicoscwb.model.entidade.ProtocoloGsv;
 import br.com.intranet.cenopservicoscwb.util.Util;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.Calendar;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
@@ -73,6 +71,7 @@ public class ControleCalculo {
         npj = new Npj();
         protocoloGsv = new ProtocoloGsv();
         npjDAO = new NpjDAO<>();
+        cliente = new Cliente();
         calculoDAO = new CalculoDAO<>();
         expurgoDAO = new ExpurgoDAO<>();
         protocoloGsvDAO = new ProtocoloGsvDAO<>();
@@ -81,13 +80,10 @@ public class ControleCalculo {
         indiceDAO = new IndiceDAO<>();
         funcionarioDAO = new FuncionarioDAO<>();
         clienteDAO = new ClienteDAO<>();
-        
+
     }
 
     public void novo() {
-        
-       
-        
 
         try {
 
@@ -101,21 +97,25 @@ public class ControleCalculo {
             if (protocoloGsv != null) {
                 setProtocoloGsv(protocoloGsv);
                 setCalculo(new Calculo());
+                getCalculo().setCliente(getCliente());
+                getCliente().adicionarCalculo(getCalculo());
                 getProtocoloGsv().adicionarCalculo(getCalculo());
 
             } else {
                 getNpj().adicionarProtocolo(getProtocoloGsv());
+                salvar();
                 setCalculo(new Calculo());
+                getCalculo().setCliente(getCliente());
+                getCliente().adicionarCalculo(getCalculo());
                 getProtocoloGsv().adicionarCalculo(getCalculo());
 
             }
 
-                setPeriodoCalculo(new PeriodoCalculo());
-                 getCalculo().adicionarPeriodoCalculo(getPeriodoCalculo());
-           
+            setPeriodoCalculo(new PeriodoCalculo());
+            getCalculo().adicionarPeriodoCalculo(getPeriodoCalculo());
+
 //            setCalculo(new Calculo());
 //            getProtocoloGsv().adicionarCalculo(getCalculo());
-
         } catch (Exception e) {
             Util.mensagemErro(Util.getMensagemErro(e));
         }
@@ -132,65 +132,68 @@ public class ControleCalculo {
     }
 
     public void salvar() {
+       
 
-        if(getNpjDAO().atualizar(getNpj())){
-            
-        Util.mensagemInformacao(getNpjDAO().getMensagem());
-        } else{
-            
-        Util.mensagemErro(getNpjDAO().getMensagem());
+        if (getNpjDAO().atualizar(getNpj())) {
+
+            Util.mensagemInformacao(getNpjDAO().getMensagem());
+        } else {
+
+            Util.mensagemErro(getNpjDAO().getMensagem());
         }
-        
-
 
     }
-    
-    
-    public void removeLinhaCalculo(Calculo calculo){
-        getCalculoDAO().deletar(calculo);
-        calculo.getProtocoloGsv().getListaCalculo().remove(calculo);
-        
+
+    public void removeLinhaCalculo(Calculo calculo) {
+        setCalculo(calculo);
+        getCalculoDAO().deletar(getCalculo());
+        calculo.getProtocoloGsv().getListaCalculo().remove(getCalculo());
+
     }
-    
-    
-    public void teste(){
+
+    public void salvarCalculo(Calculo calculo) {
+        setCalculo(calculo);
+
+        if (calculo.getId() == null) {
+            calcular();
+            getCalculoDAO().salvar(calculo);
+            Util.mensagemInformacao(getCalculoDAO().getMensagem());
+        } else {
+            getCalculoDAO().atualizar(calculo);
+            getCalculoDAO().getMensagem();
+        }
+
+    }
+
+    public void teste() {
         Util.mensagemInformacao("Desenvolver o método");
     }
 
     public void calcular() {
 
         try {
-            
-            for (Calculo  c : getProtocoloGsv().getListaCalculo()) {
-                setCalculo(c);
-            
-            
-            
-            
-            getCalculo().setDataRealizacaoCalculo(new Date("08/09/2019"));
+
+            getCalculo().setDataRealizacaoCalculo(Calendar.getInstance().getTime());
             getCalculo().setJurosCreditado(new BigDecimal("1524.00"));
             getCalculo().setJurosReclamado(new BigDecimal("2564.00"));
             getCalculo().setRemuneracaoBasica(new BigDecimal("456.00"));
             getCalculo().setRemuneracaoReclamada(new BigDecimal("780.00"));
             getCalculo().setTotRendCreditado(new BigDecimal("55444.00"));
             getCalculo().setTotRendReclamado(new BigDecimal("78500.00"));
-            getCalculo().setValorAtualizadoComMora(new BigDecimal("458746.00"));
-            getCalculo().setValorDiferenca(new BigDecimal("456.00"));
-            getCalculo().setValorDiferencaAtualizado(new BigDecimal("45678.00"));
-            getCalculo().setValorFinal(new BigDecimal("555555.00"));
+            getCalculo().setValorAtualizadoComMora(new BigDecimal("123456.00"));
+            getCalculo().setValorDiferenca(new BigDecimal("100.00"));
+            getCalculo().setValorDiferencaAtualizado(new BigDecimal("88888.00"));
+            getCalculo().setValorFinal(new BigDecimal("1"));
 
-            Cliente cliente = getClienteDAO().localizarCliente("111.222.888-77");
-            if (cliente == null) {
-                cliente = new Cliente();
-                cliente.setCpf("111.222.888-77");
-                cliente.setNomeCliente("Jose");
-                getClienteDAO().salvar(cliente);
-            }
-
-            getCalculo().setCliente(cliente);
-
-
-
+//            Cliente cliente = getClienteDAO().localizarCliente("111.222.888-77");
+//            if (cliente == null) {
+//                cliente = new Cliente();
+//                cliente.setCpf("111.222.888-77");
+//                cliente.setNomeCliente("Jose");
+//                getClienteDAO().salvar(cliente);
+//            }
+//
+//            getCalculo().setCliente(cliente);
 
             Multa multa = new Multa();
             multa.setTaxaMulta(new BigDecimal("0.05"));
@@ -208,10 +211,7 @@ public class ControleCalculo {
             mora.setValorMoraPos(new BigDecimal("120.00"));
             getCalculo().setMora(mora);
 
-            Indice indice = getIndiceDAO().localizar(1);
-            
-            getCalculo().getListaPeriodoCalculo().get(0).setIndice(indice);
-
+            // getCalculo().getListaPeriodoCalculo().get(0).setIndice(indice);
             Arquivo arquivo = new Arquivo();
             arquivo.setEnderecoArquivo("/qqcoisa");
             arquivo.setNomeArquivo("arquivoX");
@@ -221,9 +221,6 @@ public class ControleCalculo {
 
             Funcionario funcionario = getFuncionarioDAO().localizar(1);
             getCalculo().setFuncionario(funcionario);
-
-            salvar();
-            }
 
         } catch (Exception e) {
             Util.mensagemErro(Util.getMensagemErro(e));
