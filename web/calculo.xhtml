@@ -57,6 +57,16 @@
                                 <f:ajax  execute="saldoBase" render="saldoBase" event="change"></f:ajax>
                             </h:inputText>                                               
                         </h:column>
+                        
+                        <h:column>
+                            <f:facet name="header">Banco</f:facet>
+                            <h:selectOneMenu value="#{c.nomeBanco}" style="height: 30px;width: 60px">
+                                <f:selectItem itemValue="BB" itemLabel="BB"></f:selectItem>
+                                <f:selectItem itemValue="BNC" itemLabel="BNC"></f:selectItem>
+                                <f:selectItem itemValue="BESC" itemLabel="BESC"></f:selectItem>                            
+                            </h:selectOneMenu>
+                        </h:column>
+                       
 
 
 
@@ -66,6 +76,20 @@
                                 <f:converter converterId="converterInt"></f:converter>
                             </h:inputText>                                               
                         </h:column>
+                        
+                        
+                        <h:column>
+                            <f:facet name="header">Conta</f:facet>
+                            <h:inputText value="#{c.numeroConta}" style="height: 30px;width: 150px">
+                                <f:converter converterId="converterConta"></f:converter>
+
+                            </h:inputText>                                               
+                        </h:column>
+                        
+                        
+                        
+                        
+                        
                         <h:column>
                             <f:facet name="header">Nome </f:facet>
                             <h:inputText value="#{c.cliente.nomeCliente}" style="height: 30px;width: 150px">
@@ -77,13 +101,7 @@
                             </h:inputText>                                               
                         </h:column>
 
-                        <h:column>
-                            <f:facet name="header">Conta</f:facet>
-                            <h:inputText value="#{c.numeroConta}" style="height: 30px;width: 150px">
-                                <f:converter converterId="converterConta"></f:converter>
-
-                            </h:inputText>                                               
-                        </h:column>
+                        
                         <h:column>
                             <f:facet name="header">Período/Índice</f:facet>
                             <h:dataTable value="#{c.listaPeriodoCalculo}" var="d">
@@ -109,13 +127,13 @@
                             </h:dataTable>                                        
                         </h:column>
 
+                        
                         <h:column>
-                            <f:facet name="header">Banco</f:facet>
-                            <h:selectOneMenu value="#{c.nomeBanco}" style="height: 30px;width: 60px">
-                                <f:selectItem itemValue="BB" itemLabel="BB"></f:selectItem>
-                                <f:selectItem itemValue="BNC" itemLabel="BNC"></f:selectItem>
-                                <f:selectItem itemValue="BESC" itemLabel="BESC"></f:selectItem>                            
-                            </h:selectOneMenu>
+                            <f:facet name="header">Mora</f:facet>
+                            <p:inputMask  mask="99/99/9999" id="dataBase" value="#{c.mora.dataInicio}" style="width: 100px;height: 30px" >
+                                        <f:converter converterId="converterDate"></f:converter>
+                            </p:inputMask>
+                        
                         </h:column>
 
                         <h:column>

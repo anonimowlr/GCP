@@ -72,6 +72,7 @@ public class ControleCalculo {
         protocoloGsv = new ProtocoloGsv();
         npjDAO = new NpjDAO<>();
         cliente = new Cliente();
+        mora = new Mora();
         calculoDAO = new CalculoDAO<>();
         expurgoDAO = new ExpurgoDAO<>();
         protocoloGsvDAO = new ProtocoloGsvDAO<>();
@@ -99,6 +100,7 @@ public class ControleCalculo {
                 setCalculo(new Calculo());
                 getCalculo().setCliente(getCliente());
                 getCliente().adicionarCalculo(getCalculo());
+                getCalculo().setMora(getMora());
                 getProtocoloGsv().adicionarCalculo(getCalculo());
 
             } else {
@@ -107,6 +109,7 @@ public class ControleCalculo {
                 setCalculo(new Calculo());
                 getCalculo().setCliente(getCliente());
                 getCliente().adicionarCalculo(getCalculo());
+                getCalculo().setMora(getMora());
                 getProtocoloGsv().adicionarCalculo(getCalculo());
 
             }
@@ -128,11 +131,13 @@ public class ControleCalculo {
         setPeriodoCalculo(new PeriodoCalculo());
         getNpj().adicionarProtocolo(getProtocoloGsv());
         getProtocoloGsv().adicionarCalculo(getCalculo());
+        getCalculo().setCliente(getCliente());
+        getCliente().adicionarCalculo(getCalculo());
+        getCalculo().setMora(getMora());
         getCalculo().adicionarPeriodoCalculo(getPeriodoCalculo());
     }
 
     public void salvar() {
-       
 
         if (getNpjDAO().atualizar(getNpj())) {
 
@@ -194,7 +199,6 @@ public class ControleCalculo {
 //            }
 //
 //            getCalculo().setCliente(cliente);
-
             Multa multa = new Multa();
             multa.setTaxaMulta(new BigDecimal("0.05"));
             multa.setValorMulta(new BigDecimal("50.00"));
@@ -205,11 +209,8 @@ public class ControleCalculo {
             honorario.setValorHonorario(new BigDecimal("100.00"));
             getCalculo().setHonorario(honorario);
 
-            Mora mora = new Mora();
-            mora.setDataInicio(new java.util.Date("05/25/2000"));
-            mora.setValorMoraPre(new BigDecimal("150.00"));
-            mora.setValorMoraPos(new BigDecimal("120.00"));
-            getCalculo().setMora(mora);
+            getMora().setValorMoraPre(new BigDecimal("150.00"));
+            getMora().setValorMoraPos(new BigDecimal("120.00"));
 
             // getCalculo().getListaPeriodoCalculo().get(0).setIndice(indice);
             Arquivo arquivo = new Arquivo();
