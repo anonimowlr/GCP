@@ -57,6 +57,7 @@ public class DAOGenerico<T> implements Serializable {
     }
     
     public List<T> buscar (){
+       
         String jpql = "From " + classePersistente;
         return getEm().createQuery(jpql).getResultList();
     }

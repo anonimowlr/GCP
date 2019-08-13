@@ -16,19 +16,28 @@ import java.util.List;
  * @author f5078775
  */
 public class Teste {
-    static DAOGenerico d = new DAOGenerico();
+    static DAOGenerico<Npj> d = new DAOGenerico<>();
+   
+    static DAOGenerico<ProtocoloGsv> d1 = new DAOGenerico<>();
     
     public static void main(String[] args) {
-        List<Npj> listaNpj = new ArrayList<>();
-        listaNpj = d.buscar();
-        
-        for (Npj npj : listaNpj) {
-            d.apagar(npj);
-        }
+//        List<Npj> listaNpj = new ArrayList<>();
+//        d.setClassePersistente(Npj.class);
+//       
+//        try {
+//            
+//        listaNpj = d.buscar();
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//        
+//        for (Npj npj : listaNpj) {
+//            d.apagar(npj);
+//        }
 
         try {
         Npj npj = new Npj();
-        npj.setNrPrc(new Long("20165558899"));
+        npj.setNrPrc(new Long("205445454"));
         
         ProtocoloGsv p1 = new ProtocoloGsv();
         p1.setCdPrc(87458915);

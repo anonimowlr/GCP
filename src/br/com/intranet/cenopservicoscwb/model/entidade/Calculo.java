@@ -89,7 +89,7 @@ public class Calculo implements Serializable{
     
     
         
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "CD_PRC", referencedColumnName = "CD_PRC")
     private ProtocoloGsv protocoloGsv;
     
@@ -97,7 +97,7 @@ public class Calculo implements Serializable{
     @JoinColumn(name = "CD_FUNCI", referencedColumnName = "id")
     private Funcionario funcionario;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "CD_CLI", referencedColumnName = "id")
     private Cliente cliente;
     

@@ -191,7 +191,7 @@ public class TesteCalculo {
     public void iniciar() {
         try {
             d3.setClassePersistente(Npj.class);
-            Npj npj = d3.buscarObjeto(new Long("20165558899"));
+            Npj npj = d3.buscarObjeto(new Long("205445454"));
             ProtocoloGsv protocoloGsv = npj.getListaProtocoloGsv().get(1);
             protocoloGsv.setNpj(npj);
 
