@@ -3,15 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/gcp/src/java/br/com/intranet/cenopservicoscwb/controller/ControleCalculo.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/gcp/src/java/br/com/intranet/cenopservicoscwb/dao/ProtocoloGsvDAO.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/gcp/src/java/br/com/intranet/cenopservicoscwb/dao/DAOGenerico.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/gcp/src/java/br/com/intranet/cenopservicoscwb/conversores/ConverterPlano.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/gcp/web/calculo.xhtml</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/gcp/web/acesso.xhtml</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/gcp/src/java/br/com/intranet/cenopservicoscwb/dao/NpjDAO.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/gcp/src/java/br/com/intranet/cenopservicoscwb/conversores/ConverterMetodologia.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/gcp/web/header.xhtml</file>
+            <file>file:/home/jocimar/NetBeansProjects/gcp/web/calculo.xhtml</file>
+            <file>file:/home/jocimar/NetBeansProjects/gcp/src/java/br/com/intranet/cenopservicoscwb/controller/ControleCalculo.java</file>
         </group>
     </open-files>
 </project-private>
