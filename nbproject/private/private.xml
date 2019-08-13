@@ -3,8 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/jocimar/NetBeansProjects/gcp/web/calculo.xhtml</file>
-            <file>file:/home/jocimar/NetBeansProjects/gcp/src/java/br/com/intranet/cenopservicoscwb/controller/ControleCalculo.java</file>
+            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/dao/DAOGenerico.java</file>
+            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/web/calculo.xhtml</file>
+            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/dao/CalculoDAO.java</file>
+            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/dao/ExpurgoDAO.java</file>
+            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/controller/ControleCalculo.java</file>
+            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/conversores/ConverterBigDecimal.java</file>
         </group>
     </open-files>
 </project-private>

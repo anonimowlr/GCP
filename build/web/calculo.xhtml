@@ -28,7 +28,7 @@
                     <h:outputLabel value="Protocolo: "></h:outputLabel>
                     <h:inputText id="protocoloGsv" value="#{controleCalculo.protocoloGsv.cdPrc}" style="height: 30px;width: 100px">
                         <f:converter converterId="converterInt"></f:converter>
-                        <f:ajax listener="#{controleCalculo.novo()}" execute="npj protocooGsv" render="listagem" event="change"></f:ajax>
+                        <f:ajax listener="#{controleCalculo.novo()}" execute="npj protocooGsv" render=":listagem" event="change"></f:ajax>
                     </h:inputText>                    
 
 
@@ -44,7 +44,7 @@
 
                         <f:facet name="header">
                             <h:commandLink  >
-                                <f:ajax listener="#{controleCalculo.duplicar()}" execute="@this" render="listagem" event="click"></f:ajax>
+                                <f:ajax listener="#{controleCalculo.duplicar()}" execute="@this" render=":listagem" event="click"></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="add.png" title="Adicionar Linha" ></h:graphicImage>                                  
                             </h:commandLink>
                         </f:facet>
@@ -54,7 +54,6 @@
                             <f:facet name="header">Saldo Base</f:facet>
                             <h:inputText id="saldoBase" value="#{c.saldoBase}" style="height: 30px;width: 100px">
                                 <f:converter converterId="converterMoney"></f:converter>
-                                <f:ajax  execute="saldoBase" render="saldoBase" event="change"></f:ajax>
                             </h:inputText>                                               
                         </h:column>
                         
@@ -130,9 +129,17 @@
                         
                         <h:column>
                             <f:facet name="header">Mora</f:facet>
-                            <p:inputMask  mask="99/99/9999" id="dataBase" value="#{c.mora.dataInicio}" style="width: 100px;height: 30px" >
+                            <p:inputMask  mask="99/99/9999"  value="#{c.mora.dataInicio}" style="width: 100px;height: 30px" >
                                         <f:converter converterId="converterDate"></f:converter>
                             </p:inputMask>
+                        
+                        </h:column>
+                        
+                        <h:column>
+                            <f:facet name="header">Honorário</f:facet>
+                            <h:inputText value="#{c.honorario.taxaHonorario}" style="width: 100px;height: 30px" >
+                                        <f:converter converterId="converterMoney"></f:converter>
+                            </h:inputText>
                         
                         </h:column>
 
@@ -182,7 +189,7 @@
                             </h:commandLink>  
                             <h:commandLink>
 
-                                <f:ajax listener="#{controleCalculo.salvarCalculo(c)}" execute="@form" render="@form" event="click" ></f:ajax>
+                                <f:ajax listener="#{controleCalculo.salvarCalculo(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="save.png" title="Salvar/Atualizar este cálculo" ></h:graphicImage>                                    
                             </h:commandLink>  
                         </h:column>

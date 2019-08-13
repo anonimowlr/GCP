@@ -73,6 +73,7 @@ public class ControleCalculo {
         npjDAO = new NpjDAO<>();
         cliente = new Cliente();
         mora = new Mora();
+        honorario = new Honorario();
         calculoDAO = new CalculoDAO<>();
         expurgoDAO = new ExpurgoDAO<>();
         protocoloGsvDAO = new ProtocoloGsvDAO<>();
@@ -101,6 +102,7 @@ public class ControleCalculo {
                 getCalculo().setCliente(getCliente());
                 getCliente().adicionarCalculo(getCalculo());
                 getCalculo().setMora(getMora());
+                getCalculo().setHonorario(getHonorario());
                 getProtocoloGsv().adicionarCalculo(getCalculo());
 
             } else {
@@ -110,8 +112,8 @@ public class ControleCalculo {
                 getCalculo().setCliente(getCliente());
                 getCliente().adicionarCalculo(getCalculo());
                 getCalculo().setMora(getMora());
+                getCalculo().setHonorario(getHonorario());
                 getProtocoloGsv().adicionarCalculo(getCalculo());
-
             }
 
             setPeriodoCalculo(new PeriodoCalculo());
@@ -128,12 +130,16 @@ public class ControleCalculo {
     public void duplicar() {
 
         setCalculo(new Calculo());
-        setPeriodoCalculo(new PeriodoCalculo());
-        getNpj().adicionarProtocolo(getProtocoloGsv());
-        getProtocoloGsv().adicionarCalculo(getCalculo());
+        setMora(new Mora());
+        setCliente(new Cliente());
+        setHonorario(new Honorario());
+        
         getCalculo().setCliente(getCliente());
         getCliente().adicionarCalculo(getCalculo());
         getCalculo().setMora(getMora());
+        getCalculo().setHonorario(getHonorario());
+        getProtocoloGsv().adicionarCalculo(getCalculo());
+        setPeriodoCalculo(new PeriodoCalculo());
         getCalculo().adicionarPeriodoCalculo(getPeriodoCalculo());
     }
 
@@ -204,13 +210,18 @@ public class ControleCalculo {
             multa.setValorMulta(new BigDecimal("50.00"));
             getCalculo().setMulta(multa);
 
-            Honorario honorario = new Honorario();
-            honorario.setTaxaHonorario(new BigDecimal("0.10"));
-            honorario.setValorHonorario(new BigDecimal("100.00"));
-            getCalculo().setHonorario(honorario);
+            if (getCalculo().getHonorario().getTaxaHonorario() != null) {
+                getHonorario().setValorHonorario(new BigDecimal("100.00"));
+            } else {
+                getCalculo().setHonorario(null);
+            }
 
-            getMora().setValorMoraPre(new BigDecimal("150.00"));
-            getMora().setValorMoraPos(new BigDecimal("120.00"));
+            if (getCalculo().getMora().getDataInicio() != null) {
+                getMora().setValorMoraPre(new BigDecimal("150.00"));
+                getMora().setValorMoraPos(new BigDecimal("120.00"));
+            } else {
+                getCalculo().setMora(null);
+            }
 
             // getCalculo().getListaPeriodoCalculo().get(0).setIndice(indice);
             Arquivo arquivo = new Arquivo();
