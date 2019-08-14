@@ -97,6 +97,7 @@ public class ControleCalculo {
             }
 
             if (protocoloGsv != null) {
+                
                 setProtocoloGsv(protocoloGsv);
                 setCalculo(new Calculo());
                 getCalculo().setCliente(getCliente());
@@ -104,6 +105,7 @@ public class ControleCalculo {
                 getCalculo().setMora(getMora());
                 getCalculo().setHonorario(getHonorario());
                 getProtocoloGsv().adicionarCalculo(getCalculo());
+                
 
             } else {
                 getNpj().adicionarProtocolo(getProtocoloGsv());
@@ -162,6 +164,10 @@ public class ControleCalculo {
     }
 
     public void avaliarParaSalvar(Calculo calculo) {
+        
+        
+       
+        
 
         if (calculo.getId() == null) {
              calcular();
@@ -169,6 +175,7 @@ public class ControleCalculo {
 
         } else {
 
+            
             atualizarCalculo(calculo);
         }
 
@@ -224,15 +231,12 @@ public class ControleCalculo {
             getCalculo().setValorDiferencaAtualizado(new BigDecimal("88888.00"));
             getCalculo().setValorFinal(new BigDecimal("1"));
 
-//            Cliente cliente = getClienteDAO().localizarCliente("111.222.888-77");
-//            if (cliente == null) {
-//                cliente = new Cliente();
-//                cliente.setCpf("111.222.888-77");
-//                cliente.setNomeCliente("Jose");
-//                getClienteDAO().salvar(cliente);
-//            }
-//
-//            getCalculo().setCliente(cliente);
+            Cliente cliente = getClienteDAO().localizarCliente(getCalculo().getCliente().getCpf());
+            if (cliente != null) {
+                getCalculo().setCliente(cliente);
+                //getClienteDAO().salvar(cliente);
+            } 
+
             Multa multa = new Multa();
             multa.setTaxaMulta(new BigDecimal("0.05"));
             multa.setValorMulta(new BigDecimal("50.00"));
