@@ -32,6 +32,7 @@ import br.com.intranet.cenopservicoscwb.model.entidade.ProtocoloGsv;
 import br.com.intranet.cenopservicoscwb.util.Util;
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.Date;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
@@ -98,8 +99,11 @@ public class ControleCalculo {
 
             if (protocoloGsv != null) {
                 
+                setHonorario(new Honorario());
+                getHonorario().setTaxaHonorario(new BigDecimal("10"));
                 setProtocoloGsv(protocoloGsv);
                 setCalculo(new Calculo());
+                setCliente(new Cliente());
                 getCalculo().setCliente(getCliente());
                 getCliente().adicionarCalculo(getCalculo());
                 getCalculo().setMora(getMora());
@@ -241,6 +245,19 @@ public class ControleCalculo {
             multa.setTaxaMulta(new BigDecimal("0.05"));
             multa.setValorMulta(new BigDecimal("50.00"));
             getCalculo().setMulta(multa);
+            
+            
+            
+            getHonorario().setTaxaHonorario(new BigDecimal("0.05"));
+            getHonorario().setValorHonorario(new BigDecimal("100.00"));
+            
+            
+             getMora().setDataInicio(new Date("05/05/2015"));
+             getMora().setValorMoraPre(new BigDecimal("150.00"));
+             getMora().setValorMoraPos(new BigDecimal("120.00"));
+            
+            
+            
 
             if (getCalculo().getHonorario().getTaxaHonorario() != null) {
                 getHonorario().setValorHonorario(new BigDecimal("100.00"));
@@ -248,12 +265,12 @@ public class ControleCalculo {
                 getCalculo().setHonorario(null);
             }
 
-            if (getCalculo().getMora().getDataInicio() != null) {
-                getMora().setValorMoraPre(new BigDecimal("150.00"));
-                getMora().setValorMoraPos(new BigDecimal("120.00"));
-            } else {
-                getCalculo().setMora(null);
-            }
+//            if (getCalculo().getMora().getDataInicio() != null) {
+//                getMora().setValorMoraPre(new BigDecimal("150.00"));
+//                getMora().setValorMoraPos(new BigDecimal("120.00"));
+//            } else {
+//                getCalculo().setMora(null);
+//            }
 
             // getCalculo().getListaPeriodoCalculo().get(0).setIndice(indice);
             Arquivo arquivo = new Arquivo();

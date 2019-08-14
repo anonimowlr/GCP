@@ -6,7 +6,6 @@
 package br.com.intranet.cenopservicoscwb.dao;
 
 import br.com.intranet.cenopservicoscwb.model.entidade.Expurgo;
-import br.com.intranet.cenopservicoscwb.model.entidade.Metodologia;
 
 /**
  *

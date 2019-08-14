@@ -50,7 +50,7 @@ public class ConverterDate implements  Serializable,Converter{
     @Override   // do objeto para a tela;
     public String getAsString(FacesContext fc, UIComponent uic, Object o) {
 
-             if(o== null){
+             if(o == null){
                  return null;
              }
                 

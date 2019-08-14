@@ -71,7 +71,7 @@
 
                         <h:column>
                             <f:facet name="header">Agência</f:facet>
-                            <h:inputText value="#{c.numeroAgencia}" style="height: 30px;width: 60px">
+                            <h:inputText value="#{c.numeroAgencia}" style="height: 30px;width: 60px" required="true" requiredMessage="Agência inválida">
                                 <f:converter converterId="converterInt"></f:converter>
                             </h:inputText>                                               
                         </h:column>
@@ -79,7 +79,7 @@
                         
                         <h:column>
                             <f:facet name="header">Conta</f:facet>
-                            <h:inputText value="#{c.numeroConta}" style="height: 30px;width: 150px">
+                            <h:inputText value="#{c.numeroConta}" style="height: 30px;width: 150px" required="true" requiredMessage="Conta inválida">
                                 <f:converter converterId="converterConta"></f:converter>
 
                             </h:inputText>                                               
@@ -91,12 +91,12 @@
                         
                         <h:column>
                             <f:facet name="header">Nome </f:facet>
-                            <h:inputText value="#{c.cliente.nomeCliente}" style="height: 30px;width: 150px">
+                            <h:inputText value="#{c.cliente.nomeCliente}" style="height: 30px;width: 150px" required="true" requiredMessage="Informe o nome do Poupador">
                             </h:inputText>                                               
                         </h:column>
                         <h:column>
-                            <f:facet name="header">Cpf </f:facet>
-                            <h:inputText value="#{c.cliente.cpf}" style="height: 30px;width: 150px">
+                            <f:facet name="header">CPF </f:facet>
+                            <h:inputText value="#{c.cliente.cpf}" style="height: 30px;width: 150px" required="true" requiredMessage="CPF Inválido">
                             </h:inputText>                                               
                         </h:column>
 
@@ -127,18 +127,17 @@
                         </h:column>
 
                         
-                        <h:column>
+                        <!--<h:column>
                             <f:facet name="header">Mora</f:facet>
                             <p:inputMask  mask="99/99/9999"  value="#{c.mora.dataInicio}" style="width: 100px;height: 30px" >
                                         <f:converter converterId="converterDate"></f:converter>
                             </p:inputMask>
                         
-                        </h:column>
+                        </h:column>-->
                         
                         <h:column>
                             <f:facet name="header">Honorário</f:facet>
                             <h:inputText value="#{c.honorario.taxaHonorario}" style="width: 100px;height: 30px" >
-                                        <f:converter converterId="converterMoney"></f:converter>
                             </h:inputText>
                         
                         </h:column>
@@ -184,7 +183,7 @@
                             </h:commandLink>  
                             <h:commandLink>
 
-                                <f:ajax listener="#{controleCalculo.removeLinhaCalculo(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
+                                <f:ajax listener="#{controleCalculo.removeLinhaCalculo(c)}" execute=":listagem" render=":listagem" event="click" immediate="true" ></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="negative.png" title="Ocultar Visualização desta linha" ></h:graphicImage>                                    
                             </h:commandLink>  
                             <h:commandLink>
