@@ -184,12 +184,12 @@
                             </h:commandLink>  
                             <h:commandLink>
 
-                                <f:ajax listener="#{controleCalculo.removeLinhaCalculo(c)}" execute="@this" render="listagem" event="click" ></f:ajax>
+                                <f:ajax listener="#{controleCalculo.removeLinhaCalculo(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="negative.png" title="Ocultar Visualização desta linha" ></h:graphicImage>                                    
                             </h:commandLink>  
                             <h:commandLink>
 
-                                <f:ajax listener="#{controleCalculo.salvarCalculo(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
+                                <f:ajax listener="#{controleCalculo.avaliarParaSalvar(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="save.png" title="Salvar/Atualizar este cálculo" ></h:graphicImage>                                    
                             </h:commandLink>  
                         </h:column>

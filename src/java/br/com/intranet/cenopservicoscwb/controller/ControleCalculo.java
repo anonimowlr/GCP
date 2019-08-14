@@ -133,7 +133,7 @@ public class ControleCalculo {
         setMora(new Mora());
         setCliente(new Cliente());
         setHonorario(new Honorario());
-        
+
         getCalculo().setCliente(getCliente());
         getCliente().adicionarCalculo(getCalculo());
         getCalculo().setMora(getMora());
@@ -146,8 +146,8 @@ public class ControleCalculo {
     public void salvar() {
 
         if (getNpjDAO().atualizar(getNpj())) {
-
             Util.mensagemInformacao(getNpjDAO().getMensagem());
+
         } else {
 
             Util.mensagemErro(getNpjDAO().getMensagem());
@@ -156,24 +156,52 @@ public class ControleCalculo {
     }
 
     public void removeLinhaCalculo(Calculo calculo) {
-        setCalculo(calculo);
-        getCalculoDAO().deletar(getCalculo());
-        calculo.getProtocoloGsv().getListaCalculo().remove(getCalculo());
+
+        getProtocoloGsv().getListaCalculo().remove(calculo);
 
     }
 
-    public void salvarCalculo(Calculo calculo) {
-        setCalculo(calculo);
+    public void avaliarParaSalvar(Calculo calculo) {
 
         if (calculo.getId() == null) {
-            calcular();
-            getCalculoDAO().salvar(calculo);
-            Util.mensagemInformacao(getCalculoDAO().getMensagem());
+             calcular();
+            salvarCalculo(calculo);
+
         } else {
-            getCalculoDAO().atualizar(calculo);
-            getCalculoDAO().getMensagem();
+
+            atualizarCalculo(calculo);
         }
 
+    }
+    
+    public void salvarCalculo(Calculo calculo){
+        
+       
+           if(getCalculoDAO().salvar(calculo)){
+            Util.mensagemInformacao(getCalculoDAO().getMensagem());
+               
+           }else{
+               
+            Util.mensagemErro(getCalculoDAO().getMensagem());
+           }
+
+        
+    }
+    
+    public void atualizarCalculo(Calculo calculo){
+        
+        
+           
+
+            if(getCalculoDAO().atualizar(calculo)){
+                
+            Util.mensagemInformacao(getCalculoDAO().getMensagem());
+            }else{
+            Util.mensagemErro(getCalculoDAO().getMensagem());
+                
+            }
+
+        
     }
 
     public void teste() {

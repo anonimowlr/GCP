@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence         http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+    <!-- Unidade de persistencia -->
+    <persistence-unit name="ModelPU">
+        <!-- Implementação do JPA -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <!-- Lista de entidades -->
+        <class>Pais</class>
+        <properties>
+            <!-- Propriedades JDBC -->
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.1.103:4040/calc_poupanca"/>
+            <property name="javax.persistence.jdbc.user" value="jocimar"/>
+            <property name="javax.persistence.jdbc.password" value="jwalter1983"/>
+            <!-- Configurações específicas do Hibernate -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+           <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.connection.shutdown" value="true"/>
+            
+            <property name="hibernate.c3p0.automaticTestTable" value="con_test"/>
+            <property name="hibernate.c3p0.idleConnectionTestPeriod" value="60"/>
+            <property name="hibernate.c3p0.initialPoolSize" value="10"/>
+            <property name="hibernate.c3p0.maxIdleTime" value="20000"/>
+            <property name="hibernate.c3p0.maxPoolSize" value="3"/>
+            <property name="hibernate.c3p0.minPoolSize" value="1"/>
+            <property name="hibernate.c3p0.maxStatements" value="200"/>
+            <property name="hibernate.c3p0.acquireIncrement" value="50"/><!--tempo entre uma tentativa e outra de conseguir adquirir uma conexao -->
+            <property name="hibernate.c3p0.checkoutTimeout" value="60"/><!-- tempo devida da conexao estando inativa -->
+            <property name="hibernate.c3p0.initialPoolSize" value="0"/>
+            <property name="hibernate.c3p0.maxStatementsPerConnection" value="10"/>
+            <property name="hibernate.c3p0.acquireRetryDelay" value="20000"/>
+            <property name="hibernate.c3p0.acquireRetryAttempts" value="60"/><!-- qtde de vezes que o c3p0 tentara abrir a conexao -->
+            <property name="hibernate.c3p0.breakAfterAcquireFailure" value="true"/>
+            <property name="hibernate.c3p0.maxIdleTimeExcessConnections" value="60"/>
+            <property name="hibernate.c3p0.numHelperThreads" value="3"/>
+            <property name="hibernate.c3p0.debugUnreturnedConnectionStackTraces" value="true"/>
+            <property name="hibernate.c3p0.unreturnedConnectionTimeout" value="60"/>
+            
+           
+     
+        </properties>
+    </persistence-unit>
+</persistence>
