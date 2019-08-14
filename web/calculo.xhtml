@@ -28,7 +28,7 @@
                     <h:outputLabel value="Protocolo: "></h:outputLabel>
                     <h:inputText id="protocoloGsv" value="#{controleCalculo.protocoloGsv.cdPrc}" style="height: 30px;width: 100px">
                         <f:converter converterId="converterInt"></f:converter>
-                        <f:ajax listener="#{controleCalculo.novo()}" execute="npj protocooGsv" render=":listagem" event="change"></f:ajax>
+                        <f:ajax listener="#{controleCalculo.novo()}" execute="npj protocooGsv" render=":listagem" event="blur"></f:ajax>
                     </h:inputText>                    
 
 
