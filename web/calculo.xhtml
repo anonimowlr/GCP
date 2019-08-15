@@ -148,6 +148,13 @@
                             </h:inputText>
                         
                         </h:column>
+                        <h:column>
+                            <f:facet name="header">Multa</f:facet>
+                            <h:inputText value="#{c.multa.taxaMulta}" style="width: 100px;height: 30px" >
+                            <f:converter converterId="converterMoney"></f:converter>
+                            </h:inputText>
+                        
+                        </h:column>
 
                         <h:column>
                             <f:facet name="header">Plano Econômico</f:facet>

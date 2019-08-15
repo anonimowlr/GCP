@@ -30,6 +30,7 @@ import br.com.intranet.cenopservicoscwb.model.entidade.PeriodoCalculo;
 import br.com.intranet.cenopservicoscwb.model.entidade.PlanoEconomico;
 import br.com.intranet.cenopservicoscwb.model.entidade.ProtocoloGsv;
 import br.com.intranet.cenopservicoscwb.util.Util;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
@@ -42,7 +43,7 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class ControleCalculo {
+public class ControleCalculo implements Serializable{
 
     private CalculoDAO<Calculo, Object> calculoDAO;
     private ExpurgoDAO<Expurgo, Object> expurgoDAO;
@@ -102,6 +103,8 @@ public class ControleCalculo {
                 setHonorario(new Honorario());
                 setProtocoloGsv(protocoloGsv);
                 setCalculo(new Calculo());
+                setMora(new Mora());
+              
                 setCliente(new Cliente());
                 getCalculo().setCliente(getCliente());
                 getCliente().adicionarCalculo(getCalculo());
@@ -239,30 +242,35 @@ public class ControleCalculo {
                 //getClienteDAO().salvar(cliente);
             }
 
-            Multa multa = new Multa();
-            multa.setTaxaMulta(new BigDecimal("0.05"));
-            multa.setValorMulta(new BigDecimal("50.00"));
+           
+            getMulta().setValorMulta(new BigDecimal("50.00"));
             getCalculo().setMulta(multa);
 
 //           // getHonorario().setTaxaHonorario(new BigDecimal("0.05"));
 //            getHonorario().setValorHonorario(new BigDecimal("100.00"));
-//            
-//            
-//            // getMora().setDataInicio(new Date("05/05/2015"));
-//             getMora().setValorMoraPre(new BigDecimal("150.00"));
-//             getMora().setValorMoraPos(new BigDecimal("120.00"));
-            if (getCalculo().getHonorario().getTaxaHonorario() != null && !getCalculo().getHonorario().getTaxaHonorario().equals("")) {
-                getHonorario().setValorHonorario(new BigDecimal("100.00"));
-            } else {
-                getCalculo().setHonorario(null);
-            }
+//
+//
+             
+             getCalculo().getMora().setValorMoraPre(new BigDecimal("150.00"));
+             getCalculo().getMora().setValorMoraPos(new BigDecimal("120.00"));
+            
+             
+             
+             
+             getHonorario().setValorHonorario(new BigDecimal("100.00"));
+            
+            
+//            if(getCalculo().getMora() != null){
+//                
+//            if (getCalculo().getMora().getDataInicio() != null && !getCalculo().getMora().getDataInicio().equals("")) {
+//                getMora().setValorMoraPre(new BigDecimal("150.00"));
+//                getMora().setValorMoraPos(new BigDecimal("120.00"));
+//            } else {
+//                getCalculo().setMora(null);
+//            }
+//                
+//            }
 
-            if (getCalculo().getMora().getDataInicio() != null && !getCalculo().getMora().getDataInicio().equals("")) {
-                getMora().setValorMoraPre(new BigDecimal("150.00"));
-                getMora().setValorMoraPos(new BigDecimal("120.00"));
-            } else {
-                getCalculo().setMora(null);
-            }
 
             // getCalculo().getListaPeriodoCalculo().get(0).setIndice(indice);
             Arquivo arquivo = new Arquivo();
@@ -593,6 +601,7 @@ public class ControleCalculo {
      * @return the expurgoDAO
      */
     public ExpurgoDAO<Expurgo, Object> getExpurgoDAO() {
+
         return expurgoDAO;
     }
 

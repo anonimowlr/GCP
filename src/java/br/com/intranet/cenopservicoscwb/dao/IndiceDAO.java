@@ -18,6 +18,7 @@ public class IndiceDAO<T, E> extends DAOGenerico<Indice, Object>{
         classePersistente = Indice.class;
         ordem = "id";
         maximoObjeto = 50; 
+        em.clear();
     }
         
 }

@@ -17,8 +17,8 @@ public class ClienteDAO<T, E> extends DAOGenerico<Cliente, Object> {
         super();
         classePersistente = Cliente.class;
         ordem = "id";
-        maximoObjeto = 50;
-        em.clear();
+        maximoObjeto = 100000;
+        
     }
 
     public Cliente localizarCliente(String cpf) {
