@@ -19,6 +19,7 @@ public class NpjDAO<T, E> extends DAOGenerico<Npj, Object>{
         classePersistente = Npj.class;
         ordem = "nrPrc";
         maximoObjeto = 50;
+        
     }
     
 }

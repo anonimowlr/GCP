@@ -98,9 +98,8 @@ public class ControleCalculo {
             }
 
             if (protocoloGsv != null) {
-                
+
                 setHonorario(new Honorario());
-                getHonorario().setTaxaHonorario(new BigDecimal("10"));
                 setProtocoloGsv(protocoloGsv);
                 setCalculo(new Calculo());
                 setCliente(new Cliente());
@@ -109,7 +108,6 @@ public class ControleCalculo {
                 getCalculo().setMora(getMora());
                 getCalculo().setHonorario(getHonorario());
                 getProtocoloGsv().adicionarCalculo(getCalculo());
-                
 
             } else {
                 getNpj().adicionarProtocolo(getProtocoloGsv());
@@ -163,56 +161,50 @@ public class ControleCalculo {
 
     public void removeLinhaCalculo(Calculo calculo) {
 
-        getProtocoloGsv().getListaCalculo().remove(calculo);
+        if (getCalculoDAO().deletar(calculo)) {
+            getProtocoloGsv().getListaCalculo().remove(calculo);
+            Util.mensagemInformacao(getCalculoDAO().getMensagem());
+        } else {
+            Util.mensagemErro(getCalculoDAO().getMensagem());
+        }
 
     }
 
     public void avaliarParaSalvar(Calculo calculo) {
-        
-        
-       
-        
 
         if (calculo.getId() == null) {
-             calcular();
+            calcular();
             salvarCalculo(calculo);
 
         } else {
 
-            
             atualizarCalculo(calculo);
         }
 
     }
-    
-    public void salvarCalculo(Calculo calculo){
-        
-       
-           if(getCalculoDAO().salvar(calculo)){
-            Util.mensagemInformacao(getCalculoDAO().getMensagem());
-               
-           }else{
-               
-            Util.mensagemErro(getCalculoDAO().getMensagem());
-           }
 
-        
+    public void salvarCalculo(Calculo calculo) {
+
+        if (getCalculoDAO().salvar(calculo)) {
+            Util.mensagemInformacao(getCalculoDAO().getMensagem());
+
+        } else {
+
+            Util.mensagemErro(getCalculoDAO().getMensagem());
+        }
+
     }
-    
-    public void atualizarCalculo(Calculo calculo){
-        
-        
-           
 
-            if(getCalculoDAO().atualizar(calculo)){
-                
+    public void atualizarCalculo(Calculo calculo) {
+
+        if (getCalculoDAO().atualizar(calculo)) {
+
             Util.mensagemInformacao(getCalculoDAO().getMensagem());
-            }else{
+        } else {
             Util.mensagemErro(getCalculoDAO().getMensagem());
-                
-            }
 
-        
+        }
+
     }
 
     public void teste() {
@@ -239,38 +231,32 @@ public class ControleCalculo {
             if (cliente != null) {
                 getCalculo().setCliente(cliente);
                 //getClienteDAO().salvar(cliente);
-            } 
+            }
 
             Multa multa = new Multa();
             multa.setTaxaMulta(new BigDecimal("0.05"));
             multa.setValorMulta(new BigDecimal("50.00"));
             getCalculo().setMulta(multa);
-            
-            
-            
-            getHonorario().setTaxaHonorario(new BigDecimal("0.05"));
-            getHonorario().setValorHonorario(new BigDecimal("100.00"));
-            
-            
-             getMora().setDataInicio(new Date("05/05/2015"));
-             getMora().setValorMoraPre(new BigDecimal("150.00"));
-             getMora().setValorMoraPos(new BigDecimal("120.00"));
-            
-            
-            
 
-            if (getCalculo().getHonorario().getTaxaHonorario() != null) {
+//           // getHonorario().setTaxaHonorario(new BigDecimal("0.05"));
+//            getHonorario().setValorHonorario(new BigDecimal("100.00"));
+//            
+//            
+//            // getMora().setDataInicio(new Date("05/05/2015"));
+//             getMora().setValorMoraPre(new BigDecimal("150.00"));
+//             getMora().setValorMoraPos(new BigDecimal("120.00"));
+            if (getCalculo().getHonorario().getTaxaHonorario() != null && !getCalculo().getHonorario().getTaxaHonorario().equals("")) {
                 getHonorario().setValorHonorario(new BigDecimal("100.00"));
             } else {
                 getCalculo().setHonorario(null);
             }
 
-//            if (getCalculo().getMora().getDataInicio() != null) {
-//                getMora().setValorMoraPre(new BigDecimal("150.00"));
-//                getMora().setValorMoraPos(new BigDecimal("120.00"));
-//            } else {
-//                getCalculo().setMora(null);
-//            }
+            if (getCalculo().getMora().getDataInicio() != null && !getCalculo().getMora().getDataInicio().equals("")) {
+                getMora().setValorMoraPre(new BigDecimal("150.00"));
+                getMora().setValorMoraPos(new BigDecimal("120.00"));
+            } else {
+                getCalculo().setMora(null);
+            }
 
             // getCalculo().getListaPeriodoCalculo().get(0).setIndice(indice);
             Arquivo arquivo = new Arquivo();

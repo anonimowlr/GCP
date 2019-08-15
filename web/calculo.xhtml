@@ -127,17 +127,18 @@
                         </h:column>
 
                         
-                        <!--<h:column>
+                        <h:column>
                             <f:facet name="header">Mora</f:facet>
                             <p:inputMask  mask="99/99/9999"  value="#{c.mora.dataInicio}" style="width: 100px;height: 30px" >
                                         <f:converter converterId="converterDate"></f:converter>
                             </p:inputMask>
                         
-                        </h:column>-->
+                        </h:column>
                         
                         <h:column>
                             <f:facet name="header">Honorário</f:facet>
                             <h:inputText value="#{c.honorario.taxaHonorario}" style="width: 100px;height: 30px" >
+                            <f:converter converterId="converterMoney"></f:converter>
                             </h:inputText>
                         
                         </h:column>
