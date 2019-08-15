@@ -29,7 +29,8 @@
                     <h:inputText id="protocoloGsv" value="#{controleCalculo.protocoloGsv.cdPrc}" style="height: 30px;width: 100px">
                         <f:converter converterId="converterInt"></f:converter>
                         <f:ajax listener="#{controleCalculo.novo()}" execute="npj protocooGsv" render=":listagem" event="blur"></f:ajax>
-                    </h:inputText>                    
+                    </h:inputText>   
+                    
 
 
                 </h:panelGrid>
@@ -43,10 +44,15 @@
                     <h:dataTable value="#{controleCalculo.protocoloGsv.listaCalculo}" var="c" class="table table-hover" id="listagem">
 
                         <f:facet name="header">
-                            <h:commandLink  >
+                            <h:commandLink>
                                 <f:ajax listener="#{controleCalculo.duplicar()}" execute="@this" render=":listagem" event="click"></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="add.png" title="Adicionar Linha" ></h:graphicImage>                                  
                             </h:commandLink>
+                            
+                            
+                            
+                            
+                            
                         </f:facet>
 
 
@@ -181,11 +187,6 @@
 
                                 <f:ajax listener="#{controleCalculo.teste()}" execute="@this" render=":forPrincipal" event="click" ></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="print.jpg" title="Imprimir Cálculo" ></h:graphicImage>                                    
-                            </h:commandLink>  
-                            <h:commandLink>
-
-                                <f:ajax listener="#{controleCalculo.removeLinhaCalculo(c)}" execute=":listagem" render=":listagem" event="click" immediate="true" ></f:ajax>
-                                <h:graphicImage  width="20px" library="img" name="negative.png" title="Ocultar Visualização desta linha" ></h:graphicImage>                                    
                             </h:commandLink>  
                             <h:commandLink>
 

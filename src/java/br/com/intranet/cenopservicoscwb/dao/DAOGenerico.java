@@ -146,6 +146,7 @@ public class DAOGenerico<T, D> implements Serializable {
     public boolean deletar(T objeto) {
 
         try {
+            
             em.getTransaction().begin();
             em.remove(objeto);
             em.getTransaction().commit();
@@ -180,7 +181,7 @@ public class DAOGenerico<T, D> implements Serializable {
 
     public List<T> getListaTodos() {
 
-        String jpql = "From  " + classePersistente.getSimpleName() + "  order by " + ordem;
+            String jpql = "From  " + classePersistente.getSimpleName() + "  order by " + ordem;
 
         return em.createQuery(jpql).getResultList();
     }

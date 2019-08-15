@@ -20,6 +20,8 @@ public class ProtocoloGsvDAO<T, E> extends DAOGenerico<ProtocoloGsv, Object>{
         classePersistente = ProtocoloGsv.class;
         ordem = "cdPrc";
         maximoObjeto = 50;
+        em.clear();
+        
     }
     
 }

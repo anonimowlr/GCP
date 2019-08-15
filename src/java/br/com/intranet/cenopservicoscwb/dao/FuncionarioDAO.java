@@ -17,7 +17,8 @@ public class FuncionarioDAO<T,E> extends DAOGenerico<Funcionario, Object>{
         super();
         classePersistente = Funcionario.class;
         ordem = "id";
-        maximoObjeto = 50;        
+        maximoObjeto = 50; 
+        em.clear();
     }
     
 }

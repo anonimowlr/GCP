@@ -169,6 +169,12 @@ public class ControleCalculo {
         }
 
     }
+    public void removerProtocolo() {
+
+       
+       getProtocoloGsvDAO().deletar(getProtocoloGsv());
+
+    }
 
     public void avaliarParaSalvar(Calculo calculo) {
 
