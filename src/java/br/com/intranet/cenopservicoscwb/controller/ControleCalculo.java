@@ -32,10 +32,12 @@ import br.com.intranet.cenopservicoscwb.model.entidade.ProtocoloGsv;
 import br.com.intranet.cenopservicoscwb.util.Util;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import teste.TesteCalculo;
 
 /**
  *
@@ -76,6 +78,7 @@ public class ControleCalculo implements Serializable{
         cliente = new Cliente();
         mora = new Mora();
         honorario = new Honorario();
+        multa = new Multa();
         calculoDAO = new CalculoDAO<>();
         expurgoDAO = new ExpurgoDAO<>();
         protocoloGsvDAO = new ProtocoloGsvDAO<>();
@@ -104,11 +107,12 @@ public class ControleCalculo implements Serializable{
                 setProtocoloGsv(protocoloGsv);
                 setCalculo(new Calculo());
                 setMora(new Mora());
-              
+                setMulta(new Multa());
                 setCliente(new Cliente());
                 getCalculo().setCliente(getCliente());
                 getCliente().adicionarCalculo(getCalculo());
                 getCalculo().setMora(getMora());
+                getCalculo().setMulta(getMulta());
                 getCalculo().setHonorario(getHonorario());
                 getProtocoloGsv().adicionarCalculo(getCalculo());
 
@@ -119,6 +123,7 @@ public class ControleCalculo implements Serializable{
                 getCalculo().setCliente(getCliente());
                 getCliente().adicionarCalculo(getCalculo());
                 getCalculo().setMora(getMora());
+                getCalculo().setMulta(getMulta());
                 getCalculo().setHonorario(getHonorario());
                 getProtocoloGsv().adicionarCalculo(getCalculo());
             }
@@ -140,11 +145,13 @@ public class ControleCalculo implements Serializable{
         setMora(new Mora());
         setCliente(new Cliente());
         setHonorario(new Honorario());
+        setMulta(new Multa());
 
         getCalculo().setCliente(getCliente());
         getCliente().adicionarCalculo(getCalculo());
         getCalculo().setMora(getMora());
         getCalculo().setHonorario(getHonorario());
+        getCalculo().setMulta(getMulta());
         getProtocoloGsv().adicionarCalculo(getCalculo());
         setPeriodoCalculo(new PeriodoCalculo());
         getCalculo().adicionarPeriodoCalculo(getPeriodoCalculo());
@@ -179,10 +186,12 @@ public class ControleCalculo implements Serializable{
 
     }
 
-    public void avaliarParaSalvar(Calculo calculo) {
+    public void avaliarParaSalvar(Calculo calculo) throws ParseException {
 
         if (calculo.getId() == null) {
             calcular();
+            TesteCalculo calcular = new TesteCalculo();
+            calcular.calcular(calculo);
             salvarCalculo(calculo);
 
         } else {
@@ -224,17 +233,17 @@ public class ControleCalculo implements Serializable{
 
         try {
 
-            getCalculo().setDataRealizacaoCalculo(Calendar.getInstance().getTime());
-            getCalculo().setJurosCreditado(new BigDecimal("1524.00"));
-            getCalculo().setJurosReclamado(new BigDecimal("2564.00"));
-            getCalculo().setRemuneracaoBasica(new BigDecimal("456.00"));
-            getCalculo().setRemuneracaoReclamada(new BigDecimal("780.00"));
-            getCalculo().setTotRendCreditado(new BigDecimal("55444.00"));
-            getCalculo().setTotRendReclamado(new BigDecimal("78500.00"));
-            getCalculo().setValorAtualizadoComMora(new BigDecimal("123456.00"));
-            getCalculo().setValorDiferenca(new BigDecimal("100.00"));
-            getCalculo().setValorDiferencaAtualizado(new BigDecimal("88888.00"));
-            getCalculo().setValorFinal(new BigDecimal("1"));
+              getCalculo().setDataRealizacaoCalculo(Calendar.getInstance().getTime());
+//            getCalculo().setJurosCreditado(new BigDecimal("1524.00"));
+//            getCalculo().setJurosReclamado(new BigDecimal("2564.00"));
+//            getCalculo().setRemuneracaoBasica(new BigDecimal("456.00"));
+//            getCalculo().setRemuneracaoReclamada(new BigDecimal("780.00"));
+//            getCalculo().setTotRendCreditado(new BigDecimal("55444.00"));
+//            getCalculo().setTotRendReclamado(new BigDecimal("78500.00"));
+//            getCalculo().setValorAtualizadoComMora(new BigDecimal("123456.00"));
+//            getCalculo().setValorDiferenca(new BigDecimal("100.00"));
+//            getCalculo().setValorDiferencaAtualizado(new BigDecimal("88888.00"));
+//            getCalculo().setValorFinal(new BigDecimal("1"));
 
             Cliente cliente = getClienteDAO().localizarCliente(getCalculo().getCliente().getCpf());
             if (cliente != null) {
@@ -243,21 +252,21 @@ public class ControleCalculo implements Serializable{
             }
 
            
-            getMulta().setValorMulta(new BigDecimal("50.00"));
-            getCalculo().setMulta(multa);
+//            getMulta().setValorMulta(new BigDecimal("50.00"));
+//            getCalculo().setMulta(multa);
 
 //           // getHonorario().setTaxaHonorario(new BigDecimal("0.05"));
 //            getHonorario().setValorHonorario(new BigDecimal("100.00"));
 //
 //
-             
-             getCalculo().getMora().setValorMoraPre(new BigDecimal("150.00"));
-             getCalculo().getMora().setValorMoraPos(new BigDecimal("120.00"));
+//             
+//             getCalculo().getMora().setValorMoraPre(new BigDecimal("150.00"));
+//             getCalculo().getMora().setValorMoraPos(new BigDecimal("120.00"));
             
              
              
              
-             getHonorario().setValorHonorario(new BigDecimal("100.00"));
+//             getHonorario().setValorHonorario(new BigDecimal("100.00"));
             
             
 //            if(getCalculo().getMora() != null){
