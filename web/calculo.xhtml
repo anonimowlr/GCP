@@ -142,6 +142,20 @@
                         </h:column>
                         
                         <h:column>
+                            <f:facet name="header">Dt Início Juros</f:facet>
+                            <p:inputMask  mask="99/99/9999"  value="#{c.juroRemuneratorio.dataInicio}" style="width: 100px;height: 30px" >
+                                        <f:converter converterId="converterDate"></f:converter>
+                            </p:inputMask>                        
+                        </h:column>
+                        
+                        <h:column>
+                            <f:facet name="header">Dt Fim Juros</f:facet>
+                            <p:inputMask  mask="99/99/9999"  value="#{c.juroRemuneratorio.dataFinal}" style="width: 100px;height: 30px" >
+                                        <f:converter converterId="converterDate"></f:converter>
+                            </p:inputMask>                        
+                        </h:column>
+                        
+                        <h:column>
                             <f:facet name="header">Honorário</f:facet>
                             <h:inputText value="#{c.honorario.taxaHonorario}" style="width: 100px;height: 30px" >
                             <f:converter converterId="converterMoney"></f:converter>

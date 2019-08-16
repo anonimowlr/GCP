@@ -14,6 +14,7 @@ import br.com.intranet.cenopservicoscwb.dao.MetodologiaDAO;
 import br.com.intranet.cenopservicoscwb.dao.NpjDAO;
 import br.com.intranet.cenopservicoscwb.dao.PlanoEconomicoDAO;
 import br.com.intranet.cenopservicoscwb.dao.ProtocoloGsvDAO;
+import br.com.intranet.cenopservicoscwb.model.calculo.MotorCalculoPoupanca;
 import br.com.intranet.cenopservicoscwb.model.entidade.Arquivo;
 import br.com.intranet.cenopservicoscwb.model.entidade.Atualizacao;
 import br.com.intranet.cenopservicoscwb.model.entidade.Calculo;
@@ -22,6 +23,7 @@ import br.com.intranet.cenopservicoscwb.model.entidade.Expurgo;
 import br.com.intranet.cenopservicoscwb.model.entidade.Funcionario;
 import br.com.intranet.cenopservicoscwb.model.entidade.Honorario;
 import br.com.intranet.cenopservicoscwb.model.entidade.Indice;
+import br.com.intranet.cenopservicoscwb.model.entidade.JuroRemuneratorio;
 import br.com.intranet.cenopservicoscwb.model.entidade.Metodologia;
 import br.com.intranet.cenopservicoscwb.model.entidade.Mora;
 import br.com.intranet.cenopservicoscwb.model.entidade.Multa;
@@ -62,6 +64,7 @@ public class ControleCalculo implements Serializable{
     private Cliente cliente;
     private Expurgo expurgo;
     private Metodologia metodologia;
+    private JuroRemuneratorio juroRemuneratorio;
     private Funcionario funcionario;
     private PlanoEconomico planoEconomico;
     private Multa multa;
@@ -77,6 +80,7 @@ public class ControleCalculo implements Serializable{
         npjDAO = new NpjDAO<>();
         cliente = new Cliente();
         mora = new Mora();
+        juroRemuneratorio = new JuroRemuneratorio();
         honorario = new Honorario();
         multa = new Multa();
         calculoDAO = new CalculoDAO<>();
@@ -109,11 +113,14 @@ public class ControleCalculo implements Serializable{
                 setMora(new Mora());
                 setMulta(new Multa());
                 setCliente(new Cliente());
+                setJuroRemuneratorio(new JuroRemuneratorio());
+                
                 getCalculo().setCliente(getCliente());
                 getCliente().adicionarCalculo(getCalculo());
                 getCalculo().setMora(getMora());
                 getCalculo().setMulta(getMulta());
                 getCalculo().setHonorario(getHonorario());
+                getCalculo().setJuroRemuneratorio(getJuroRemuneratorio());
                 getProtocoloGsv().adicionarCalculo(getCalculo());
 
             } else {
@@ -125,6 +132,7 @@ public class ControleCalculo implements Serializable{
                 getCalculo().setMora(getMora());
                 getCalculo().setMulta(getMulta());
                 getCalculo().setHonorario(getHonorario());
+                getCalculo().setJuroRemuneratorio(getJuroRemuneratorio());
                 getProtocoloGsv().adicionarCalculo(getCalculo());
             }
 
@@ -146,12 +154,14 @@ public class ControleCalculo implements Serializable{
         setCliente(new Cliente());
         setHonorario(new Honorario());
         setMulta(new Multa());
+        setJuroRemuneratorio(new JuroRemuneratorio());
 
         getCalculo().setCliente(getCliente());
         getCliente().adicionarCalculo(getCalculo());
         getCalculo().setMora(getMora());
         getCalculo().setHonorario(getHonorario());
         getCalculo().setMulta(getMulta());
+        getCalculo().setJuroRemuneratorio(getJuroRemuneratorio());
         getProtocoloGsv().adicionarCalculo(getCalculo());
         setPeriodoCalculo(new PeriodoCalculo());
         getCalculo().adicionarPeriodoCalculo(getPeriodoCalculo());
@@ -189,12 +199,16 @@ public class ControleCalculo implements Serializable{
     public void avaliarParaSalvar(Calculo calculo) throws ParseException {
 
         if (calculo.getId() == null) {
-            calcular();
-            TesteCalculo calcular = new TesteCalculo();
-            calcular.calcular(calculo);
+            complementarDadosCalculo();
+            MotorCalculoPoupanca motorCalculoPoupanca = new MotorCalculoPoupanca();
+            motorCalculoPoupanca.calcular(calculo);
             salvarCalculo(calculo);
 
         } else {
+            
+            complementarDadosCalculo();
+            MotorCalculoPoupanca motorCalculoPoupanca = new MotorCalculoPoupanca();
+            motorCalculoPoupanca.calcular(calculo);
 
             atualizarCalculo(calculo);
         }
@@ -229,59 +243,18 @@ public class ControleCalculo implements Serializable{
         Util.mensagemInformacao("Desenvolver o método");
     }
 
-    public void calcular() {
+    public void complementarDadosCalculo() {
 
         try {
 
               getCalculo().setDataRealizacaoCalculo(Calendar.getInstance().getTime());
-//            getCalculo().setJurosCreditado(new BigDecimal("1524.00"));
-//            getCalculo().setJurosReclamado(new BigDecimal("2564.00"));
-//            getCalculo().setRemuneracaoBasica(new BigDecimal("456.00"));
-//            getCalculo().setRemuneracaoReclamada(new BigDecimal("780.00"));
-//            getCalculo().setTotRendCreditado(new BigDecimal("55444.00"));
-//            getCalculo().setTotRendReclamado(new BigDecimal("78500.00"));
-//            getCalculo().setValorAtualizadoComMora(new BigDecimal("123456.00"));
-//            getCalculo().setValorDiferenca(new BigDecimal("100.00"));
-//            getCalculo().setValorDiferencaAtualizado(new BigDecimal("88888.00"));
-//            getCalculo().setValorFinal(new BigDecimal("1"));
 
             Cliente cliente = getClienteDAO().localizarCliente(getCalculo().getCliente().getCpf());
             if (cliente != null) {
                 getCalculo().setCliente(cliente);
-                //getClienteDAO().salvar(cliente);
             }
 
            
-//            getMulta().setValorMulta(new BigDecimal("50.00"));
-//            getCalculo().setMulta(multa);
-
-//           // getHonorario().setTaxaHonorario(new BigDecimal("0.05"));
-//            getHonorario().setValorHonorario(new BigDecimal("100.00"));
-//
-//
-//             
-//             getCalculo().getMora().setValorMoraPre(new BigDecimal("150.00"));
-//             getCalculo().getMora().setValorMoraPos(new BigDecimal("120.00"));
-            
-             
-             
-             
-//             getHonorario().setValorHonorario(new BigDecimal("100.00"));
-            
-            
-//            if(getCalculo().getMora() != null){
-//                
-//            if (getCalculo().getMora().getDataInicio() != null && !getCalculo().getMora().getDataInicio().equals("")) {
-//                getMora().setValorMoraPre(new BigDecimal("150.00"));
-//                getMora().setValorMoraPos(new BigDecimal("120.00"));
-//            } else {
-//                getCalculo().setMora(null);
-//            }
-//                
-//            }
-
-
-            // getCalculo().getListaPeriodoCalculo().get(0).setIndice(indice);
             Arquivo arquivo = new Arquivo();
             arquivo.setEnderecoArquivo("/qqcoisa");
             arquivo.setNomeArquivo("arquivoX");
@@ -619,6 +592,20 @@ public class ControleCalculo implements Serializable{
      */
     public void setExpurgoDAO(ExpurgoDAO<Expurgo, Object> expurgoDAO) {
         this.expurgoDAO = expurgoDAO;
+    }
+
+    /**
+     * @return the juroRemuneratorio
+     */
+    public JuroRemuneratorio getJuroRemuneratorio() {
+        return juroRemuneratorio;
+    }
+
+    /**
+     * @param juroRemuneratorio the juroRemuneratorio to set
+     */
+    public void setJuroRemuneratorio(JuroRemuneratorio juroRemuneratorio) {
+        this.juroRemuneratorio = juroRemuneratorio;
     }
 
 }
