@@ -31,12 +31,16 @@ import br.com.intranet.cenopservicoscwb.model.entidade.Npj;
 import br.com.intranet.cenopservicoscwb.model.entidade.PeriodoCalculo;
 import br.com.intranet.cenopservicoscwb.model.entidade.PlanoEconomico;
 import br.com.intranet.cenopservicoscwb.model.entidade.ProtocoloGsv;
+import br.com.intranet.cenopservicoscwb.model.pdf.GerarPdf;
 import br.com.intranet.cenopservicoscwb.util.Util;
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import teste.TesteCalculo;
@@ -47,7 +51,7 @@ import teste.TesteCalculo;
  */
 @ManagedBean
 @ViewScoped
-public class ControleCalculo implements Serializable{
+public class ControleCalculo implements Serializable {
 
     private CalculoDAO<Calculo, Object> calculoDAO;
     private ExpurgoDAO<Expurgo, Object> expurgoDAO;
@@ -114,7 +118,7 @@ public class ControleCalculo implements Serializable{
                 setMulta(new Multa());
                 setCliente(new Cliente());
                 setJuroRemuneratorio(new JuroRemuneratorio());
-                
+
                 getCalculo().setCliente(getCliente());
                 getCliente().adicionarCalculo(getCalculo());
                 getCalculo().setMora(getMora());
@@ -189,14 +193,14 @@ public class ControleCalculo implements Serializable{
         }
 
     }
+
     public void removerProtocolo() {
 
-       
-       getProtocoloGsvDAO().deletar(getProtocoloGsv());
+        getProtocoloGsvDAO().deletar(getProtocoloGsv());
 
     }
 
-    public void avaliarParaSalvar(Calculo calculo) throws ParseException {
+    public void avaliarParaSalvar(Calculo calculo) throws ParseException, IOException {
 
         if (calculo.getId() == null) {
             complementarDadosCalculo();
@@ -205,7 +209,7 @@ public class ControleCalculo implements Serializable{
             salvarCalculo(calculo);
 
         } else {
-            
+
             complementarDadosCalculo();
             MotorCalculoPoupanca motorCalculoPoupanca = new MotorCalculoPoupanca();
             motorCalculoPoupanca.calcular(calculo);
@@ -243,18 +247,29 @@ public class ControleCalculo implements Serializable{
         Util.mensagemInformacao("Desenvolver o método");
     }
 
+    public void gerarPdf(Calculo calculo) {
+
+        try {
+            GerarPdf gerarPdf = new GerarPdf();
+            gerarPdf.gerarDocumento(calculo);
+        } catch (IOException ex) {
+
+            Util.mensagemErro(Util.getMensagemErro(ex));
+        }
+
+    }
+
     public void complementarDadosCalculo() {
 
         try {
 
-              getCalculo().setDataRealizacaoCalculo(Calendar.getInstance().getTime());
+            getCalculo().setDataRealizacaoCalculo(Calendar.getInstance().getTime());
 
             Cliente cliente = getClienteDAO().localizarCliente(getCalculo().getCliente().getCpf());
             if (cliente != null) {
                 getCalculo().setCliente(cliente);
             }
 
-           
             Arquivo arquivo = new Arquivo();
             arquivo.setEnderecoArquivo("/qqcoisa");
             arquivo.setNomeArquivo("arquivoX");
