@@ -33,6 +33,7 @@ import br.com.intranet.cenopservicoscwb.model.entidade.PlanoEconomico;
 import br.com.intranet.cenopservicoscwb.model.entidade.ProtocoloGsv;
 import br.com.intranet.cenopservicoscwb.model.pdf.GerarPdf;
 import br.com.intranet.cenopservicoscwb.util.Util;
+import com.itextpdf.text.DocumentException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -247,7 +248,7 @@ public class ControleCalculo implements Serializable {
         Util.mensagemInformacao("Desenvolver o método");
     }
 
-    public void gerarPdf(Calculo calculo) {
+    public void gerarPdf(Calculo calculo) throws DocumentException {
 
         try {
             GerarPdf gerarPdf = new GerarPdf();
