@@ -203,9 +203,8 @@
                             <h:commandLink action="#{controleCalculo.gerarPdf(c)}">
                                 <h:graphicImage  width="20px" library="img" name="lupa.png" title="Visualizar Cálculo" ></h:graphicImage>                                    
                             </h:commandLink>  
-                            <h:commandLink>
+                            <h:commandLink actionListener="#{controleCalculo.downloadPdf(c)}">
 
-                                <f:ajax listener="#{controleCalculo.teste()}" execute="@this" render=":forPrincipal" event="click" ></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="print.jpg" title="Imprimir Cálculo" ></h:graphicImage>                                    
                             </h:commandLink>  
                             <h:commandLink>

@@ -32,19 +32,22 @@ import br.com.intranet.cenopservicoscwb.model.entidade.PeriodoCalculo;
 import br.com.intranet.cenopservicoscwb.model.entidade.PlanoEconomico;
 import br.com.intranet.cenopservicoscwb.model.entidade.ProtocoloGsv;
 import br.com.intranet.cenopservicoscwb.model.pdf.GerarPdf;
+import br.com.intranet.cenopservicoscwb.model.util.Utils;
 import br.com.intranet.cenopservicoscwb.util.Util;
 import com.itextpdf.text.DocumentException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import teste.TesteCalculo;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -248,7 +251,7 @@ public class ControleCalculo implements Serializable {
         Util.mensagemInformacao("Desenvolver o método");
     }
 
-    public void gerarPdf(Calculo calculo) throws DocumentException {
+    public void gerarPdf(Calculo calculo) throws DocumentException, ParseException {
 
         try {
             GerarPdf gerarPdf = new GerarPdf();
@@ -259,8 +262,48 @@ public class ControleCalculo implements Serializable {
         }
 
     }
+    
+    
+    public void downloadPdf(Calculo calculo) throws DocumentException, ParseException, FileNotFoundException, IOException {
+
+            FacesContext fc = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = fc.getExternalContext();
+
+            externalContext.responseReset();
+            externalContext.setResponseContentType("application/pdf");
+            externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\"" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) +  " - "  + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - "  + Utils.converterToMoney(calculo.getValorFinal().toString()) +  ".pdf\"");
+
+
+            FileInputStream inputStream = new FileInputStream(new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) +  " - "  + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - "  + Utils.converterToMoney(calculo.getValorFinal().toString()) +  ".pdf"));
+            //FileInputStream inputStream = new FileInputStream(new File("/opt/apache-tomcat-8.5.39/webapps/utilitario/Resumo Poupador CPF - " + Utils.tratarVariavel(complemento.getCpf()) + ".pdf"));
+             //FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) +  " - "  + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - "  + Utils.converterToMoney(calculo.getValorFinal().toString()) +   ".pdf"));
+            OutputStream out = externalContext.getResponseOutputStream();
+            byte[] buffer = new byte[1024];
+            int lenght;
+
+            while ((lenght = inputStream.read(buffer)) > 0) {
+                out.write(buffer);
+            }
+
+            out.flush();
+            fc.responseComplete();
+        
+        
+        
+        
+        
+        
+        
+        
+    }
 
     public void complementarDadosCalculo() {
+        
+     FacesContext fc = FacesContext.getCurrentInstance();
+     HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
+
+     Funcionario usuario = (Funcionario) session.getAttribute("usuarioLogado");
+        
 
         try {
 
@@ -277,8 +320,19 @@ public class ControleCalculo implements Serializable {
             arquivo.setNpjArquivo(new Long("555555555"));
             arquivo.setTipoArquivo(".pdf");
             getCalculo().adicionarArquivo(arquivo);
-
-            Funcionario funcionario = getFuncionarioDAO().localizar(1);
+            
+            
+            Funcionario funcionario =  getFuncionarioDAO().localizarFuncionarioPorChave(usuario.getChaveFunci());
+            
+            if(usuario.getNomeGerente()==null){
+            funcionario.setNomeGerente("");
+                
+            }else{
+                funcionario.setNomeGerente(usuario.getNomeGerente());
+            }
+            funcionario.setNomeFunci(usuario.getNomeFunci());
+            funcionario.setNomeFuncao(usuario.getNomeFuncao());
+            
             getCalculo().setFuncionario(funcionario);
 
         } catch (Exception e) {

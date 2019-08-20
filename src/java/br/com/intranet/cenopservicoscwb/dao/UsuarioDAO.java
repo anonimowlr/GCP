@@ -30,8 +30,10 @@ public class UsuarioDAO {
         try {
             if (tabela.next()) {
                 funci.setChaveFunci(chave);
-                funci.setNomeFunci(tabela.getString("nome_guerra"));
+                funci.setNomeFunci(tabela.getString("nome"));
+                funci.setNomeFuncao(tabela.getString("nfuncao"));
                 funci.setMatriculaFunci(Integer.parseInt(Utils.tratarVariavel(chave)));
+                funci.setNomeGerente(tabela.getString("gerente"));
                 
             } else{
                funci.setChaveFunci(chave);

@@ -6,6 +6,10 @@
 package br.com.intranet.cenopservicoscwb.dao;
 
 import br.com.intranet.cenopservicoscwb.model.entidade.Funcionario;
+import java.util.List;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+
 
 /**
  *
@@ -20,5 +24,30 @@ public class FuncionarioDAO<T,E> extends DAOGenerico<Funcionario, Object>{
         maximoObjeto = 50; 
         em.clear();
     }
+    
+    
+    
+    
+    
+    public Funcionario localizarFuncionarioPorChave(String chaveSessao){
+        
+//        String jpql = "From " + classePersistente + " f where f.chaveFunci = :pChave";
+//        
+//        Query query = getEm().createQuery(jpql);
+//        query.setParameter("pChave", chaveSessao);
+//        
+//        List<Funcionario> listaFuncionarios = query.getResultList();
+//        
+//        Funcionario funcionario = listaFuncionarios.get(0);
+        
+         TypedQuery<Funcionario> query = em.createQuery(
+        "SELECT c FROM Funcionario c WHERE c.chaveFunci = :name", classePersistente);
+    return query.setParameter("name", chaveSessao).getSingleResult();
+        
+        
+        
+        
+    }
+    
     
 }
