@@ -30,7 +30,7 @@
                         <f:converter converterId="converterInt"></f:converter>
                         <f:ajax listener="#{controleCalculo.novo()}" execute="npj protocooGsv" render=":listagem" event="blur"></f:ajax>
                     </h:inputText>   
-                    
+
 
 
                 </h:panelGrid>
@@ -48,11 +48,11 @@
                                 <f:ajax listener="#{controleCalculo.duplicar()}" execute="@this" render=":listagem" event="click"></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="add.png" title="Adicionar Linha" ></h:graphicImage>                                  
                             </h:commandLink>
-                            
-                            
-                            
-                            
-                            
+
+
+
+
+
                         </f:facet>
 
 
@@ -62,7 +62,7 @@
                                 <f:converter converterId="converterMoney"></f:converter>
                             </h:inputText>                                               
                         </h:column>
-                        
+
                         <h:column>
                             <f:facet name="header">Banco</f:facet>
                             <h:selectOneMenu value="#{c.nomeBanco}" style="height: 30px;width: 60px">
@@ -71,7 +71,7 @@
                                 <f:selectItem itemValue="BESC" itemLabel="BESC"></f:selectItem>                            
                             </h:selectOneMenu>
                         </h:column>
-                       
+
 
 
 
@@ -81,8 +81,8 @@
                                 <f:converter converterId="converterInt"></f:converter>
                             </h:inputText>                                               
                         </h:column>
-                        
-                        
+
+
                         <h:column>
                             <f:facet name="header">Conta</f:facet>
                             <h:inputText value="#{c.numeroConta}" style="height: 30px;width: 150px" required="true" requiredMessage="Conta inválida">
@@ -90,11 +90,11 @@
 
                             </h:inputText>                                               
                         </h:column>
-                        
-                        
-                        
-                        
-                        
+
+
+
+
+
                         <h:column>
                             <f:facet name="header">Nome </f:facet>
                             <h:inputText value="#{c.cliente.nomeCliente}" style="height: 30px;width: 150px" required="true" requiredMessage="Informe o nome do Poupador">
@@ -106,7 +106,7 @@
                             </h:inputText>                                               
                         </h:column>
 
-                        
+
                         <h:column>
                             <f:facet name="header">Período/Índice</f:facet>
                             <h:dataTable value="#{c.listaPeriodoCalculo}" var="d">
@@ -132,42 +132,42 @@
                             </h:dataTable>                                        
                         </h:column>
 
-                        
+
                         <h:column>
                             <f:facet name="header">Mora</f:facet>
                             <p:inputMask  mask="99/99/9999"  value="#{c.mora.dataInicio}" style="width: 100px;height: 30px" >
-                                        <f:converter converterId="converterDate"></f:converter>
+                                <f:converter converterId="converterDate"></f:converter>
                             </p:inputMask>
-                        
+
                         </h:column>
-                        
+
                         <h:column>
                             <f:facet name="header">Dt Início Juros</f:facet>
                             <p:inputMask  mask="99/99/9999"  value="#{c.juroRemuneratorio.dataInicio}" style="width: 100px;height: 30px" >
-                                        <f:converter converterId="converterDate"></f:converter>
+                                <f:converter converterId="converterDate"></f:converter>
                             </p:inputMask>                        
                         </h:column>
-                        
+
                         <h:column>
                             <f:facet name="header">Dt Fim Juros</f:facet>
                             <p:inputMask  mask="99/99/9999"  value="#{c.juroRemuneratorio.dataFinal}" style="width: 100px;height: 30px" >
-                                        <f:converter converterId="converterDate"></f:converter>
+                                <f:converter converterId="converterDate"></f:converter>
                             </p:inputMask>                        
                         </h:column>
-                        
+
                         <h:column>
-                            <f:facet name="header">Honorário</f:facet>
+                            <f:facet name="header">Honorário %</f:facet>
                             <h:inputText value="#{c.honorario.taxaHonorario}" style="width: 100px;height: 30px" >
-                            <f:converter converterId="converterMoney"></f:converter>
+                                <f:converter converterId="converterMoney"></f:converter>
                             </h:inputText>
-                        
+
                         </h:column>
                         <h:column>
-                            <f:facet name="header">Multa</f:facet>
+                            <f:facet name="header">Multa %</f:facet>
                             <h:inputText value="#{c.multa.taxaMulta}" style="width: 100px;height: 30px" >
-                            <f:converter converterId="converterMoney"></f:converter>
+                                <f:converter converterId="converterMoney"></f:converter>
                             </h:inputText>
-                        
+
                         </h:column>
 
                         <h:column>
@@ -212,6 +212,20 @@
                                 <f:ajax listener="#{controleCalculo.avaliarParaSalvar(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="save.png" title="Salvar/Atualizar este cálculo" ></h:graphicImage>                                    
                             </h:commandLink>  
+
+
+
+                            <h:outputLabel for="file"  class="upload"  >
+                                <h:graphicImage   width="20px" library="img" name="up.png" title="Vincular imagem de extrato à conta informada" >
+
+                                </h:graphicImage>
+                            </h:outputLabel>
+                            <h:inputFile  id="file"  value="#{controleCalculo.file}" title="Selecione um arquivo" label="Carregar arquivo"   class="upload"  style="display: none">
+                                <f:ajax listener="#{controleCalculo.upload()}" execute=":listagem" render="@all" ></f:ajax>
+                            </h:inputFile>
+
+
+
                         </h:column>
 
                     </h:dataTable>

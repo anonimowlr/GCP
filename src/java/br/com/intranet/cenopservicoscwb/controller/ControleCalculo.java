@@ -39,8 +39,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
 import java.text.ParseException;
 import java.util.Calendar;
 import javax.faces.bean.ManagedBean;
@@ -48,6 +50,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 /**
  *
@@ -57,6 +60,8 @@ import javax.servlet.http.HttpSession;
 @ViewScoped
 public class ControleCalculo implements Serializable {
 
+    
+    private Part file;
     private CalculoDAO<Calculo, Object> calculoDAO;
     private ExpurgoDAO<Expurgo, Object> expurgoDAO;
     private ProtocoloGsvDAO<ProtocoloGsv, Object> protocoloGsvDAO;
@@ -85,6 +90,7 @@ public class ControleCalculo implements Serializable {
     public ControleCalculo() {
         npj = new Npj();
         protocoloGsv = new ProtocoloGsv();
+        arquivo = new Arquivo();
         npjDAO = new NpjDAO<>();
         cliente = new Cliente();
         mora = new Mora();
@@ -122,6 +128,7 @@ public class ControleCalculo implements Serializable {
                 setMulta(new Multa());
                 setCliente(new Cliente());
                 setJuroRemuneratorio(new JuroRemuneratorio());
+                setArquivo(new Arquivo());
 
                 getCalculo().setCliente(getCliente());
                 getCliente().adicionarCalculo(getCalculo());
@@ -129,6 +136,7 @@ public class ControleCalculo implements Serializable {
                 getCalculo().setMulta(getMulta());
                 getCalculo().setHonorario(getHonorario());
                 getCalculo().setJuroRemuneratorio(getJuroRemuneratorio());
+                getCalculo().setArquivo(getArquivo());
                 getProtocoloGsv().adicionarCalculo(getCalculo());
 
             } else {
@@ -141,6 +149,7 @@ public class ControleCalculo implements Serializable {
                 getCalculo().setMulta(getMulta());
                 getCalculo().setHonorario(getHonorario());
                 getCalculo().setJuroRemuneratorio(getJuroRemuneratorio());
+                getCalculo().setArquivo(getArquivo());
                 getProtocoloGsv().adicionarCalculo(getCalculo());
             }
 
@@ -163,6 +172,7 @@ public class ControleCalculo implements Serializable {
         setHonorario(new Honorario());
         setMulta(new Multa());
         setJuroRemuneratorio(new JuroRemuneratorio());
+        setArquivo(new Arquivo());
 
         getCalculo().setCliente(getCliente());
         getCliente().adicionarCalculo(getCalculo());
@@ -172,6 +182,7 @@ public class ControleCalculo implements Serializable {
         getCalculo().setJuroRemuneratorio(getJuroRemuneratorio());
         getProtocoloGsv().adicionarCalculo(getCalculo());
         setPeriodoCalculo(new PeriodoCalculo());
+        getCalculo().setArquivo(getArquivo());
         getCalculo().adicionarPeriodoCalculo(getPeriodoCalculo());
     }
 
@@ -185,6 +196,46 @@ public class ControleCalculo implements Serializable {
             Util.mensagemErro(getNpjDAO().getMensagem());
         }
 
+    }
+    
+    
+    public void upload(){
+     
+        try(InputStream is = file.getInputStream()){
+            
+           String tipoArquivo = file.getContentType();
+           
+           getCalculo().getArquivo().setNomeArquivo(file.getName());
+           getCalculo().getArquivo().setTipoArquivo(tipoArquivo);
+           
+           
+           if(!tipoArquivo.equals("image/jpeg")){
+               Util.mensagemErro("Selecione um arquivo do tipo image/jpeg ");
+              return;
+           }
+           
+           this.arquivo.setNomeArquivo(file.getSubmittedFileName());
+           //this.tamanhoArquivo=file.getSize();
+           
+           
+           
+           if(!Utils.criarDiretorio(getCalculo())){
+             Util.mensagemErro("Não foi possivel criar diretório para a imagem!!");
+             return;
+           }
+            
+           //Files.copy(is, new java.io.File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + calculo.getCliente().getCpf().toString() + "/" + Utils.tratarVariavel(getCalculo().getCliente().getCpf()) + "/" + getCalculo().getNumeroConta().toString() ,getArquivo().getNomeArquivo()).toPath());
+           Files.copy(is, new java.io.File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + calculo.getCliente().getCpf() + "/" + calculo.getNumeroConta() ,getArquivo().getNomeArquivo()).toPath());
+           //Files.copy(is, new java.io.File("/home/jocimar/Área de Trabalho/TestePlanilha/" + getComplementoPoupanca().getPoupanca().getIdPoupanca().getNpj().toString() + "/" + Utils.tratarVariavel(getComplementoPoupanca().getCpf()) + "/" + getComplementoPoupanca().getConta().toString() ,fileName).toPath());
+           //getComplementoPoupanca().setImagemExtrato(fileName);
+           
+           Util.mensagemInformacao(getArquivo().getNomeArquivo() + tipoArquivo + " Enviado com sucesso!!");
+           
+        } catch(Exception ex){
+         Util.mensagemErro(Util.getMensagemErro(ex));
+        }
+       
+        
     }
 
     public void removeLinhaCalculo(Calculo calculo) {
@@ -274,9 +325,9 @@ public class ControleCalculo implements Serializable {
             externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\"" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) +  " - "  + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - "  + Utils.converterToMoney(calculo.getValorFinal().toString()) +  ".pdf\"");
 
 
-            FileInputStream inputStream = new FileInputStream(new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) +  " - "  + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - "  + Utils.converterToMoney(calculo.getValorFinal().toString()) +  ".pdf"));
+            //FileInputStream inputStream = new FileInputStream(new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) +  " - "  + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - "  + Utils.converterToMoney(calculo.getValorFinal().toString()) +  ".pdf"));
             //FileInputStream inputStream = new FileInputStream(new File("/opt/apache-tomcat-8.5.39/webapps/utilitario/Resumo Poupador CPF - " + Utils.tratarVariavel(complemento.getCpf()) + ".pdf"));
-             //FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) +  " - "  + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - "  + Utils.converterToMoney(calculo.getValorFinal().toString()) +   ".pdf"));
+             FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) +  " - "  + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - "  + Utils.converterToMoney(calculo.getValorFinal().toString()) +   ".pdf"));
             OutputStream out = externalContext.getResponseOutputStream();
             byte[] buffer = new byte[1024];
             int lenght;
@@ -314,13 +365,13 @@ public class ControleCalculo implements Serializable {
                 getCalculo().setCliente(cliente);
             }
 
-            Arquivo arquivo = new Arquivo();
-            arquivo.setEnderecoArquivo("/qqcoisa");
-            arquivo.setNomeArquivo("arquivoX");
-            arquivo.setNpjArquivo(new Long("555555555"));
-            arquivo.setTipoArquivo(".pdf");
-            getCalculo().adicionarArquivo(arquivo);
-            
+//            Arquivo arquivo = new Arquivo();
+//            arquivo.setEnderecoArquivo("/qqcoisa");
+//            arquivo.setNomeArquivo("arquivoX");
+//            arquivo.setNpjArquivo(new Long("555555555"));
+//            arquivo.setTipoArquivo(".pdf");
+//            getCalculo().adicionarArquivo(arquivo);
+//            
             
             Funcionario funcionario =  getFuncionarioDAO().localizarFuncionarioPorChave(usuario.getChaveFunci());
             
@@ -676,6 +727,20 @@ public class ControleCalculo implements Serializable {
      */
     public void setJuroRemuneratorio(JuroRemuneratorio juroRemuneratorio) {
         this.juroRemuneratorio = juroRemuneratorio;
+    }
+
+    /**
+     * @return the file
+     */
+    public Part getFile() {
+        return file;
+    }
+
+    /**
+     * @param file the file to set
+     */
+    public void setFile(Part file) {
+        this.file = file;
     }
 
 }
