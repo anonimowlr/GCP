@@ -85,7 +85,7 @@
 
                         <h:column>
                             <f:facet name="header">Conta</f:facet>
-                            <h:inputText value="#{c.numeroConta}" style="height: 30px;width: 150px" required="true" requiredMessage="Conta inválida">
+                            <h:inputText id="conta" value="#{c.numeroConta}" style="height: 30px;width: 150px" required="true" requiredMessage="Conta inválida">
                                 <f:converter converterId="converterConta"></f:converter>
 
                             </h:inputText>                                               
@@ -102,7 +102,7 @@
                         </h:column>
                         <h:column>
                             <f:facet name="header">CPF </f:facet>
-                            <h:inputText value="#{c.cliente.cpf}" style="height: 30px;width: 150px" required="true" requiredMessage="CPF Inválido">
+                            <h:inputText id="cpf" value="#{c.cliente.cpf}" style="height: 30px;width: 150px" required="true" requiredMessage="CPF Inválido">
                             </h:inputText>                                               
                         </h:column>
 
@@ -221,7 +221,7 @@
                                 </h:graphicImage>
                             </h:outputLabel>
                             <h:inputFile  id="file"  value="#{controleCalculo.file}" title="Selecione um arquivo" label="Carregar arquivo"   class="upload"  style="display: none">
-                                <f:ajax listener="#{controleCalculo.upload()}" execute=":listagem" render="@all" ></f:ajax>
+                                <f:ajax listener="#{controleCalculo.upload()}" execute="conta cpf" render="@all"></f:ajax>
                             </h:inputFile>
 
 
