@@ -105,6 +105,16 @@
                             <h:inputText id="cpf" value="#{c.cliente.cpf}" style="height: 30px;width: 150px" required="true" requiredMessage="CPF Inválido">
                             </h:inputText>                                               
                         </h:column>
+                        
+                        <h:column>
+                            <f:facet name="header">Plano Econômico</f:facet>
+                            <h:selectOneMenu value="#{c.planoEconomico}" style="height: 30px;width: 120px">
+                                <f:converter converterId="converterPlano"></f:converter>
+                                <f:selectItem itemLabel="selecione" noSelectionOption="true"></f:selectItem>
+                                <f:selectItems value="#{controleCalculo.planoEconomicoDAO.listaTodos}" var="p" itemLabel="#{p.nomePlanoEconomico}"></f:selectItems>
+                                <f:ajax listener="#{controleCalculo.atribuirDataInicialPlano(c)}" execute=":listagem" render=":listagem" event="change" immediate="true"></f:ajax>
+                            </h:selectOneMenu>
+                        </h:column>
 
 
                         <h:column>
@@ -200,8 +210,10 @@
                         <h:column>
                             <f:facet name="header">Ações</f:facet>
 
-                            <h:commandLink action="#{controleCalculo.gerarPdf(c)}">
-                                <h:graphicImage  width="20px" library="img" name="lupa.png" title="Visualizar Cálculo" ></h:graphicImage>                                    
+                            <h:commandLink  immediate="true">
+                                
+                                <f:ajax listener="#{controleCalculo.removeLinhaCalculo(c)}" execute=":listagem" render=":listagem" event="click" immediate="true"></f:ajax>
+                                <h:graphicImage  width="20px" library="img" name="negative.png" title="Remover Cálculo" ></h:graphicImage>                                    
                             </h:commandLink>  
                             <h:commandLink actionListener="#{controleCalculo.downloadPdf(c)}">
 

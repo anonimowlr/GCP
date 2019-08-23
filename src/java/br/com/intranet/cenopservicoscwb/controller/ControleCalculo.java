@@ -225,8 +225,8 @@ public class ControleCalculo implements Serializable {
            }
             
              Files.copy(is, new java.io.File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + calculo.getCliente().getCpf() + "/" + calculo.getNumeroConta() ,getCalculo().getArquivo().getNomeArquivo()).toPath());
-            //Files.copy(is, new java.io.File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + calculo.getCliente().getCpf() + "/" + calculo.getNumeroConta() ,getCalculo().getArquivo().getNomeArquivo()).toPath());
-           //Files.copy(is, new java.io.File("/home/jocimar/Área de Trabalho/TestePlanilha/" + getComplementoPoupanca().getPoupanca().getIdPoupanca().getNpj().toString() + "/" + Utils.tratarVariavel(getComplementoPoupanca().getCpf()) + "/" + getComplementoPoupanca().getConta().toString() ,fileName).toPath());
+              // Files.copy(is, new java.io.File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + calculo.getCliente().getCpf() + "/" + calculo.getNumeroConta() ,getCalculo().getArquivo().getNomeArquivo()).toPath());
+             //Files.copy(is, new java.io.File("/home/jocimar/Área de Trabalho/TestePlanilha/" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + calculo.getCliente().getCpf() + "/" + calculo.getNumeroConta() ,getCalculo().getArquivo().getNomeArquivo()).toPath());
            //getComplementoPoupanca().setImagemExtrato(fileName);
            
            Util.mensagemInformacao(getArquivo().getNomeArquivo() + tipoArquivo + " Enviado com sucesso!!");
@@ -240,14 +240,19 @@ public class ControleCalculo implements Serializable {
 
     public void removeLinhaCalculo(Calculo calculo) {
 
-        if (getCalculoDAO().deletar(calculo)) {
-            getProtocoloGsv().getListaCalculo().remove(calculo);
-            Util.mensagemInformacao(getCalculoDAO().getMensagem());
-        } else {
-            Util.mensagemErro(getCalculoDAO().getMensagem());
-        }
+      getProtocoloGsv().getListaCalculo().remove(calculo);
 
     }
+    
+    
+    public void atribuirDataInicialPlano(Calculo calculo){
+        
+        
+        Util.mensagemInformacao("Teste...");
+        
+    }
+    
+    
 
     public void removerProtocolo() {
 
@@ -327,7 +332,7 @@ public class ControleCalculo implements Serializable {
 
             FileInputStream inputStream = new FileInputStream(new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) +  " - "  + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - "  + Utils.converterToMoney(calculo.getValorFinal().toString()) +  ".pdf"));
             //FileInputStream inputStream = new FileInputStream(new File("/opt/apache-tomcat-8.5.39/webapps/utilitario/Resumo Poupador CPF - " + Utils.tratarVariavel(complemento.getCpf()) + ".pdf"));
-            ///FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) +  " - "  + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - "  + Utils.converterToMoney(calculo.getValorFinal().toString()) +   ".pdf"));            
+            //FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) +  " - "  + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - "  + Utils.converterToMoney(calculo.getValorFinal().toString()) +   ".pdf"));            
             OutputStream out = externalContext.getResponseOutputStream();
             byte[] buffer = new byte[1024];
             int lenght;
