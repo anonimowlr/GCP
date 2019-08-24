@@ -45,6 +45,7 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
@@ -201,11 +202,11 @@ public class ControleCalculo implements Serializable {
     
     public void upload(){
      
-        try(InputStream is = file.getInputStream()){
+        try(InputStream is = getFile().getInputStream()){
             
-           String tipoArquivo = file.getContentType();
+           String tipoArquivo = getFile().getContentType();
            
-           getCalculo().getArquivo().setNomeArquivo(file.getName());
+           getCalculo().getArquivo().setNomeArquivo(getFile().getName());
            getCalculo().getArquivo().setTipoArquivo(tipoArquivo);
            
            
@@ -214,7 +215,7 @@ public class ControleCalculo implements Serializable {
               return;
            }
            
-           this.arquivo.setNomeArquivo(file.getSubmittedFileName());
+           this.getArquivo().setNomeArquivo(getFile().getSubmittedFileName());
            //this.tamanhoArquivo=file.getSize();
            
            
@@ -224,9 +225,9 @@ public class ControleCalculo implements Serializable {
              return;
            }
             
-             Files.copy(is, new java.io.File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + calculo.getCliente().getCpf() + "/" + calculo.getNumeroConta() ,getCalculo().getArquivo().getNomeArquivo()).toPath());
+             //Files.copy(is, new java.io.File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + calculo.getCliente().getCpf() + "/" + calculo.getNumeroConta() ,getCalculo().getArquivo().getNomeArquivo()).toPath());
               // Files.copy(is, new java.io.File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + calculo.getCliente().getCpf() + "/" + calculo.getNumeroConta() ,getCalculo().getArquivo().getNomeArquivo()).toPath());
-             //Files.copy(is, new java.io.File("/home/jocimar/Área de Trabalho/TestePlanilha/" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + calculo.getCliente().getCpf() + "/" + calculo.getNumeroConta() ,getCalculo().getArquivo().getNomeArquivo()).toPath());
+             Files.copy(is, new java.io.File("/home/jocimar/Área de Trabalho/TestePlanilha/" + getCalculo().getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + getCalculo().getProtocoloGsv().getCdPrc().toString() + "/" + getCalculo().getCliente().getCpf() + "/" + getCalculo().getNumeroConta() ,getCalculo().getArquivo().getNomeArquivo()).toPath());
            //getComplementoPoupanca().setImagemExtrato(fileName);
            
            Util.mensagemInformacao(getArquivo().getNomeArquivo() + tipoArquivo + " Enviado com sucesso!!");
@@ -247,8 +248,15 @@ public class ControleCalculo implements Serializable {
     
     public void atribuirDataInicialPlano(Calculo calculo){
         
+        if(getCalculo().getPlanoEconomico().getId().equals(1)){
+           getCalculo().getListaPeriodoCalculo().get(0).setDataInicioCalculo(new Date("02/01/1989"));
+            try {
+                getCalculo().getListaPeriodoCalculo().get(getCalculo().getListaPeriodoCalculo().size()-1).setDataFinalCalculo(Utils.getDataAtualFormatoMysql());
+            } catch (Exception ex) {
+                Util.mensagemInformacao(Util.getMensagemErro(ex));
+            }
+        }
         
-        Util.mensagemInformacao("Teste...");
         
     }
     
@@ -330,8 +338,8 @@ public class ControleCalculo implements Serializable {
             externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\"" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) +  " - "  + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - "  + Utils.converterToMoney(calculo.getValorFinal().toString()) +  ".pdf\"");
 
 
-            FileInputStream inputStream = new FileInputStream(new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) +  " - "  + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - "  + Utils.converterToMoney(calculo.getValorFinal().toString()) +  ".pdf"));
-            //FileInputStream inputStream = new FileInputStream(new File("/opt/apache-tomcat-8.5.39/webapps/utilitario/Resumo Poupador CPF - " + Utils.tratarVariavel(complemento.getCpf()) + ".pdf"));
+            //FileInputStream inputStream = new FileInputStream(new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) +  " - "  + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - "  + Utils.converterToMoney(calculo.getValorFinal().toString()) +  ".pdf"));
+            FileInputStream inputStream = new FileInputStream(new File("/opt/apache-tomcat-8.5.39/webapps/utilitario/" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) +  " - "  + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - "  + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf"));
             //FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) +  " - "  + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - "  + Utils.converterToMoney(calculo.getValorFinal().toString()) +   ".pdf"));            
             OutputStream out = externalContext.getResponseOutputStream();
             byte[] buffer = new byte[1024];
@@ -370,13 +378,6 @@ public class ControleCalculo implements Serializable {
                 getCalculo().setCliente(cliente);
             }
 
-//            Arquivo arquivo = new Arquivo();
-//            arquivo.setEnderecoArquivo("/qqcoisa");
-//            arquivo.setNomeArquivo("arquivoX");
-//            arquivo.setNpjArquivo(new Long("555555555"));
-//            arquivo.setTipoArquivo(".pdf");
-//            getCalculo().adicionarArquivo(arquivo);
-//            
             
             Funcionario funcionario =  getFuncionarioDAO().localizarFuncionarioPorChave(usuario.getChaveFunci());
             
@@ -747,5 +748,6 @@ public class ControleCalculo implements Serializable {
     public void setFile(Part file) {
         this.file = file;
     }
+
 
 }

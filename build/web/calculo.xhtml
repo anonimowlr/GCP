@@ -54,12 +54,27 @@
 
 
                         </f:facet>
+                        
+                        <h:column>
+                            <f:facet name="header">Plano Econômico</f:facet>
+                            <h:selectOneMenu value="#{c.planoEconomico}" style="height: 30px;width: 120px">
+                                <f:converter converterId="converterPlano"></f:converter>
+                                <f:selectItem itemLabel="selecione" noSelectionOption="true"></f:selectItem>
+                                <f:selectItems value="#{controleCalculo.planoEconomicoDAO.listaTodos}" var="p" itemLabel="#{p.nomePlanoEconomico}"></f:selectItems>
+                                <f:ajax listener="#{controleCalculo.atribuirDataInicialPlano(c)}" execute=":listagem" render=":listagem" event="change" ></f:ajax>
+                            </h:selectOneMenu>
+                        </h:column>
 
 
                         <h:column >
                             <f:facet name="header">Saldo Base</f:facet>
                             <h:inputText id="saldoBase" value="#{c.saldoBase}" style="height: 30px;width: 100px">
                                 <f:converter converterId="converterMoney"></f:converter>
+                            </h:inputText>                                               
+                        </h:column>
+                        <h:column >
+                            <f:facet name="header">Dia base</f:facet>
+                            <h:inputText id="diaBase" value="#{c.diaBase}" style="height: 30px;width: 100px">
                             </h:inputText>                                               
                         </h:column>
 
@@ -77,7 +92,7 @@
 
                         <h:column>
                             <f:facet name="header">Agência</f:facet>
-                            <h:inputText value="#{c.numeroAgencia}" style="height: 30px;width: 60px" required="true" requiredMessage="Agência inválida">
+                            <h:inputText value="#{c.numeroAgencia}" style="height: 30px;width: 60px" >
                                 <f:converter converterId="converterInt"></f:converter>
                             </h:inputText>                                               
                         </h:column>
@@ -85,7 +100,7 @@
 
                         <h:column>
                             <f:facet name="header">Conta</f:facet>
-                            <h:inputText id="conta" value="#{c.numeroConta}" style="height: 30px;width: 150px" required="true" requiredMessage="Conta inválida">
+                            <h:inputText id="conta" value="#{c.numeroConta}" style="height: 30px;width: 150px">
                                 <f:converter converterId="converterConta"></f:converter>
 
                             </h:inputText>                                               
@@ -97,24 +112,16 @@
 
                         <h:column>
                             <f:facet name="header">Nome </f:facet>
-                            <h:inputText value="#{c.cliente.nomeCliente}" style="height: 30px;width: 150px" required="true" requiredMessage="Informe o nome do Poupador">
+                            <h:inputText value="#{c.cliente.nomeCliente}" style="height: 30px;width: 150px"  >
                             </h:inputText>                                               
                         </h:column>
                         <h:column>
                             <f:facet name="header">CPF </f:facet>
-                            <h:inputText id="cpf" value="#{c.cliente.cpf}" style="height: 30px;width: 150px" required="true" requiredMessage="CPF Inválido">
+                            <h:inputText id="cpf" value="#{c.cliente.cpf}" style="height: 30px;width: 150px" >
                             </h:inputText>                                               
                         </h:column>
                         
-                        <h:column>
-                            <f:facet name="header">Plano Econômico</f:facet>
-                            <h:selectOneMenu value="#{c.planoEconomico}" style="height: 30px;width: 120px">
-                                <f:converter converterId="converterPlano"></f:converter>
-                                <f:selectItem itemLabel="selecione" noSelectionOption="true"></f:selectItem>
-                                <f:selectItems value="#{controleCalculo.planoEconomicoDAO.listaTodos}" var="p" itemLabel="#{p.nomePlanoEconomico}"></f:selectItems>
-                                <f:ajax listener="#{controleCalculo.atribuirDataInicialPlano(c)}" execute=":listagem" render=":listagem" event="change" immediate="true"></f:ajax>
-                            </h:selectOneMenu>
-                        </h:column>
+                        
 
 
                         <h:column>
@@ -180,14 +187,6 @@
 
                         </h:column>
 
-                        <h:column>
-                            <f:facet name="header">Plano Econômico</f:facet>
-                            <h:selectOneMenu value="#{c.planoEconomico}" style="height: 30px;width: 120px">
-                                <f:converter converterId="converterPlano"></f:converter>
-                                <f:selectItem itemLabel="selecione" noSelectionOption="true"></f:selectItem>
-                                <f:selectItems value="#{controleCalculo.planoEconomicoDAO.listaTodos}" var="p" itemLabel="#{p.nomePlanoEconomico}"></f:selectItems>
-                            </h:selectOneMenu>
-                        </h:column>
 
 
                         <h:column>
@@ -212,7 +211,7 @@
 
                             <h:commandLink  immediate="true">
                                 
-                                <f:ajax listener="#{controleCalculo.removeLinhaCalculo(c)}" execute=":listagem" render=":listagem" event="click" immediate="true"></f:ajax>
+                                <f:ajax listener="#{controleCalculo.removeLinhaCalculo(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="negative.png" title="Remover Cálculo" ></h:graphicImage>                                    
                             </h:commandLink>  
                             <h:commandLink actionListener="#{controleCalculo.downloadPdf(c)}">
