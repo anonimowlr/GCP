@@ -28,7 +28,7 @@
                     <h:outputLabel value="Protocolo: "></h:outputLabel>
                     <h:inputText id="protocoloGsv" value="#{controleCalculo.protocoloGsv.cdPrc}" style="height: 30px;width: 100px">
                         <f:converter converterId="converterInt"></f:converter>
-                        <f:ajax listener="#{controleCalculo.novo()}" execute="npj protocooGsv" render=":listagem" event="blur"></f:ajax>
+                        <f:ajax listener="#{controleCalculo.novo()}" execute="npj protocoloGsv" render=":listagem" event="blur"></f:ajax>
                     </h:inputText>   
 
 
@@ -61,7 +61,7 @@
                                 <f:converter converterId="converterPlano"></f:converter>
                                 <f:selectItem itemLabel="selecione" noSelectionOption="true"></f:selectItem>
                                 <f:selectItems value="#{controleCalculo.planoEconomicoDAO.listaTodos}" var="p" itemLabel="#{p.nomePlanoEconomico}"></f:selectItems>
-                                <f:ajax listener="#{controleCalculo.atribuirDataInicialPlano(c)}" execute=":listagem" render=":listagem" event="change" ></f:ajax>
+                               
                             </h:selectOneMenu>
                         </h:column>
 
@@ -75,6 +75,7 @@
                         <h:column >
                             <f:facet name="header">Dia base</f:facet>
                             <h:inputText id="diaBase" value="#{c.diaBase}" style="height: 30px;width: 100px">
+                                 <f:ajax listener="#{controleCalculo.atribuirDataInicialPlano(c)}" execute=":listagem" render=":listagem dataInicio dataFinal" event="blur" ></f:ajax>
                             </h:inputText>                                               
                         </h:column>
 
@@ -126,14 +127,14 @@
 
                         <h:column>
                             <f:facet name="header">Período/Índice</f:facet>
-                            <h:dataTable value="#{c.listaPeriodoCalculo}" var="d">
+                            <h:dataTable value="#{c.listaPeriodoCalculo}" var="d" id="tabelaListaPeriodo">
                                 <h:column>
                                     <p:inputMask  mask="99/99/9999" id="dataInicio" value="#{d.dataInicioCalculo}" style="width: 100px;height: 30px" >
                                         <f:converter converterId="converterDate"></f:converter>
                                     </p:inputMask>
                                 </h:column> 
                                 <h:column>
-                                    <p:inputMask  mask="99/99/9999" id="dataBase" value="#{d.dataFinalCalculo}" style="width: 100px;height: 30px" >
+                                    <p:inputMask  mask="99/99/9999" id="dataFinal" value="#{d.dataFinalCalculo}" style="width: 100px;height: 30px" >
                                         <f:converter converterId="converterDate"></f:converter>
                                     </p:inputMask>
                                 </h:column> 
@@ -193,7 +194,6 @@
                             <f:facet name="header">Metodologia</f:facet>
                             <h:selectOneMenu value="#{c.metodologia}" style="height: 30px;width: 140px">
                                 <f:converter converterId="converterMetodologia"></f:converter>
-                                <f:selectItem itemLabel="selecione" noSelectionOption="true"></f:selectItem>
                                 <f:selectItems value="#{controleCalculo.metodologiaDAO.listaTodos}" var="p" itemLabel="#{p.nomeMetodologia}"></f:selectItems>
                             </h:selectOneMenu>
                         </h:column>
@@ -232,7 +232,7 @@
                                 </h:graphicImage>
                             </h:outputLabel>
                             <h:inputFile  id="file"  value="#{controleCalculo.file}" title="Selecione um arquivo" label="Carregar arquivo"   class="upload"  style="display: none">
-                                <f:ajax listener="#{controleCalculo.upload()}" execute="conta cpf" render="@all"></f:ajax>
+                                <f:ajax listener="#{controleCalculo.upload(c)}" execute=":istagem" render=":listagem"></f:ajax>
                             </h:inputFile>
 
 

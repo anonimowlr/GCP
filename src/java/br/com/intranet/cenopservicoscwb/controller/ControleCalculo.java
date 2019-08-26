@@ -116,11 +116,25 @@ public class ControleCalculo implements Serializable {
             Npj npj = getNpjDAO().localizar(getNpj().getNrPrc());
             ProtocoloGsv protocoloGsv = getProtocoloGsvDAO().localizar(getProtocoloGsv().getCdPrc());
 
-            if (npj != null) {
+           if (npj != null) {
                 setNpj(npj);
             }
+            
+            
+            
+            if (protocoloGsv !=null) {
+                setNpj(protocoloGsv.getNpj());
+                setProtocoloGsv(protocoloGsv);
+                getNpj().adicionarProtocolo(getProtocoloGsv());
+                return;
+            }
+            
+            
+            
 
             if (protocoloGsv != null) {
+                
+                setNpj(protocoloGsv.getNpj());
 
                 setHonorario(new Honorario());
                 setProtocoloGsv(protocoloGsv);
@@ -200,7 +214,10 @@ public class ControleCalculo implements Serializable {
     }
     
     
-    public void upload(){
+    public void upload(Calculo calculo){
+        setCalculo(calculo);
+        setArquivo(new Arquivo());
+        getCalculo().setArquivo(getArquivo());
      
         try(InputStream is = getFile().getInputStream()){
             
@@ -246,12 +263,12 @@ public class ControleCalculo implements Serializable {
     }
     
     
-    public void atribuirDataInicialPlano(Calculo calculo){
+    public void atribuirDataInicialPlano(Calculo calculo) throws Exception{
         
-        if(getCalculo().getPlanoEconomico().getId().equals(1)){
-           getCalculo().getListaPeriodoCalculo().get(0).setDataInicioCalculo(new Date("02/01/1989"));
+        if(calculo.getPlanoEconomico().getId().equals(1)){
+           calculo.getListaPeriodoCalculo().get(0).setDataInicioCalculo(Utils.getDataPlanoVerao(calculo.getDiaBase().toString()));
             try {
-                getCalculo().getListaPeriodoCalculo().get(getCalculo().getListaPeriodoCalculo().size()-1).setDataFinalCalculo(Utils.getDataAtualFormatoMysql());
+                calculo.getListaPeriodoCalculo().get(getCalculo().getListaPeriodoCalculo().size()-1).setDataFinalCalculo(Utils.getDataAtualFormatoMysql());
             } catch (Exception ex) {
                 Util.mensagemInformacao(Util.getMensagemErro(ex));
             }
@@ -269,6 +286,7 @@ public class ControleCalculo implements Serializable {
     }
 
     public void avaliarParaSalvar(Calculo calculo) throws ParseException, IOException {
+        setCalculo(calculo);
 
         if (calculo.getId() == null) {
             complementarDadosCalculo();
