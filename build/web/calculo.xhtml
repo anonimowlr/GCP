@@ -24,6 +24,7 @@
                     <h:outputLabel value="NPJ: "></h:outputLabel>
                     <h:inputText id="npj" value="#{controleCalculo.npj.nrPrc}" style="height: 30px;width: 200px">
                         <f:converter converterId="converterBigInt"></f:converter>
+                        <f:ajax listener="#{controleCalculo.limparCampoProtocolo()}" execute="@this" render="protocoloGsv" event="blur" ></f:ajax>
                     </h:inputText>
                     <h:outputLabel value="Protocolo: "></h:outputLabel>
                     <h:inputText id="protocoloGsv" value="#{controleCalculo.protocoloGsv.cdPrc}" style="height: 30px;width: 150px">

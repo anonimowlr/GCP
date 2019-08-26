@@ -63,8 +63,13 @@ function  uperCaseChave(param2){
 
 
 
-function  formataConta(param){
-        var valor = param;
+function  formataConta(valor, nomeComponente){
+    
+   
+    
+        
+    
+        var valor = valor;
         var num;
         var numero = "";
         var i;
@@ -92,9 +97,9 @@ function  formataConta(param){
         }
        
         
+       var nomeComponenteFormatado = "#".concat(nomeComponente);
        
-       
-        $("#txtConta").val((numero));
+        $("#saldoBase").val((numero));
         
         
 }
