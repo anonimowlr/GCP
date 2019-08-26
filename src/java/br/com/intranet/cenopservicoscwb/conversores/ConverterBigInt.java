@@ -5,6 +5,7 @@
  */
 package br.com.intranet.cenopservicoscwb.conversores;
 
+import br.com.intranet.cenopservicoscwb.model.util.Utils;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
@@ -25,6 +26,8 @@ public class ConverterBigInt implements Serializable, Converter {
     @Override // da tela para o objeto
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
 
+        string = Utils.tratarVariavel(string);
+        
         try {
             BigInteger retorno = new BigInteger(string);
 
