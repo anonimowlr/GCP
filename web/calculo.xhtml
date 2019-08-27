@@ -46,7 +46,7 @@
 
                         <f:facet name="header">
                             <h:commandLink>
-                                <f:ajax listener="#{controleCalculo.duplicar()}" execute="@this" render=":listagem" event="click"></f:ajax>
+                                <f:ajax listener="#{controleCalculo.duplicar()}" execute=":listagem" render=":listagem" event="click"></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="add.png" title="Adicionar Linha" ></h:graphicImage>                                  
                             </h:commandLink>
 
@@ -71,6 +71,7 @@
                             <f:facet name="header">Saldo Base</f:facet>
                             <h:inputText id="saldoBase" value="#{c.saldoBase}" style="height: 30px;width: 100px">
                                 <f:converter converterId="converterMoney"></f:converter>
+                                <f:ajax execute="@this" render="@this" event="blur"></f:ajax>
                             </h:inputText>                                               
                         </h:column>
                         <h:column >
@@ -120,7 +121,7 @@
                         <h:column>
                             <f:facet name="header">CPF </f:facet>
                             <p:inputMask id="cpf" validator="validaCpf"  value="#{c.cliente.cpf}" style="width: 150px;height: 30px"  mask="999.999.999-99"  placeholder="informe o CPF" >
-                        <f:ajax  execute=":listagem" render=":listagem" event="blur"></f:ajax>
+                        <f:ajax  execute="cpf" render="cpf" event="blur"></f:ajax>
 
                     </p:inputMask>                                           
                         </h:column>
