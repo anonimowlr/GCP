@@ -48,39 +48,44 @@
                                 <f:ajax listener="#{controleCalculo.duplicar()}" execute="@all" render=":listagem" event="click"></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="add.png" title="Adicionar Linha" ></h:graphicImage>                                  
                             </h:commandLink>
+                            
+                            <h:commandLink actionListener="#{controleCalculo.imprimirTodos()}">
+
+                                <h:graphicImage  width="20px" library="img" name="print.jpg" title="Imprimir Todos os cálculos" ></h:graphicImage>                                    
+                            </h:commandLink>  
 
 
 
 
 
                         </f:facet>
-                        
+
                         <h:column>
-                            <f:facet name="header">Plano Econômico</f:facet>
-                            <h:selectOneMenu value="#{c.planoEconomico}" style="height: 30px;width: 120px">
-                                <f:converter converterId="converterPlano"></f:converter>
-                                <f:selectItem itemLabel="selecione" noSelectionOption="true"></f:selectItem>
-                                <f:selectItems value="#{controleCalculo.planoEconomicoDAO.listaTodos}" var="p" itemLabel="#{p.nomePlanoEconomico}"></f:selectItems>
-                               
+                            <f:facet name="header">Metodologia</f:facet>
+                            <h:selectOneMenu value="#{c.metodologia}" style="height: 30px;width: 140px;">
+                                <f:converter converterId="converterMetodologia"></f:converter>
+                                <f:selectItems value="#{controleCalculo.metodologiaDAO.listaTodos}" var="p" itemLabel="#{p.nomeMetodologia}"></f:selectItems>
                             </h:selectOneMenu>
                         </h:column>
 
-
-                        <h:column >
-                            <f:facet name="header">Saldo Base</f:facet>
-                            <h:inputText id="saldoBase" value="#{c.saldoBase}" style="height: 30px;width: 100px">
-                                <f:converter converterId="converterMoney"></f:converter>
-                                <f:ajax execute="@this" render="@this" event="blur"></f:ajax>
-                            </h:inputText>                                               
-                        </h:column>
-                        <h:column >
-                            <f:facet name="header">Dia base</f:facet>
-                            <h:inputText id="diaBase" value="#{c.diaBase}" style="height: 30px;width: 100px">
-                                 <f:ajax listener="#{controleCalculo.atribuirDataInicialPlano(c)}" execute=":listagem" render=":listagem dataInicio dataFinal" event="blur" ></f:ajax>
-                            </h:inputText>                                               
-                        </h:column>
-
+                        
                         <h:column>
+                            <f:facet name="header">CPF </f:facet>
+                            <p:inputMask id="cpf" validator="validaCpf"  value="#{c.cliente.cpf}" style="width: 150px;height: 30px"  mask="999.999.999-99"  placeholder="informe o CPF" >
+                                <f:ajax  execute="cpf" render="cpf" event="blur"></f:ajax>
+
+                            </p:inputMask>                                           
+                        </h:column>
+                        
+                        
+                        <h:column>
+                            <f:facet name="header">Nome </f:facet>
+                            <h:inputText value="#{c.cliente.nomeCliente}" style="height: 30px;width: 150px"  >
+                            </h:inputText>                                               
+                        </h:column>
+                        
+                        
+                         <h:column>
                             <f:facet name="header">Banco</f:facet>
                             <h:selectOneMenu value="#{c.nomeBanco}" style="height: 30px;width: 60px">
                                 <f:selectItem itemValue="BB" itemLabel="BB"></f:selectItem>
@@ -88,11 +93,10 @@
                                 <f:selectItem itemValue="BESC" itemLabel="BESC"></f:selectItem>                            
                             </h:selectOneMenu>
                         </h:column>
-
-
-
-
-                        <h:column>
+                        
+                        
+                        
+                         <h:column>
                             <f:facet name="header">Agência</f:facet>
                             <h:inputText value="#{c.numeroAgencia}" style="height: 30px;width: 60px" >
                                 <f:converter converterId="converterInt"></f:converter>
@@ -107,30 +111,71 @@
 
                             </h:inputText>                                               
                         </h:column>
+                        
 
-
-
-
-
+                        
                         <h:column>
-                            <f:facet name="header">Nome </f:facet>
-                            <h:inputText value="#{c.cliente.nomeCliente}" style="height: 30px;width: 150px"  >
+                            <f:facet name="header">Plano Econômico</f:facet>
+                            <h:selectOneMenu value="#{c.planoEconomico}" style="height: 30px;width: 120px">
+                                <f:converter converterId="converterPlano"></f:converter>
+                                <f:selectItem itemLabel="selecione" noSelectionOption="true"></f:selectItem>
+                                <f:selectItems value="#{controleCalculo.planoEconomicoDAO.listaTodos}" var="p" itemLabel="#{p.nomePlanoEconomico}"></f:selectItems>
+
+                            </h:selectOneMenu>
+                        </h:column>
+
+                        
+
+
+                        <h:column >
+                            <f:facet name="header">Saldo Base</f:facet>
+                            <h:inputText id="saldoBase" value="#{c.saldoBase}" style="height: 30px;width: 100px">
+                                <f:converter converterId="converterMoney"></f:converter>
+                                <f:ajax execute="@this" render="@this" event="blur"></f:ajax>
                             </h:inputText>                                               
                         </h:column>
-                        <h:column>
-                            <f:facet name="header">CPF </f:facet>
-                            <p:inputMask id="cpf" validator="validaCpf"  value="#{c.cliente.cpf}" style="width: 150px;height: 30px"  mask="999.999.999-99"  placeholder="informe o CPF" >
-                        <f:ajax  execute="cpf" render="cpf" event="blur"></f:ajax>
-
-                    </p:inputMask>                                           
+                        
+                        
+                        
+                        
+                        
+                        
+                        <h:column >
+                            <f:facet name="header">Dia base</f:facet>
+                            <h:inputText id="diaBase" value="#{c.diaBase}" style="height: 30px;width: 100px">
+                                <f:ajax listener="#{controleCalculo.atribuirDataInicialPlano(c)}" execute=":listagem" render=":listagem" event="blur" ></f:ajax>
+                            </h:inputText>                                               
                         </h:column>
+
+                       
+
+
+
+
+                       
+
+
+
+
+
                         
                         
+
+
 
 
                         <h:column>
-                            <f:facet name="header">Período/Índice</f:facet>
+                            <f:facet name="header"><p style="font-size: 11pt; font: bold;">Índice&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inicio Correção &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fim Correção</p></f:facet>
                             <h:dataTable value="#{c.listaPeriodoCalculo}" var="d" id="tabelaListaPeriodo">
+                                
+                                 <h:column>
+                                    <h:selectOneMenu value="#{d.indice}" style="height: 30px;width: 120px">
+                                        <f:converter converterId="converterIndice"></f:converter>
+                                        <f:selectItems value="#{controleCalculo.indiceDAO.listaTodos}" var="p" itemLabel="#{p.nomeIndice}"></f:selectItems>
+                                    </h:selectOneMenu>
+                                </h:column>
+                                
+                                
                                 <h:column>
                                     <p:inputMask  mask="99/99/9999" id="dataInicio" value="#{d.dataInicioCalculo}" style="width: 100px;height: 30px" >
                                         <f:converter converterId="converterDate"></f:converter>
@@ -142,12 +187,7 @@
                                     </p:inputMask>
                                 </h:column> 
 
-                                <h:column>
-                                    <h:selectOneMenu value="#{d.indice}" style="height: 30px;width: 120px">
-                                        <f:converter converterId="converterIndice"></f:converter>
-                                        <f:selectItems value="#{controleCalculo.indiceDAO.listaTodos}" var="p" itemLabel="#{p.nomeIndice}"></f:selectItems>
-                                    </h:selectOneMenu>
-                                </h:column>
+                               
 
                             </h:dataTable>                                        
                         </h:column>
@@ -192,13 +232,7 @@
 
 
 
-                        <h:column>
-                            <f:facet name="header">Metodologia</f:facet>
-                            <h:selectOneMenu value="#{c.metodologia}" style="height: 30px;width: 140px">
-                                <f:converter converterId="converterMetodologia"></f:converter>
-                                <f:selectItems value="#{controleCalculo.metodologiaDAO.listaTodos}" var="p" itemLabel="#{p.nomeMetodologia}"></f:selectItems>
-                            </h:selectOneMenu>
-                        </h:column>
+
 
                         <h:column>
                             <f:facet name="header">Expurgo</f:facet>
@@ -210,22 +244,22 @@
 
                         <h:column>
                             <f:facet name="header">Ações</f:facet>
-                            
-                             <h:commandLink>
+
+                            <h:commandLink>
 
                                 <f:ajax listener="#{controleCalculo.avaliarParaSalvar(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="save.png" title="Salvar/Atualizar este cálculo" ></h:graphicImage>                                    
                             </h:commandLink>  
-                            
-                            
-                            
 
-                            
+
+
+
+
                             <h:commandLink actionListener="#{controleCalculo.downloadPdf(c)}">
 
                                 <h:graphicImage  width="20px" library="img" name="print.jpg" title="Imprimir Cálculo" ></h:graphicImage>                                    
                             </h:commandLink>  
-                           
+
 
 
 
@@ -237,9 +271,9 @@
                             <h:inputFile  id="file"  value="#{controleCalculo.file}" title="Selecione um arquivo" label="Carregar arquivo"   class="upload"  style="display: none">
                                 <f:ajax listener="#{controleCalculo.upload(c)}" execute=":istagem" render=":listagem"></f:ajax>
                             </h:inputFile>
-                            
+
                             <h:commandLink  immediate="true">
-                                
+
                                 <f:ajax listener="#{controleCalculo.removeLinhaCalculo(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="negative.png" title="Remover Cálculo" ></h:graphicImage>                                    
                             </h:commandLink>  
