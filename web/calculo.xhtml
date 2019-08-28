@@ -20,18 +20,17 @@
 
             <h:form  id="formPrincipal" prependId="false" enctype="multipart/form-data">
 
-                <h:panelGrid columns="7" id="gridEdicao">
+                <h:panelGrid columns="7">
                     <h:outputLabel value="NPJ: "></h:outputLabel>
-                    <h:inputText id="npj" value="#{controleCalculo.npj.nrPrc}" style="height: 30px;width: 200px">
+                    <p:inputMask  mask="9999/9999999-999" id="npj" value="#{controleCalculo.npj.nrPrc}" style="height: 30px;width: 200px">
                         <f:converter converterId="converterBigInt"></f:converter>
-                        <f:ajax listener="#{controleCalculo.limparCampoProtocolo()}" execute="@this" render="protocoloGsv" event="blur" ></f:ajax>
-                    </h:inputText>
+                        <f:ajax listener="#{controleCalculo.limparCampoProtocolo()}" execute="@this" render="protocoloGsv" event="change" ></f:ajax>
+                    </p:inputMask>
                     <h:outputLabel value="Protocolo: "></h:outputLabel>
                     <h:inputText id="protocoloGsv" value="#{controleCalculo.protocoloGsv.cdPrc}" style="height: 30px;width: 150px">
                         <f:converter converterId="converterInt"></f:converter>
                         <f:ajax listener="#{controleCalculo.novo()}" execute="npj protocoloGsv" render=":listagem" event="blur"></f:ajax>
                     </h:inputText>   
-
 
 
                 </h:panelGrid>
@@ -46,7 +45,7 @@
 
                         <f:facet name="header">
                             <h:commandLink>
-                                <f:ajax listener="#{controleCalculo.duplicar()}" execute=":listagem" render=":listagem" event="click"></f:ajax>
+                                <f:ajax listener="#{controleCalculo.duplicar()}" execute="@all" render=":listagem" event="click"></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="add.png" title="Adicionar Linha" ></h:graphicImage>                                  
                             </h:commandLink>
 

@@ -5,7 +5,13 @@
         <group>
             <file>file:/home/jocimar/NetBeansProjects/gcp/src/java/br/com/intranet/cenopservicoscwb/validadores/ValidaCpf.java</file>
             <file>file:/home/jocimar/NetBeansProjects/gcp/web/calculo.xhtml</file>
+            <file>file:/home/jocimar/NetBeansProjects/gcp/nbproject/build-impl.xml</file>
+            <file>file:/home/jocimar/NetBeansProjects/gcp/src/java/br/com/intranet/cenopservicoscwb/dao/NpjDAO.java</file>
+            <file>file:/home/jocimar/NetBeansProjects/gcp/src/java/br/com/intranet/cenopservicoscwb/dao/CalculoDAO.java</file>
+            <file>file:/home/jocimar/NetBeansProjects/gcp/src/java/br/com/intranet/cenopservicoscwb/conversores/ConverterLong.java</file>
+            <file>file:/home/jocimar/NetBeansProjects/gcp/src/java/br/com/intranet/cenopservicoscwb/controller/ControleCalculo.java</file>
             <file>file:/home/jocimar/NetBeansProjects/gcp/src/java/br/com/intranet/cenopservicoscwb/conversores/ConverterBigInt.java</file>
+            <file>file:/home/jocimar/NetBeansProjects/gcp/src/java/br/com/intranet/cenopservicoscwb/dao/ProtocoloGsvDAO.java</file>
         </group>
     </open-files>
 </project-private>

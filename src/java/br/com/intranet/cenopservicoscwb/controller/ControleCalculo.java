@@ -59,7 +59,9 @@ import javax.servlet.http.Part;
 @ManagedBean
 @ViewScoped
 public class ControleCalculo implements Serializable {
-
+    
+    
+    private String estadoTela="recolhido";
     private Part file;
     private CalculoDAO<Calculo, Object> calculoDAO;
     private ExpurgoDAO<Expurgo, Object> expurgoDAO;
@@ -110,6 +112,7 @@ public class ControleCalculo implements Serializable {
     public void novo() {
 
         try {
+            
 
             Npj npj = getNpjDAO().localizar(getNpj().getNrPrc());
             ProtocoloGsv protocoloGsv = getProtocoloGsvDAO().localizar(getProtocoloGsv().getCdPrc());
@@ -140,6 +143,7 @@ public class ControleCalculo implements Serializable {
 
             setPeriodoCalculo(new PeriodoCalculo());
             getCalculo().adicionarPeriodoCalculo(getPeriodoCalculo());
+            mudarParaEditar();
 
 //            setCalculo(new Calculo());
 //            getProtocoloGsv().adicionarCalculo(getCalculo());
@@ -156,6 +160,13 @@ public class ControleCalculo implements Serializable {
             return;
 
         }
+        
+        if(isRecolhido()){
+            novo();
+            mudarParaEditar();
+            return;
+        }
+        
         
         if(getProtocoloGsv().getListaCalculo().size()>=1 && getProtocoloGsv().getListaCalculo().get(getProtocoloGsv().getListaCalculo().size()-1).getValorFinal()==null){
             
@@ -737,6 +748,33 @@ public class ControleCalculo implements Serializable {
      */
     public void setFile(Part file) {
         this.file = file;
+    }
+
+    /**
+     * @return the estadoTela
+     */
+    public String getEstadoTela() {
+        return estadoTela;
+    }
+
+    /**
+     * @param estadoTela the estadoTela to set
+     */
+    public void setEstadoTela(String estadoTela) {
+        this.estadoTela = estadoTela;
+    }
+    
+    
+    public void mudarParaEditar(){
+        setEstadoTela("editar");
+    }
+    
+    public boolean isEditar(){
+        return "editar".equals(estadoTela);
+    }
+    
+    public boolean isRecolhido(){
+        return "recolhido".equals(estadoTela);
     }
 
 }
