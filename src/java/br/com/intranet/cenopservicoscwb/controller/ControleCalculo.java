@@ -117,10 +117,9 @@ public class ControleCalculo implements Serializable {
             Npj npj = getNpjDAO().localizar(getNpj().getNrPrc());
             ProtocoloGsv protocoloGsv = getProtocoloGsvDAO().localizar(getProtocoloGsv().getCdPrc());
 
-            if (npj != null) {
-                setNpj(npj);
-            }
-
+            
+            
+            
             if (protocoloGsv != null) {
                 setNpj(protocoloGsv.getNpj());
                 setProtocoloGsv(protocoloGsv);
@@ -145,8 +144,6 @@ public class ControleCalculo implements Serializable {
             getCalculo().adicionarPeriodoCalculo(getPeriodoCalculo());
             mudarParaEditar();
 
-//            setCalculo(new Calculo());
-//            getProtocoloGsv().adicionarCalculo(getCalculo());
         } catch (Exception e) {
             Util.mensagemErro(Util.getMensagemErro(e));
         }
@@ -172,8 +169,7 @@ public class ControleCalculo implements Serializable {
             
             avaliarParaSalvar(getProtocoloGsv().getListaCalculo().get(getProtocoloGsv().getListaCalculo().size()-1));
             
-        }
-
+        } else{
         setCalculo(new Calculo());
         setMora(new Mora());
         setCliente(new Cliente());
@@ -189,9 +185,13 @@ public class ControleCalculo implements Serializable {
         getCalculo().setMulta(getMulta());
         getCalculo().setJuroRemuneratorio(getJuroRemuneratorio());
         getProtocoloGsv().adicionarCalculo(getCalculo());
+        
         setPeriodoCalculo(new PeriodoCalculo());
         getCalculo().setArquivo(getArquivo());
         getCalculo().adicionarPeriodoCalculo(getPeriodoCalculo());
+        }
+
+        
     }
 
     public void salvar() {
@@ -243,6 +243,21 @@ public class ControleCalculo implements Serializable {
         }
 
     }
+    
+    
+    public void avaliarAlteracaoParametros() throws IOException{
+        
+        if(isEditar()){
+            
+            FacesContext.getCurrentInstance().getExternalContext().redirect("calculo.jsf");
+            Util.mensagemErro("Alteração de parametros");
+            return;
+            
+        }
+        
+    }
+    
+    
 
     public void removeLinhaCalculo(Calculo calculo) {
 
@@ -271,6 +286,13 @@ public class ControleCalculo implements Serializable {
 
     public void avaliarParaSalvar(Calculo calculo) throws ParseException, IOException {
         setCalculo(calculo);
+        
+        
+        if(!calculo.getProtocoloGsv().getNpj().equals(getNpjDAO().localizar(getNpj().getNrPrc()))){
+            Util.mensagemErro("O protocolo "+ calculo.getProtocoloGsv().getCdPrc().toString() + " " + "já está associado a outro NPJ:  " + getProtocoloGsvDAO().localizar(getProtocoloGsv().getCdPrc()).getNpj().getNrPrc().toString());
+            return;
+        }
+        
 
         if (calculo.getId() == null) {
             complementarDadosCalculo();
@@ -290,6 +312,7 @@ public class ControleCalculo implements Serializable {
     }
 
     public void salvarCalculo(Calculo calculo) {
+        
 
         if (getCalculoDAO().salvar(calculo)) {
             Util.mensagemInformacao(getCalculoDAO().getMensagem());
@@ -297,6 +320,7 @@ public class ControleCalculo implements Serializable {
         } else {
 
             Util.mensagemErro(getCalculoDAO().getMensagem());
+            
         }
 
     }
