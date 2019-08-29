@@ -16,24 +16,54 @@
         <ui:define name="conteudo">
 
 
+            <h:form id="formRemuneracaoEsperada">
+                <h:panelGrid columns="2" rendered="#{controleCalculo.editar}">
+
+
+                        <h:outputLabel value="Remuneração  Creditada:"></h:outputLabel>
+                        <h:outputText value="#{controleCalculo.calculo.remuneracaoBasica}">
+                            <f:converter converterId="converterMoneySaldoBase"></f:converter>
+                        </h:outputText>
+                        <h:outputLabel value="Juros Creditados:"></h:outputLabel>
+                        <h:outputText value="#{controleCalculo.calculo.jurosCreditado}">
+                            <f:converter converterId="converterMoneySaldoBase"></f:converter>
+                        </h:outputText>
+
+
+                </h:panelGrid>
+            </h:form>
+
+
 
 
             <h:form  id="formPrincipal" prependId="false" enctype="multipart/form-data">
 
-                <h:panelGrid columns="7">
-                    <h:outputLabel value="NPJ: "></h:outputLabel>
-                    <p:inputMask  mask="9999/9999999-999" id="npj" value="#{controleCalculo.npj.nrPrc}" style="height: 30px;width: 200px">
-                        <f:converter converterId="converterBigInt"></f:converter>
-                        <f:ajax listener="#{controleCalculo.avaliarAlteracaoParametros()}" execute="@all" render="@all" event="change" ></f:ajax>
-                    </p:inputMask>
-                    <h:outputLabel value="Protocolo: "></h:outputLabel>
-                    <h:inputText id="protocoloGsv" value="#{controleCalculo.protocoloGsv.cdPrc}" style="height: 30px;width: 150px">
-                        <f:converter converterId="converterInt"></f:converter>
-                        <f:ajax listener="#{controleCalculo.avaliarAlteracaoParametros()}" execute="@all" render="@all" event="change" ></f:ajax>
-                    </h:inputText>   
 
 
-                </h:panelGrid>
+                <div id="divNpjProtocolo" align="left" style="width: 30%">
+                    <h:panelGrid columns="4" id="panelGrid">
+                        <h:outputLabel value="NPJ: "></h:outputLabel>
+                        <p:inputMask  mask="9999/9999999-999" id="npj" value="#{controleCalculo.npj.nrPrc}" style="height: 30px;width: 200px">
+                            <f:converter converterId="converterBigInt"></f:converter>
+                            <f:ajax listener="#{controleCalculo.avaliarAlteracaoParametros()}" execute="@all" render="@all" event="change" ></f:ajax>
+                        </p:inputMask>
+                        <h:outputLabel value="Protocolo: "></h:outputLabel>
+                        <h:inputText id="protocoloGsv" value="#{controleCalculo.protocoloGsv.cdPrc}" style="height: 30px;width: 150px">
+                            <f:converter converterId="converterInt"></f:converter>
+                            <f:ajax listener="#{controleCalculo.avaliarAlteracaoParametros()}" execute="@all" render="@all" event="change" ></f:ajax>
+                        </h:inputText>   
+
+
+
+
+
+
+                    </h:panelGrid>
+                </div>
+
+
+
+
 
 
                 <div class="table-responsive">
@@ -45,10 +75,10 @@
 
                         <f:facet name="header">
                             <h:commandLink>
-                                <f:ajax listener="#{controleCalculo.duplicar()}" execute="@all" render=":listagem" event="click"></f:ajax>
+                                <f:ajax listener="#{controleCalculo.duplicar()}" execute="@all" render=":listagem :formRemuneracaoEsperada" event="click"></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="add.png" title="Adicionar Linha" ></h:graphicImage>                                  
                             </h:commandLink>
-                            
+
                             <h:commandLink actionListener="#{controleCalculo.imprimirTodos()}">
 
                                 <h:graphicImage  width="20px" library="img" name="print.jpg" title="Imprimir Todos os cálculos" ></h:graphicImage>                                    
@@ -68,7 +98,7 @@
                             </h:selectOneMenu>
                         </h:column>
 
-                        
+
                         <h:column>
                             <f:facet name="header">CPF </f:facet>
                             <p:inputMask id="cpf" validator="validaCpf"  value="#{c.cliente.cpf}" style="width: 150px;height: 30px"  mask="999.999.999-99"  placeholder="informe o CPF" >
@@ -76,16 +106,16 @@
 
                             </p:inputMask>                                           
                         </h:column>
-                        
-                        
+
+
                         <h:column>
                             <f:facet name="header">Nome </f:facet>
                             <h:inputText value="#{c.cliente.nomeCliente}" style="height: 30px;width: 150px"  >
                             </h:inputText>                                               
                         </h:column>
-                        
-                        
-                         <h:column>
+
+
+                        <h:column>
                             <f:facet name="header">Banco</f:facet>
                             <h:selectOneMenu value="#{c.nomeBanco}" style="height: 30px;width: 60px">
                                 <f:selectItem itemValue="BB" itemLabel="BB"></f:selectItem>
@@ -93,10 +123,10 @@
                                 <f:selectItem itemValue="BESC" itemLabel="BESC"></f:selectItem>                            
                             </h:selectOneMenu>
                         </h:column>
-                        
-                        
-                        
-                         <h:column>
+
+
+
+                        <h:column>
                             <f:facet name="header">Agência</f:facet>
                             <h:inputText value="#{c.numeroAgencia}" style="height: 30px;width: 60px" >
                                 <f:converter converterId="converterInt"></f:converter>
@@ -106,17 +136,17 @@
 
                         <h:column>
                             <f:facet name="header">Conta</f:facet>
-                            <h:inputText id="conta" value="#{c.numeroConta}" style="height: 30px;width: 150px">
+                            <h:inputText id="conta" value="#{c.numeroConta}" style="height: 30px;width: 100px">
                                 <f:converter converterId="converterConta"></f:converter>
 
                             </h:inputText>                                               
                         </h:column>
-                        
 
-                        
+
+
                         <h:column>
                             <f:facet name="header">Plano Econômico</f:facet>
-                            <h:selectOneMenu value="#{c.planoEconomico}" style="height: 30px;width: 120px">
+                            <h:selectOneMenu id="plano" value="#{c.planoEconomico}" style="height: 30px;width: 120px">
                                 <f:converter converterId="converterPlano"></f:converter>
                                 <f:selectItem itemLabel="selecione" noSelectionOption="true"></f:selectItem>
                                 <f:selectItems value="#{controleCalculo.planoEconomicoDAO.listaTodos}" var="p" itemLabel="#{p.nomePlanoEconomico}"></f:selectItems>
@@ -124,58 +154,58 @@
                             </h:selectOneMenu>
                         </h:column>
 
-                        
+
 
 
                         <h:column >
                             <f:facet name="header">Saldo Base</f:facet>
                             <h:inputText id="saldoBase" value="#{c.saldoBase}" style="height: 30px;width: 100px">
-                                <f:converter converterId="converterMoney"></f:converter>
-                                <f:ajax execute="@this" render="@this" event="blur"></f:ajax>
+                                <f:converter converterId="converterMoneySaldoBase"></f:converter>
+                                <f:ajax  listener="#{controleCalculo.calcularParaConferencia(c)}"  execute=":listagem" render="@this :formRemuneracaoEsperada" event="blur"></f:ajax>
                             </h:inputText>                                               
                         </h:column>
-                        
-                        
-                        
-                        
-                        
-                        
+
+
+
+
+
+
                         <h:column >
                             <f:facet name="header">Dia base</f:facet>
-                            <h:inputText id="diaBase" value="#{c.diaBase}" style="height: 30px;width: 100px">
+                            <h:inputText id="diaBase" value="#{c.diaBase}" style="height: 30px;width: 30px">
                                 <f:ajax listener="#{controleCalculo.atribuirDataInicialPlano(c)}" execute=":listagem" render=":listagem" event="blur" ></f:ajax>
                             </h:inputText>                                               
                         </h:column>
 
-                       
-
-
-
-
-                       
 
 
 
 
 
-                        
-                        
+
+
+
+
+
+
+
+
 
 
 
 
                         <h:column>
-                            <f:facet name="header"><p style="font-size: 11pt; font: bold;">Índice&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inicio Correção &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fim Correção</p></f:facet>
+                            <f:facet name="header"><p style="font-size: 11pt; font: bold;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Índice&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inicio Correção &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fim Correção</p></f:facet>
                             <h:dataTable value="#{c.listaPeriodoCalculo}" var="d" id="tabelaListaPeriodo">
-                                
-                                 <h:column>
+
+                                <h:column>
                                     <h:selectOneMenu value="#{d.indice}" style="height: 30px;width: 120px">
                                         <f:converter converterId="converterIndice"></f:converter>
                                         <f:selectItems value="#{controleCalculo.indiceDAO.listaTodos}" var="p" itemLabel="#{p.nomeIndice}"></f:selectItems>
                                     </h:selectOneMenu>
                                 </h:column>
-                                
-                                
+
+
                                 <h:column>
                                     <p:inputMask  mask="99/99/9999" id="dataInicio" value="#{d.dataInicioCalculo}" style="width: 100px;height: 30px" >
                                         <f:converter converterId="converterDate"></f:converter>
@@ -187,7 +217,7 @@
                                     </p:inputMask>
                                 </h:column> 
 
-                               
+
 
                             </h:dataTable>                                        
                         </h:column>
@@ -215,16 +245,28 @@
                             </p:inputMask>                        
                         </h:column>
 
+
+
                         <h:column>
                             <f:facet name="header">Honorário %</f:facet>
-                            <h:inputText value="#{c.honorario.taxaHonorario}" style="width: 100px;height: 30px" >
+                            <h:inputText value="#{c.honorario.taxaHonorario}" style="width: 70px;height: 30px" >
                                 <f:converter converterId="converterMoney"></f:converter>
+                                <f:ajax execute="@this" render="valorHonorario" event="blur"></f:ajax>
+
+                            </h:inputText>
+
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Valor Honorário</f:facet>
+                            <h:inputText  id="valorHonorario" value="#{c.honorario.valorHonorario}" disabled="#{c.honorario.taxaHonorario > 0}" style="width: 80px;height: 30px" >
+                                <f:converter converterId="converterMoneySaldoBase"></f:converter>
+                                <f:ajax execute="@this" render="@this" event="blur"></f:ajax>
                             </h:inputText>
 
                         </h:column>
                         <h:column>
                             <f:facet name="header">Multa %</f:facet>
-                            <h:inputText value="#{c.multa.taxaMulta}" style="width: 100px;height: 30px" >
+                            <h:inputText value="#{c.multa.taxaMulta}" style="width: 70px;height: 30px" >
                                 <f:converter converterId="converterMoney"></f:converter>
                             </h:inputText>
 
@@ -241,13 +283,20 @@
                                 <f:selectItems value="#{controleCalculo.expurgoDAO.listaTodos}" var="p" itemLabel="#{p.marcador}"></f:selectItems>
                             </h:selectOneMenu>
                         </h:column>
+                        <h:column>
+
+                            <f:facet name="header">Valor Final</f:facet>
+                            <h:inputText value="#{c.valorFinal}" style="height: 30px;width: 100px; background-color: #E3E3E3; font-style: italic" disabled="true">
+                                <f:converter converterId="converterMoney"></f:converter>
+                            </h:inputText>
+                        </h:column>
 
                         <h:column>
                             <f:facet name="header">Ações</f:facet>
 
                             <h:commandLink>
 
-                                <f:ajax listener="#{controleCalculo.avaliarParaSalvar(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
+                                <f:ajax listener="#{controleCalculo.avaliarParaSalvar(c)}" execute=":listagem" render=":listagem :formRemuneracaoEsperada" event="click" ></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="save.png" title="Salvar/Atualizar este cálculo" ></h:graphicImage>                                    
                             </h:commandLink>  
 
@@ -255,7 +304,7 @@
 
 
 
-                            <h:commandLink actionListener="#{controleCalculo.downloadPdf(c)}">
+                            <h:commandLink actionListener="#{controleCalculo.downloadPdf(c)}" rendered="#{c.valorFinal ne null  }">
 
                                 <h:graphicImage  width="20px" library="img" name="print.jpg" title="Imprimir Cálculo" ></h:graphicImage>                                    
                             </h:commandLink>  

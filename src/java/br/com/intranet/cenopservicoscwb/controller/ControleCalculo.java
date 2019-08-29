@@ -199,6 +199,15 @@ public class ControleCalculo implements Serializable {
 
     }
 
+    public void calcularParaConferencia(Calculo calculo) {
+        
+        setCalculo(calculo);
+
+        MotorCalculoPoupanca motorCalculoPoupanca = new MotorCalculoPoupanca();
+        motorCalculoPoupanca.calcularParaConferencia(calculo);
+
+    }
+
     public void upload(Calculo calculo) {
         setCalculo(calculo);
         setArquivo(new Arquivo());
@@ -339,29 +348,23 @@ public class ControleCalculo implements Serializable {
         }
 
     }
-    
-    
-    public void imprimirTodos() throws DocumentException, ParseException, IOException{
+
+    public void imprimirTodos() throws DocumentException, ParseException, IOException {
         for (Calculo c : getProtocoloGsv().getListaCalculo()) {
-            
+
             downloadMassificadoPdf(c);
-            
+
         }
     }
-    
-    
-    
+
     public void downloadMassificadoPdf(Calculo calculo) throws DocumentException, ParseException, FileNotFoundException, IOException {
 
         try {
             FacesContext fc = FacesContext.getCurrentInstance();
             ExternalContext externalContext = fc.getExternalContext();
 
-            
-           
-             externalContext.responseReset();
-            
-            
+            externalContext.responseReset();
+
             externalContext.setResponseContentType("application/pdf");
             externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\"" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf\"");
 
@@ -376,18 +379,15 @@ public class ControleCalculo implements Serializable {
                 out.write(buffer);
             }
 
-             out.flush();
+            out.flush();
             fc.responseComplete();
-            
-            
+
         } catch (Exception e) {
             Util.mensagemErro(Util.getMensagemErro(e));
 
         }
 
     }
-    
-    
 
     public void downloadPdf(Calculo calculo) throws DocumentException, ParseException, FileNotFoundException, IOException {
 
@@ -401,7 +401,7 @@ public class ControleCalculo implements Serializable {
 
             //FileInputStream inputStream = new FileInputStream(new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + "NPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/"  + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf"));
             //FileInputStream inputStream = new FileInputStream(new File("/opt/apache-tomcat-8.5.39/webapps/utilitario/" + "NPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf"));
-            FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "\\"  + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf"));
+            FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf"));
             OutputStream out = externalContext.getResponseOutputStream();
             byte[] buffer = new byte[1024];
             int lenght;
