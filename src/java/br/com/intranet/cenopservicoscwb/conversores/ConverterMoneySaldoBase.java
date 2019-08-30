@@ -37,7 +37,7 @@ public class ConverterMoneySaldoBase implements  Serializable,Converter{
         
         
             try{
-                BigDecimal retorno = new BigDecimal(Utils.tratarVariavel(string));
+                BigDecimal retorno = new BigDecimal(Utils.tratarVariavelSaldoBase(string));
                
                 return  retorno;
             } catch (Exception ex) {

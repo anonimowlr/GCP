@@ -34,6 +34,7 @@ public class UsuarioDAO {
                 funci.setNomeFuncao(tabela.getString("nfuncao"));
                 funci.setMatriculaFunci(Integer.parseInt(Utils.tratarVariavel(chave)));
                 funci.setNomeGerente(tabela.getString("gerente"));
+                funci.setCodigoFuncao(tabela.getInt("funcao"));
                 
             } else{
                funci.setChaveFunci(chave);

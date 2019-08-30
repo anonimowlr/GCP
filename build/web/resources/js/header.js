@@ -12,6 +12,8 @@ $(document).ready(function (){
     
     favicon.setAttribute('type', 'image/png');
     favicon.setAttribute('href', "resources/img/bb-logo.png");
+    
+    document.body.size = "80%";
    
    
    
