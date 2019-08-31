@@ -15,33 +15,38 @@
 
         <ui:define name="conteudo">
 
+            <div id="divRemuneracaoEsperada">
 
-            <h:form id="formRemuneracaoEsperada" >
-                <h:panelGrid columns="2" rendered="#{controleCalculo.editar}">
-
-                    
-                        <h:outputLabel value="Saldo Base:"></h:outputLabel>
-                        <h:outputText value="#{controleCalculo.calculo.saldoBase}" style="color: red">
-                            <f:converter converterId="converterMoneySaldoBase"></f:converter>
-                        </h:outputText>
-
-                        <h:outputLabel value="Remuneração  Creditada:"></h:outputLabel>
-                        <h:outputText value="#{controleCalculo.calculo.remuneracaoBasica}" style="color: red">
-                            <f:converter converterId="converterMoneySaldoBase"></f:converter>
-                        </h:outputText>
-                        <h:outputLabel value="Juros Creditados:"></h:outputLabel>
-                        <h:outputText value="#{controleCalculo.calculo.jurosCreditado}" style="color: red">
-                            <f:converter converterId="converterMoneySaldoBase"></f:converter>
-                        </h:outputText>
-                        <h:outputLabel value="Saldo na data base:"></h:outputLabel>
-                        <h:outputText value="#{controleCalculo.saldoNaDataBase}" style="color: red">
-                            <f:converter converterId="converterMoneySaldoBase"></f:converter>
-                        </h:outputText>
+                <div id="divRemuneracaoEsperacadaFilha" align="right" style="padding: 10px">
 
 
-                </h:panelGrid>
-            </h:form>
+                    <h:form id="formRemuneracaoEsperada" >
+                        <p:panelGrid columns="2" rendered="#{controleCalculo.saldoNaDataBase ne null}">
 
+
+                            <h:outputLabel value="Saldo Base:"></h:outputLabel>
+                            <h:outputText value="#{controleCalculo.calculo.saldoBase}" style="color: red">
+                                <f:converter converterId="converterMoneySaldoBase"></f:converter>
+                            </h:outputText>
+
+                            <h:outputLabel value="Remuneração  Creditada:"></h:outputLabel>
+                            <h:outputText value="#{controleCalculo.calculo.remuneracaoBasica}" style="color: red">
+                                <f:converter converterId="converterMoneySaldoBase"></f:converter>
+                            </h:outputText>
+                            <h:outputLabel value="Juros Creditados:"></h:outputLabel>
+                            <h:outputText value="#{controleCalculo.calculo.jurosCreditado}" style="color: red">
+                                <f:converter converterId="converterMoneySaldoBase"></f:converter>
+                            </h:outputText>
+                            <h:outputLabel value="Saldo na data base:"></h:outputLabel>
+                            <h:outputText value="#{controleCalculo.saldoNaDataBase}" style="color: red">
+                                <f:converter converterId="converterMoneySaldoBase"></f:converter>
+                            </h:outputText>
+
+
+                        </p:panelGrid>
+                    </h:form>
+                </div>
+            </div>
 
 
 
@@ -169,11 +174,11 @@
                         <h:column >
                             <f:facet name="header">Saldo Base</f:facet>
                             <h:inputText id="saldoBase" value="#{c.saldoBase}" style="height: 30px;width: 100px">
-                                
-                                
-                                
+
+
+
                                 <f:converter converterId="converterMoneySaldoBase"></f:converter>
-                                
+
                                 <f:ajax  listener="#{controleCalculo.calcularParaConferencia(c)}"  execute=":listagem" render="@this :formRemuneracaoEsperada" event="blur"></f:ajax>
                             </h:inputText>                                               
                         </h:column>
