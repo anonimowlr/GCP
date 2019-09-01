@@ -120,6 +120,10 @@ public class ControleCalculo implements Serializable {
             Npj npj = getNpjDAO().localizar(getNpj().getNrPrc());
             ProtocoloGsv protocoloGsv = getProtocoloGsvDAO().localizar(getProtocoloGsv().getCdPrc());
 
+            if(npj!=null){ // SE RETIRAR ESSA CONSTRUÇÃO, AO ATUALIZAR NPJ COM PROTOCOLO DIFERENTE EXCLUI OS ANTERIORES
+                setNpj(npj);
+            }
+            
             if (protocoloGsv != null) {
                 setNpj(protocoloGsv.getNpj());
                 setProtocoloGsv(protocoloGsv);
@@ -127,6 +131,7 @@ public class ControleCalculo implements Serializable {
                 return;
 
             } else {
+                
                 getNpj().adicionarProtocolo(getProtocoloGsv());
                 salvar();
                 setCalculo(new Calculo());
@@ -176,14 +181,28 @@ public class ControleCalculo implements Serializable {
 
         } else {
             setCalculo(new Calculo());
+            
+            Calculo calculoUltimaLinha = getProtocoloGsv().getListaCalculo().get(getProtocoloGsv().getListaCalculo().size()-1);
+            
+            getCalculo().setCliente(calculoUltimaLinha.getCliente());
+            getCalculo().setArquivo(calculoUltimaLinha.getArquivo());
+            getCalculo().setDiaBase(calculoUltimaLinha.getDiaBase());
+            getCalculo().setNomeBanco(calculoUltimaLinha.getNomeBanco());
+            getCalculo().setNumeroAgencia(calculoUltimaLinha.getNumeroAgencia());
+            getCalculo().setNumeroConta(calculoUltimaLinha.getNumeroConta());
+            getCalculo().setPlanoEconomico(calculoUltimaLinha.getPlanoEconomico());
+            getCalculo().setSaldoBase(calculoUltimaLinha.getSaldoBase());
+            
+            
+            
             setMora(new Mora());
-            setCliente(new Cliente());
+            setCliente(getCalculo().getCliente());
             setHonorario(new Honorario());
             setMulta(new Multa());
             setJuroRemuneratorio(new JuroRemuneratorio());
-            setArquivo(new Arquivo());
+            //setArquivo(new Arquivo());
 
-            getCalculo().setCliente(getCliente());
+            //getCalculo().setCliente(getCliente());
             getCliente().adicionarCalculo(getCalculo());
             getCalculo().setMora(getMora());
             getCalculo().setHonorario(getHonorario());
@@ -308,7 +327,7 @@ public class ControleCalculo implements Serializable {
             complementarDadosCalculo();
             MotorCalculoPoupanca motorCalculoPoupanca = new MotorCalculoPoupanca();
             motorCalculoPoupanca.calcular(calculo);
-            salvarCalculo(calculo);
+            atualizarCalculo(calculo);
 
         } else {
 
