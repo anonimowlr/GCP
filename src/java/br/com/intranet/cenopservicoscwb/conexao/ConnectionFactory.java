@@ -32,9 +32,9 @@ public class ConnectionFactory {
 
     
     
-        private static final String DB_USER ="f5078775";
+        private static final String DB_USER ="calculopoupanca";
   
-        private static final String DB_PASSWORD ="jwalter1983";
+        private static final String DB_PASSWORD ="calculopoupanca";
       
     
 

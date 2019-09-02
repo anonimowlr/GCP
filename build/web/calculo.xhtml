@@ -4,7 +4,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:composition template="header.xhtml" >
 
@@ -177,8 +178,8 @@
                             <f:facet name="header">Saldo Base</f:facet>
                             <h:inputText id="saldoBase" value="#{c.saldoBase}" style="height: 30px;width: 100px">
 
-
-
+                                
+                                
                                 <f:converter converterId="converterMoneySaldoBase"></f:converter>
 
                                 <f:ajax  listener="#{controleCalculo.calcularParaConferencia(c)}"  execute=":listagem" render="@this :formRemuneracaoEsperada" event="blur"></f:ajax>
@@ -341,11 +342,6 @@
                                 <f:ajax listener="#{controleCalculo.upload(c)}" execute=":istagem" render=":listagem"></f:ajax>
                             </h:inputFile>
 
-                            <h:commandLink  immediate="true">
-
-                                <f:ajax listener="#{controleCalculo.removeLinhaCalculo(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
-                                <h:graphicImage  width="20px" library="img" name="negative.png" title="Remover Cálculo" ></h:graphicImage>                                    
-                            </h:commandLink>  
 
 
 
