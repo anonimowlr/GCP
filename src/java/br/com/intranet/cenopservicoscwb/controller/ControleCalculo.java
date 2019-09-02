@@ -60,9 +60,7 @@ import javax.servlet.http.Part;
 @ManagedBean
 @ViewScoped
 public class ControleCalculo implements Serializable {
-    
-    
-    
+
     private BigDecimal saldoNaDataBase;
     private String estadoTela = "recolhido";
     private Part file;
@@ -92,7 +90,7 @@ public class ControleCalculo implements Serializable {
     private PeriodoCalculo periodoCalculo;
 
     public ControleCalculo() {
-        
+
         npj = new Npj();
         protocoloGsv = new ProtocoloGsv();
         arquivo = new Arquivo();
@@ -120,19 +118,19 @@ public class ControleCalculo implements Serializable {
             Npj npj = getNpjDAO().localizar(getNpj().getNrPrc());
             ProtocoloGsv protocoloGsv = getProtocoloGsvDAO().localizar(getProtocoloGsv().getCdPrc());
 
-            if(npj!=null){ // SE RETIRAR ESSA CONSTRUÇÃO, AO ATUALIZAR NPJ COM PROTOCOLO DIFERENTE EXCLUI OS ANTERIORES
+            if (npj != null) { // SE RETIRAR ESSA CONSTRUÇÃO, AO ATUALIZAR NPJ COM PROTOCOLO DIFERENTE EXCLUI OS ANTERIORES
                 setNpj(npj);
             }
-            
-            if (protocoloGsv != null) {
+
+            if (protocoloGsv != null && protocoloGsv.getListaCalculo().size() >= 1) {
                 setNpj(protocoloGsv.getNpj());
                 setProtocoloGsv(protocoloGsv);
                 getNpj().adicionarProtocolo(getProtocoloGsv());
                 return;
 
             } else {
-                
-                getNpj().adicionarProtocolo(getProtocoloGsv());
+
+                //getNpj().adicionarProtocolo(getProtocoloGsv());
                 salvar();
                 setCalculo(new Calculo());
                 getCalculo().setCliente(getCliente());
@@ -143,6 +141,7 @@ public class ControleCalculo implements Serializable {
                 getCalculo().setJuroRemuneratorio(getJuroRemuneratorio());
                 getCalculo().setArquivo(getArquivo());
                 getProtocoloGsv().adicionarCalculo(getCalculo());
+                getProtocoloGsv().setNpj(getNpj());
             }
 
             setPeriodoCalculo(new PeriodoCalculo());
@@ -156,11 +155,10 @@ public class ControleCalculo implements Serializable {
     }
 
     public void duplicar() throws ParseException, IOException {
-        
-        
-        if(saldoNaDataBase != null){
+
+        if (saldoNaDataBase != null) {
             setSaldoNaDataBase(null);
-            
+
         }
 
         if (getProtocoloGsv().getCdPrc() == null || getNpj().getNrPrc() == null) {
@@ -181,9 +179,9 @@ public class ControleCalculo implements Serializable {
 
         } else {
             setCalculo(new Calculo());
-            
-            Calculo calculoUltimaLinha = getProtocoloGsv().getListaCalculo().get(getProtocoloGsv().getListaCalculo().size()-1);
-            
+
+            Calculo calculoUltimaLinha = getProtocoloGsv().getListaCalculo().get(getProtocoloGsv().getListaCalculo().size() - 1);
+
             getCalculo().setCliente(calculoUltimaLinha.getCliente());
             getCalculo().setArquivo(calculoUltimaLinha.getArquivo());
             getCalculo().setDiaBase(calculoUltimaLinha.getDiaBase());
@@ -192,9 +190,7 @@ public class ControleCalculo implements Serializable {
             getCalculo().setNumeroConta(calculoUltimaLinha.getNumeroConta());
             getCalculo().setPlanoEconomico(calculoUltimaLinha.getPlanoEconomico());
             getCalculo().setSaldoBase(calculoUltimaLinha.getSaldoBase());
-            
-            
-            
+
             setMora(new Mora());
             setCliente(getCalculo().getCliente());
             setHonorario(new Honorario());
@@ -211,6 +207,9 @@ public class ControleCalculo implements Serializable {
             getProtocoloGsv().adicionarCalculo(getCalculo());
 
             setPeriodoCalculo(new PeriodoCalculo());
+            getPeriodoCalculo().setDataInicioCalculo(calculoUltimaLinha.getListaPeriodoCalculo().get(0).getDataInicioCalculo());
+            getPeriodoCalculo().setDataFinalCalculo(calculoUltimaLinha.getListaPeriodoCalculo().get(0).getDataFinalCalculo());
+
             getCalculo().setArquivo(getArquivo());
             getCalculo().adicionarPeriodoCalculo(getPeriodoCalculo());
         }
@@ -230,13 +229,12 @@ public class ControleCalculo implements Serializable {
     }
 
     public void calcularParaConferencia(Calculo calculo) {
-        
+
         setCalculo(calculo);
 
         MotorCalculoPoupanca motorCalculoPoupanca = new MotorCalculoPoupanca();
         motorCalculoPoupanca.calcularParaConferencia(calculo);
         setSaldoNaDataBase(getCalculo().getSaldoBase().add(getCalculo().getRemuneracaoBasica().add(getCalculo().getJurosCreditado())));
-        
 
     }
 
@@ -292,7 +290,17 @@ public class ControleCalculo implements Serializable {
 
     public void removeLinhaCalculo(Calculo calculo) {
 
-        getProtocoloGsv().getListaCalculo().remove(calculo);
+        try {
+            if (getCalculoDAO().deletar(calculo)) {
+                Util.mensagemInformacao(getCalculoDAO().getMensagem());
+                getProtocoloGsv().getListaCalculo().remove(calculo);
+            } else {
+                Util.mensagemErro(getCalculoDAO().getMensagem());
+            }
+
+        } catch (Exception e) {
+            Util.mensagemErro(Util.getMensagemErro(e));
+        }
 
     }
 
@@ -319,7 +327,7 @@ public class ControleCalculo implements Serializable {
         setCalculo(calculo);
 
         if (!calculo.getProtocoloGsv().getNpj().equals(getNpjDAO().localizar(getNpj().getNrPrc()))) {
-            Util.mensagemErro("O protocolo " + calculo.getProtocoloGsv().getCdPrc().toString() + " " + "já está associado a outro NPJ:  " + getProtocoloGsvDAO().localizar(calculo.getProtocoloGsv().getCdPrc()).getNpj().getNrPrc().toString());
+            Util.mensagemErro("O protocolo " + calculo.getProtocoloGsv().getCdPrc().toString() + " " + "já está associado a outro NPJ:  " + getProtocoloGsvDAO().localizar(getProtocoloGsv().getCdPrc()).getNpj().getNrPrc().toString());
             return;
         }
 
@@ -327,7 +335,7 @@ public class ControleCalculo implements Serializable {
             complementarDadosCalculo();
             MotorCalculoPoupanca motorCalculoPoupanca = new MotorCalculoPoupanca();
             motorCalculoPoupanca.calcular(calculo);
-            atualizarCalculo(calculo);
+            salvarCalculo(calculo);
 
         } else {
 
