@@ -100,10 +100,21 @@
                             </h:commandLink>  
 
 
+                            
 
 
 
                         </f:facet>
+                        
+                        
+                         <h:column>
+                            <f:facet name="header">Seleção</f:facet>
+                            
+                            <h:selectBooleanCheckbox value="#{c.selecionado}">
+                                <f:ajax listener="#{controleCalculo.mostrarEstadoSelecao(c)}" execute="@this" render=":listagem" event="change"></f:ajax>
+                            </h:selectBooleanCheckbox>
+                        </h:column>
+                        
                         
                         
 
