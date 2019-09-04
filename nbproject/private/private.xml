@@ -2,30 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/web/resources/js/header.js</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/dao/NpjDAO.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/dao/DAOGenerico.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/controller/ControleAcesso.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/dao/PlanoEconomicoDAO.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/dao/FuncionarioDAO.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/conversores/ConverterIndice.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/conversores/ConverterMetodologia.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/nbproject/build-impl.xml~</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/conversores/ConverterPlano.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/controller/ControleFuncionario.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/web/index.jsp</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/web/header.xhtml</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/web/WEB-INF/web_1.xml</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/web/calculo.xhtml</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/nbproject/build-impl.xml</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/conexao/ConnectionFactory.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/conversores/ConverterMoney.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/controller/ControleCalculo.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/dao/UsuarioDAO.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/conversores/ConverterExpurgo.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/conversores/ConverterMoneySaldoBase.java</file>
-            <file>file:/K:/Restrita/Administrativo/Apoio%20a%20Gestao/Solucoes%20Automatizadas/Em%20Desenvolvimento/Calculo%20Poupanca/GCP/src/java/br/com/intranet/cenopservicoscwb/util/Util.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

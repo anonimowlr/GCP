@@ -322,6 +322,12 @@ public class ControleCalculo implements Serializable {
         if (calculo.getPlanoEconomico().getId().equals(1)) {
             calculo.getListaPeriodoCalculo().get(0).setDataInicioCalculo(Utils.getDataPlanoVerao(calculo.getDiaBase().toString()));
             try {
+                
+                
+                if(calculo.getListaPeriodoCalculo().get(0).getDataFinalCalculo()!=null){
+                    return;
+                    
+                }
                 calculo.getListaPeriodoCalculo().get(getCalculo().getListaPeriodoCalculo().size() - 1).setDataFinalCalculo(Utils.getDataAtualFormatoMysql());
             } catch (Exception ex) {
                 Util.mensagemInformacao(Util.getMensagemErro(ex));
