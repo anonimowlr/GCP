@@ -56,7 +56,7 @@
 
 
                 <div id="divNpjProtocolo" align="left" style="width: 30%">
-                    <h:panelGrid columns="4" id="panelGrid">
+                    <h:panelGrid columns="5" id="panelGrid">
                         <h:outputLabel value="NPJ: "></h:outputLabel>
                         <p:inputMask  mask="9999/9999999-999" id="npj" value="#{controleCalculo.npj.nrPrc}" style="height: 30px;width: 200px">
                             <f:converter converterId="converterBigInt"></f:converter>
@@ -66,7 +66,8 @@
                         <h:inputText id="protocoloGsv" value="#{controleCalculo.protocoloGsv.cdPrc}" style="height: 30px;width: 150px">
                             <f:converter converterId="converterInt"></f:converter>
                             <f:ajax listener="#{controleCalculo.avaliarAlteracaoParametros()}" execute="@all" render="@all" event="change" ></f:ajax>
-                        </h:inputText>   
+                        </h:inputText>  
+                        
 
 
 
@@ -97,6 +98,20 @@
                             <h:commandLink actionListener="#{controleCalculo.imprimirTodos()}">
 
                                 <h:graphicImage  width="20px" library="img" name="print.jpg" title="Imprimir Todos os cálculos" ></h:graphicImage>                                    
+                            </h:commandLink>  
+                            
+                            <h:commandLink actionListener="#{controleCalculo.gerarPdfResumo()}">
+
+                                <h:graphicImage  width="20px" library="img" name="file.png" title="Imprimir resumo de cálculos vinculados ao npj:  #{controleCalculo.npj.nrPrc}" >
+                                    
+                                </h:graphicImage>                                    
+                            </h:commandLink>  
+                           
+                            <h:commandLink >
+
+                                <h:graphicImage  width="20px" library="img" name="check.png" title="Selecionar Todos os cálculos"  rendered="#{controleCalculo.editar}" >
+                                    <f:ajax   listener="#{controleCalculo.selecionarTodos()}" execute=":listagem" render=":listagem" event="click"></f:ajax>
+                                </h:graphicImage>                                    
                             </h:commandLink>  
 
 
