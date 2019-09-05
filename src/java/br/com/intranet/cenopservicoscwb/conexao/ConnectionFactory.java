@@ -18,17 +18,6 @@ public class ConnectionFactory {
    
     private static final String DB_DRIVER ="com.mysql.jdbc.Driver";
    
-//    private static final String DB_USER ="rejud";
-//  
-//    private static final String DB_PASSWORD ="giEC8e";
-    
-//    private static final String DB_USER ="rejud";
-//  
-//    private static final String DB_PASSWORD ="rejud";
-//    
-//    private static final String DB_USER ="jocimar";
-//  
-//    private static final String DB_PASSWORD ="jwalter1983";
 
     
     

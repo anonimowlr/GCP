@@ -97,12 +97,12 @@
 
                             <h:commandLink actionListener="#{controleCalculo.imprimirTodos()}">
 
-                                <h:graphicImage  width="20px" library="img" name="print.jpg" title="Imprimir Todos os cálculos" ></h:graphicImage>                                    
+                                <h:graphicImage  width="20px" library="img" name="print.jpg" title="Imprimir Todos os cálculos" rendered="#{controleCalculo.editar}" ></h:graphicImage>                                    
                             </h:commandLink>  
                             
-                            <h:commandLink actionListener="#{controleCalculo.gerarPdfResumo()}">
+                            <h:commandLink actionListener="#{controleCalculo.downloadPdfResumo()}">
 
-                                <h:graphicImage  width="20px" library="img" name="file.png" title="Imprimir resumo de cálculos vinculados ao npj:  #{controleCalculo.npj.nrPrc}" >
+                                <h:graphicImage  width="20px" library="img" name="file.png" title="Imprimir resumo de cálculos vinculados ao npj:  #{controleCalculo.npj.nrPrc}"  rendered="#{controleCalculo.editar}">
                                     
                                 </h:graphicImage>                                    
                             </h:commandLink>  
@@ -121,6 +121,7 @@
 
                         </f:facet>
                         
+                     
                         
                          <h:column>
                             <f:facet name="header">Seleção</f:facet>
@@ -135,7 +136,7 @@
 
                         <h:column>
                             <f:facet name="header">Metodologia</f:facet>
-                            <h:selectOneMenu value="#{c.metodologia}" style="height: 30px;width: 140px;">
+                            <h:selectOneMenu value="#{c.metodologia}" style="height: 30px;width: 140px;" >
                                 <f:converter converterId="converterMetodologia"></f:converter>
                                 <f:selectItems value="#{controleCalculo.metodologiaDAO.listaTodos}" var="p" itemLabel="#{p.nomeMetodologia}"></f:selectItems>
                             </h:selectOneMenu>
