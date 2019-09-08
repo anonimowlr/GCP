@@ -6,6 +6,7 @@
 package br.com.intranet.cenopservicoscwb.dao;
 
 import br.com.intranet.cenopservicoscwb.model.entidade.Cliente;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -19,21 +20,19 @@ public class ClienteDAO<T, E> extends DAOGenerico<Cliente, Object> {
         ordem = "id";
         maximoObjeto = 100000;
         em.clear();
-        
+
     }
 
     public Cliente localizarCliente(String cpf) {
-        Cliente cliente = null;
-
-        for (Cliente c : getListaObjetos()) {
-
-            if (c.getCpf().equals(cpf)) {
-                cliente = c;
-                return cliente;
-            }
-
+        try {
+            
+        TypedQuery<Cliente> query = em.createQuery(
+                "SELECT c FROM Cliente c WHERE c.cpf = :cpf", classePersistente);
+        return query.setParameter("cpf", cpf).getSingleResult();
+        } catch (Exception e) {
+            return null;
         }
-        return null;
-    }
+        
 
+    }
 }

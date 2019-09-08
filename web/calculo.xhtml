@@ -146,7 +146,7 @@
                         <h:column>
                             <f:facet name="header">CPF </f:facet>
                             <p:inputMask id="cpf" validator="validaCpf"  value="#{c.cliente.cpf}" style="width: 150px;height: 30px"  mask="999.999.999-99"  placeholder="informe o CPF" >
-                                <f:ajax  execute="cpf" render="cpf" event="blur"></f:ajax>
+                                <f:ajax listener="#{controleCalculo.alterarClienteCalculo(c)}" execute="cpf" render="cpf nomeCliente" event="change"></f:ajax>
 
                             </p:inputMask>                                           
                         </h:column>
@@ -154,7 +154,7 @@
 
                         <h:column>
                             <f:facet name="header">Nome </f:facet>
-                            <h:inputText value="#{c.cliente.nomeCliente}" style="height: 30px;width: 150px"  >
+                            <h:inputText id="nomeCliente" value="#{c.cliente.nomeCliente}" style="height: 30px;width: 150px"  >
                             </h:inputText>                                               
                         </h:column>
 

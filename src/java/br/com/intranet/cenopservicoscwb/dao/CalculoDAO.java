@@ -17,7 +17,7 @@ public class CalculoDAO<T, E> extends DAOGenerico<Calculo, Object>{
         super();
         
         classePersistente = Calculo.class;
-        ordem = "id";
+        ordem = "cliente.cpf";
         maximoObjeto = 1000;
         em.clear();
     }
