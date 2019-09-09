@@ -60,7 +60,8 @@
                         <h:outputLabel value="NPJ: "></h:outputLabel>
                         <p:inputMask  mask="9999/9999999-999" id="npj" value="#{controleCalculo.npj.nrPrc}" style="height: 30px;width: 200px">
                             <f:converter converterId="converterBigInt"></f:converter>
-                            <f:ajax listener="#{controleCalculo.avaliarAlteracaoParametros()}" execute="@all" render="@all" event="change" ></f:ajax>
+                            <f:validator validatorId="validaNpj" ></f:validator>
+                            <f:ajax listener="#{controleCalculo.avaliarAlteracaoParametros()}" execute="@this" render="divNpjProtocolo" event="change" ></f:ajax>
                         </p:inputMask>
                         <h:outputLabel value="Protocolo: "></h:outputLabel>
                         <h:inputText id="protocoloGsv" value="#{controleCalculo.protocoloGsv.cdPrc}" style="height: 30px;width: 150px">
@@ -102,15 +103,15 @@
                             
                             <h:commandLink actionListener="#{controleCalculo.downloadPdfResumo()}">
 
-                                <h:graphicImage  width="20px" library="img" name="file.png" title="Imprimir resumo de cálculos vinculados ao npj:  #{controleCalculo.npj.nrPrc}"  rendered="#{controleCalculo.editar}">
+                                <h:graphicImage  width="20px" library="img" name="file.png" title="Imprimir resumo de cálculos vinculados ao protocolo  #{controleCalculo.protocoloGsv.cdPrc}"  rendered="#{controleCalculo.editar}">
                                     
                                 </h:graphicImage>                                    
                             </h:commandLink>  
                            
                             <h:commandLink >
 
-                                <h:graphicImage  width="20px" library="img" name="check.png" title="Selecionar Todos os cálculos"  rendered="#{controleCalculo.editar}" >
-                                    <f:ajax   listener="#{controleCalculo.selecionarTodos()}" execute=":listagem" render=":listagem" event="click"></f:ajax>
+                                <h:graphicImage  width="20px" library="img" name="check.png" title="Selecionar Todos os cálculos"  rendered="#{controleCalculo.editar}"  >
+                                    <f:ajax   listener="#{controleCalculo.selecionarTodos()}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
                                 </h:graphicImage>                                    
                             </h:commandLink>  
 
@@ -145,7 +146,7 @@
 
                         <h:column>
                             <f:facet name="header">CPF </f:facet>
-                            <p:inputMask id="cpf" validator="validaCpf"  value="#{c.cliente.cpf}" style="width: 150px;height: 30px"  mask="999.999.999-99"  placeholder="informe o CPF" >
+                            <p:inputMask id="cpf" validator="validaCpf"  value="#{c.cliente.cpf}" style="width: 150px;height: 30px"  mask="999.999.999-99"  placeholder="informe o CPF" required="true" requiredMessage="Informe O CPF" >
                                 <f:ajax listener="#{controleCalculo.alterarClienteCalculo(c)}" execute="cpf" render="cpf nomeCliente" event="change"></f:ajax>
 
                             </p:inputMask>                                           
@@ -154,7 +155,7 @@
 
                         <h:column>
                             <f:facet name="header">Nome </f:facet>
-                            <h:inputText id="nomeCliente" value="#{c.cliente.nomeCliente}" style="height: 30px;width: 150px"  >
+                            <h:inputText id="nomeCliente" value="#{c.cliente.nomeCliente}" style="height: 30px;width: 150px" required="true" requiredMessage="Informe o nome do cliente." >
                             </h:inputText>                                               
                         </h:column>
 
