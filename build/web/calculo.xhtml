@@ -210,7 +210,7 @@
                                 
                                 <f:converter converterId="converterMoneySaldoBase"></f:converter>
 
-                                <f:ajax  listener="#{controleCalculo.calcularParaConferencia(c)}"  execute=":listagem" render="@this :formRemuneracaoEsperada" event="blur"></f:ajax>
+                                <f:ajax  listener="#{controleCalculo.calcularParaConferencia(c)}"  execute=":listagem" render="@this :formRemuneracaoEsperada :listagem" event="blur"></f:ajax>
                             </h:inputText>                                               
                         </h:column>
 
