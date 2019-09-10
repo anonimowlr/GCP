@@ -107,6 +107,12 @@
                                     
                                 </h:graphicImage>                                    
                             </h:commandLink>  
+                            <h:commandLink actionListener="#{controleCalculo.avaliarParaSalvarPcond()}">
+
+                                <h:graphicImage  width="20px" library="img" name="addEscuro.png" title="Duplicar selecionados para PCOND"  rendered="#{controleCalculo.editar}">
+                                    
+                                </h:graphicImage>                                    
+                            </h:commandLink>  
                            
                             <h:commandLink >
 
@@ -220,7 +226,7 @@
 
 
                         <h:column >
-                            <f:facet name="header">Dia base</f:facet>
+                            <f:facet name="header">Dia Base</f:facet>
                             <h:inputText id="diaBase" value="#{c.diaBase}" style="height: 30px;width: 30px">
                                 <f:ajax listener="#{controleCalculo.atribuirDataInicialPlano(c)}" execute=":listagem" render=":listagem" event="blur" ></f:ajax>
                             </h:inputText>                                               
@@ -244,7 +250,7 @@
 
 
                         <h:column>
-                            <f:facet name="header"><p style="font-size: 11pt; font: bold;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Índice&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inicio Correção &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fim Correção</p></f:facet>
+                            <f:facet name="header"><p style="font-size: 11pt; font: bold;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Índice&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inicio Correção &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fim Correção</p></f:facet>
                             <h:dataTable value="#{c.listaPeriodoCalculo}" var="d" id="tabelaListaPeriodo">
 
                                 <h:column>
@@ -273,7 +279,7 @@
 
 
                         <h:column>
-                            <f:facet name="header">Mora</f:facet>
+                            <f:facet name="header">Juros Mora</f:facet>
                             <p:inputMask  mask="99/99/9999"  value="#{c.mora.dataInicio}" style="width: 100px;height: 30px" >
                                 <f:converter converterId="converterDate"></f:converter>
                             </p:inputMask>
@@ -281,14 +287,14 @@
                         </h:column>
 
                         <h:column>
-                            <f:facet name="header">Dt Início Juros</f:facet>
+                            <f:facet name="header">Início Juros Rem.</f:facet>
                             <p:inputMask  mask="99/99/9999"  value="#{c.juroRemuneratorio.dataInicio}" style="width: 100px;height: 30px" >
                                 <f:converter converterId="converterDate"></f:converter>
                             </p:inputMask>                        
                         </h:column>
 
                         <h:column>
-                            <f:facet name="header">Dt Fim Juros</f:facet>
+                            <f:facet name="header">Fim Juros Rem.</f:facet>
                             <p:inputMask  mask="99/99/9999"  value="#{c.juroRemuneratorio.dataFinal}" style="width: 100px;height: 30px" >
                                 <f:converter converterId="converterDate"></f:converter>
                             </p:inputMask>                        
