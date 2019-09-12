@@ -107,12 +107,6 @@
 
                                 </h:graphicImage>                                    
                             </h:commandLink>  
-                            <h:commandLink >
-                                <f:ajax listener="#{controleCalculo.avaliarParaSalvarPcond()}" execute="@this" render="@this" event="click"></f:ajax>
-
-                                <h:graphicImage  width="20px" library="img" name="addEscuro.png" title="Duplicar selecionados para PCOND"  rendered="#{controleCalculo.editar}">
-                                </h:graphicImage>                                    
-                            </h:commandLink>  
 
                             <h:commandLink >
 
@@ -130,13 +124,7 @@
 
 
 
-                        <h:column>
-                            <f:facet name="header">Seleção</f:facet>
 
-                            <h:selectBooleanCheckbox value="#{c.selecionado}">
-                                <f:ajax  execute="@this" render="@this" event="change"></f:ajax>
-                            </h:selectBooleanCheckbox>
-                        </h:column>
 
 
 
@@ -162,6 +150,8 @@
                         <h:column>
                             <f:facet name="header">Nome </f:facet>
                             <h:inputText id="nomeCliente" value="#{c.cliente.nomeCliente}" style="height: 30px;width: 150px" required="true" requiredMessage="Informe o nome do cliente." >
+                                <f:ajax execute="@this" render="@this" event="change"></f:ajax>
+                            
                             </h:inputText>                                               
                         </h:column>
 
@@ -181,6 +171,7 @@
                             <f:facet name="header">Agência</f:facet>
                             <h:inputText value="#{c.numeroAgencia}" style="height: 30px;width: 60px" required="true">
                                 <f:converter converterId="converterInt"></f:converter>
+                                 <f:ajax execute="@this" render=":listagem checkPcond" event="change"></f:ajax>
                             </h:inputText>                                               
                         </h:column>
 
@@ -189,6 +180,7 @@
                             <f:facet name="header">Conta</f:facet>
                             <h:inputText id="conta" value="#{c.numeroConta}" style="height: 30px;width: 100px">
                                 <f:converter converterId="converterConta"></f:converter>
+                                 <f:ajax execute="@this" render=":listagem checkPcond" event="change"></f:ajax>
 
                             </h:inputText>                                               
                         </h:column>
@@ -201,7 +193,7 @@
                                 <f:converter converterId="converterPlano"></f:converter>
                                 <f:selectItem itemLabel="selecione" noSelectionOption="true"></f:selectItem>
                                 <f:selectItems value="#{controleCalculo.planoEconomicoDAO.listaTodos}" var="p" itemLabel="#{p.nomePlanoEconomico}"></f:selectItems>
-
+                                <f:ajax execute="@this" render=":listagem checkPcond" event="change"></f:ajax>
                             </h:selectOneMenu>
                         </h:column>
 
@@ -346,7 +338,19 @@
                             </h:inputText>
                         </h:column>
 
+
                         <h:column>
+                            <f:facet name="header">PCOND</f:facet>
+
+                            <h:selectBooleanCheckbox id="checkPcond" value="#{c.selecionado}" rendered="#{c.planoEconomico.id eq 1}">
+                                <f:ajax   execute="@this" render="@this" event="click"></f:ajax>
+                            </h:selectBooleanCheckbox>
+                        </h:column>
+
+                        <h:column>
+
+
+
                             <f:facet name="header">Ações</f:facet>
 
                             <h:commandLink>
@@ -375,7 +379,7 @@
                             <h:inputFile  id="file"  value="#{controleCalculo.file}" title="Selecione um arquivo" label="Carregar arquivo"   class="upload"  style="display: none">
                                 <f:ajax listener="#{controleCalculo.upload(c)}" execute=":istagem" render=":listagem"></f:ajax>
                             </h:inputFile>
-                            
+
                             <h:commandLink  rendered="#{c.valorFinal ne null}">
                                 <f:ajax listener="#{controleCalculo.removeLinhaCalculo(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="negative.png" title="Excluir" ></h:graphicImage>                                    
