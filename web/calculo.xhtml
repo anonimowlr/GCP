@@ -169,9 +169,9 @@
 
                         <h:column>
                             <f:facet name="header">Agência</f:facet>
-                            <h:inputText value="#{c.numeroAgencia}" style="height: 30px;width: 60px" required="true">
+                            <h:inputText id="agencia" value="#{c.numeroAgencia}" style="height: 30px;width: 60px" required="true">
                                 <f:converter converterId="converterInt"></f:converter>
-                                 <f:ajax execute="@this" render=":listagem checkPcond" event="change"></f:ajax>
+                                 <f:ajax execute="agencia" render="agencia" event="change"></f:ajax>
                             </h:inputText>                                               
                         </h:column>
 
@@ -180,7 +180,7 @@
                             <f:facet name="header">Conta</f:facet>
                             <h:inputText id="conta" value="#{c.numeroConta}" style="height: 30px;width: 100px">
                                 <f:converter converterId="converterConta"></f:converter>
-                                 <f:ajax execute="@this" render=":listagem checkPcond" event="change"></f:ajax>
+                                 <f:ajax execute="conta" render="conta" event="change"></f:ajax>
 
                             </h:inputText>                                               
                         </h:column>
@@ -193,7 +193,7 @@
                                 <f:converter converterId="converterPlano"></f:converter>
                                 <f:selectItem itemLabel="selecione" noSelectionOption="true"></f:selectItem>
                                 <f:selectItems value="#{controleCalculo.planoEconomicoDAO.listaTodos}" var="p" itemLabel="#{p.nomePlanoEconomico}"></f:selectItems>
-                                <f:ajax execute="@this" render=":listagem checkPcond" event="change"></f:ajax>
+                                <f:ajax execute="plano" render="checkPcond" event="change"></f:ajax>
                             </h:selectOneMenu>
                         </h:column>
 
@@ -339,11 +339,11 @@
                         </h:column>
 
 
-                        <h:column>
+                        <h:column >
                             <f:facet name="header">PCOND</f:facet>
 
-                            <h:selectBooleanCheckbox id="checkPcond" value="#{c.selecionado}" rendered="#{c.planoEconomico.id eq 1}">
-                                <f:ajax   execute="@this" render="@this" event="click"></f:ajax>
+                            <h:selectBooleanCheckbox id="checkPcond" value="#{c.selecionado}">
+                                <f:ajax   execute=":listagem" render=":listagem" event="click"></f:ajax>
                             </h:selectBooleanCheckbox>
                         </h:column>
 
@@ -355,7 +355,7 @@
 
                             <h:commandLink>
 
-                                <f:ajax listener="#{controleCalculo.avaliarParaSalvar(c)}" execute=":listagem" render=":listagem :formRemuneracaoEsperada" event="click" ></f:ajax>
+                                <f:ajax listener="#{controleCalculo.avaliarParaSalvar(c)}" execute=":listagem" render=":formRemuneracaoEsperada :listagem " event="click" ></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="save.png" title="Salvar/Atualizar este cálculo" ></h:graphicImage>                                    
                             </h:commandLink>  
 
