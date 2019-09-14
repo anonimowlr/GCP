@@ -191,9 +191,8 @@
                             <f:facet name="header">Plano Econômico</f:facet>
                             <h:selectOneMenu id="plano" value="#{c.planoEconomico}" style="height: 30px;width: 120px">
                                 <f:converter converterId="converterPlano"></f:converter>
-                                <f:selectItem itemLabel="selecione" noSelectionOption="true"></f:selectItem>
                                 <f:selectItems value="#{controleCalculo.planoEconomicoDAO.listaTodos}" var="p" itemLabel="#{p.nomePlanoEconomico}"></f:selectItems>
-                                <f:ajax execute="plano" render="checkPcond" event="change"></f:ajax>
+                                <f:ajax execute="@this" render="@this" event="change"></f:ajax>
                             </h:selectOneMenu>
                         </h:column>
 
@@ -343,7 +342,7 @@
                             <f:facet name="header">PCOND</f:facet>
 
                             <h:selectBooleanCheckbox id="checkPcond" value="#{c.selecionado}">
-                                <f:ajax   listener="#{controleCalculo.avaliarParaSalvarPcond(c)}" execute=":listagem" render="@this" event="click"></f:ajax>
+                                <f:ajax   listener="#{controleCalculo.alterarParametrosParaPcond(c)}" execute=":listagem" render=":listagem" event="click"></f:ajax>
                             </h:selectBooleanCheckbox>
                         </h:column>
 
@@ -366,7 +365,7 @@
 
 
 
-                                <h:commandLink id="acaoImprimirCalculoIndividual" actionListener="#{controleCalculo.downloadPdf(c)}" rendered="#{c.valorFinal ne null  }">
+                                <h:commandLink id="acaoImprimirCalculoIndividual" actionListener="#{controleCalculo.avaliarParaImprimir(c)}" rendered="#{c.valorFinal ne null  }">
 
                                     <h:graphicImage  width="20px" library="img" name="print.jpg" title="Imprimir Cálculo" ></h:graphicImage>                                    
                                 </h:commandLink>  
