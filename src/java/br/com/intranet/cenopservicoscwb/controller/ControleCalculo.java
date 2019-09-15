@@ -228,7 +228,7 @@ public class ControleCalculo implements Serializable {
     public void selecionarTodos() {
 
         for (Calculo c : getProtocoloGsv().getListaCalculo()) {
-            c.setSelecionado(true);
+            c.setPcond(true);
 
         }
 
@@ -313,7 +313,7 @@ public class ControleCalculo implements Serializable {
 
     public void mostrarEstadoSelecao(Calculo calculo) {
 
-        Util.mensagemInformacao(Boolean.toString(calculo.isSelecionado()));
+        Util.mensagemInformacao(Boolean.toString(calculo.isPcond()));
     }
 
     public void removeLinhaCalculo(Calculo calculo) {
@@ -435,7 +435,7 @@ public class ControleCalculo implements Serializable {
     public void alterarParametrosParaPcond(Calculo calculo) throws ParseException, IOException, DocumentException {
 
         
-            if(!calculo.isSelecionado()){
+            if(!calculo.isPcond()){
                return;
             }
             
@@ -554,7 +554,7 @@ public class ControleCalculo implements Serializable {
     
     
     public void avaliarParaImprimir(Calculo calculo) throws DocumentException, ParseException, IOException{
-        if(calculo.isSelecionado()){
+        if(calculo.isPcond()){
             downloadPcond(calculo);
         } else{
             downloadPdf(calculo);

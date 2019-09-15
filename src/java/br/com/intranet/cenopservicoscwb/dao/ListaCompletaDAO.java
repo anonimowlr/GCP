@@ -11,9 +11,9 @@ import br.com.intranet.cenopservicoscwb.model.entidade.Calculo;
  *
  * @author f5078775
  */
-public class CalculoDAO<T, E> extends DAOGenerico<Calculo, Object>{
+public class ListaCompletaDAO<T, E> extends DAOGenerico<Calculo, Object>{
 
-    public CalculoDAO() {
+    public ListaCompletaDAO() {
         super();
         
         classePersistente = Calculo.class;

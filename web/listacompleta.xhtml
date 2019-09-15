@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:composition template="header.xhtml" >
+
+        <ui:define name="titulo">
+            Cálculo De planos econômicos - Lista completa 
+        </ui:define>
+
+
+        <ui:define name="conteudo">
+            
+            <h:form id="formFiltro">
+                 <h:panelGrid columns="11" id="painelFiltro"  >
+                    <h:outputLabel value="Tipo Filtro"></h:outputLabel>
+                    <h:selectOneMenu value="#{controleListaCompleta.listaCompletaDAO.ordem}" style="width: 200px;height: 30px">
+                        <f:selectItem noSelectionOption="true" itemValue="selecione" itemLabel="selecione"></f:selectItem>
+                        <f:selectItem itemValue="protocoloGsv.npj.nrPrc" itemLabel="NPJ"></f:selectItem>
+                        <f:selectItem itemValue="protocoloGsv.cdPrc" itemLabel="GSV"></f:selectItem>
+                        <f:selectItem itemValue="funcionario.chaveFunci" itemLabel="FUNCIONÁRIO RESPONSÁVEL"></f:selectItem>
+                        <f:selectItem itemValue="dataRealizacaoCalculo" itemLabel="DATA"></f:selectItem>
+                        <f:selectItem itemValue="pcond" itemLabel="PCOND"></f:selectItem>
+                        <f:ajax     execute="@this" render="listagem" event="change" ></f:ajax>
+                    </h:selectOneMenu>
+
+                    <h:outputLabel value="Filtro"></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.listaCompletaDAO.filtro}" style="width: 200px; height: 30px">
+                        <f:ajax  execute="painelFiltro" render="listagem" event="keyup"   ></f:ajax>    
+                    </h:inputText>
+                    <h:outputLabel value="QUANDIDADE NA TELA"></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.listaCompletaDAO.maximoObjeto}" style="width: 90px; height: 30px">
+                        <f:ajax  execute="painelFiltro" render="listagem" event="change"   ></f:ajax>    
+                    </h:inputText>
+                </h:panelGrid>
+
+                
+            </h:form>
+
+
+            <h:form prependId="false" enctype="multipart/form-data">
+                
+                
+                
+                
+
+
+                <h:dataTable value="#{controleListaCompleta.listaCompletaDAO.listaObjetos}" var="c" class="table table-hover" id="listagem">
+
+                    <f:facet name="header">
+                            #{controleListaCompleta.listaCompletaDAO.mensagemNavegacao()}
+                        </f:facet>
+
+                    <h:column>
+                        <f:facet name="header">NPJ</f:facet>
+                        <h:outputText value="#{c.protocoloGsv.npj.nrPrc}"></h:outputText>
+
+                    </h:column>
+
+
+
+                    <h:column>
+                        <f:facet name="header">GSV</f:facet>
+                        <h:outputText value="#{c.protocoloGsv.cdPrc}"></h:outputText>
+
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Funci</f:facet>
+                        <h:outputText value="#{c.funcionario.chaveFunci}"></h:outputText>
+
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Data Realização</f:facet>
+                        <h:outputText value="#{c.dataRealizacaoCalculo}"></h:outputText>
+
+                    </h:column>
+                   
+                    <h:column >
+                            <f:facet name="header">PCOND</f:facet>
+
+                            <h:selectBooleanCheckbox id="checkPcond" value="#{c.pcond}">
+                                <f:ajax   listener="#{controleCalculo.alterarParametrosParaPcond(c)}" execute=":listagem" render=":listagem" event="click"></f:ajax>
+                            </h:selectBooleanCheckbox>
+                        </h:column>
+                    
+                    
+                    <h:column>
+                        <f:facet name="header">Valor Final </f:facet>
+                        <h:outputText value="#{c.valorFinal}">
+                            <f:converter converterId="converterMoney"></f:converter>
+                        </h:outputText>
+
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Ações</f:facet>
+                        <h:commandLink  id="validaCalculo">
+
+                            <h:graphicImage  width="20px" library="img" name="check.png" title="Validar cálculo"  >
+                            </h:graphicImage>                                    
+                            <f:ajax  listener="#{controleListaCompleta.testeValidaCalculo(c.id)}"  execute="@form" render="@form"  event="click" ></f:ajax>
+                        </h:commandLink>  
+
+                        <h:commandLink id="acaoImprimirCalculoIndividual" actionListener="#{controleListaCompleta.avaliarParaImprimir(c.id)}" >
+
+                            <h:graphicImage  width="20px" library="img" name="lupa.png" title="Visualizar Cálculo" ></h:graphicImage>                                    
+                        </h:commandLink> 
+
+                    </h:column>
+
+
+                </h:dataTable>
+
+
+            </h:form>
+
+
+
+
+        </ui:define>
+
+
+    </ui:composition>
+
+</html>
+
