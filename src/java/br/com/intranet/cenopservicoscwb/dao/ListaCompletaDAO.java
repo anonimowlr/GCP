@@ -19,7 +19,8 @@ public class ListaCompletaDAO<T, E> extends DAOGenerico<Calculo, Object>{
         classePersistente = Calculo.class;
         ordem = "id";
         maximoObjeto = 1000;
-        //em.clear();
+        //filtro = "";
+       //em.clear();
     }
     
 }

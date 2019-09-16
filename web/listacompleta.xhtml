@@ -10,12 +10,11 @@
     <ui:composition template="header.xhtml" >
 
         <ui:define name="titulo">
-            Cálculo De planos econômicos - Lista completa 
+            Cálculo de planos econômicos - Lista completa 
         </ui:define>
 
 
         <ui:define name="conteudo">
-
 
 
 
@@ -60,8 +59,7 @@
 
             <h:form prependId="false" enctype="multipart/form-data">
 
-
-                <h:commandButton value=" Clique aqui para Atualizar o  Cálculo" class="btn btn-link" rendered="#{controleListaCompleta.isEditar()}">
+                 <h:commandButton value=" Clique aqui para Atualizar o  Cálculo" class="btn btn-link" rendered="#{controleListaCompleta.isEditar()}">
                     <f:ajax listener="#{controleListaCompleta.avaliarParaSalvar()}" execute=":gridEdicao" render="@all" event="click"></f:ajax>
                 </h:commandButton>
 
@@ -169,10 +167,7 @@
 
 
                 </h:panelGrid>
-
-
-
-
+                
 
 
 
@@ -229,16 +224,11 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">Ações</f:facet>
-                        <h:commandLink  id="validaCalculo">
-
-                            <h:graphicImage  width="20px" library="img" name="check.png" title="Validar cálculo"  >
-                            </h:graphicImage>                                    
-                            <f:ajax  listener="#{controleListaCompleta.testeValidaCalculo(c.id)}"  execute="@form" render="@form"  event="click" ></f:ajax>
-                        </h:commandLink>  
+                        
 
                         <h:commandLink id="acaoImprimirCalculoIndividual" actionListener="#{controleListaCompleta.avaliarParaImprimir(c.id)}" >
 
-                            <h:graphicImage  width="20px" library="img" name="lupa.png" title="Visualizar Cálculo" ></h:graphicImage>                                    
+                            <h:graphicImage  width="20px" library="img" name="print.jpg" title="Imprimir cálculo" ></h:graphicImage>                                    
                         </h:commandLink> 
 
                         <h:commandLink actionListener="#{controleListaCompleta.downloadPdfResumo(c.protocoloGsv)}">
@@ -246,7 +236,7 @@
                             <h:graphicImage  width="20px" library="img" name="file.png" title="Imprimir resumo de cálculos vinculados ao protocolo  #{c.protocoloGsv.cdPrc}">
 
                             </h:graphicImage>                                    
-                        </h:commandLink>  
+                        </h:commandLink> 
 
                         <h:commandLink  id="removerLinha" onclick="if (!confirm('Deseja realmente excluir?'))
                                     return false" >
