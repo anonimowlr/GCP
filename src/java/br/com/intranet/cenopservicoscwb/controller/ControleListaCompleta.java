@@ -6,7 +6,14 @@
 package br.com.intranet.cenopservicoscwb.controller;
 
 import br.com.intranet.cenopservicoscwb.dao.ListaCompletaDAO;
+import br.com.intranet.cenopservicoscwb.dao.MetodologiaDAO;
+import br.com.intranet.cenopservicoscwb.dao.PlanoEconomicoDAO;
+import br.com.intranet.cenopservicoscwb.model.calculo.MotorCalculoPoupanca;
 import br.com.intranet.cenopservicoscwb.model.entidade.Calculo;
+import br.com.intranet.cenopservicoscwb.model.entidade.Metodologia;
+import br.com.intranet.cenopservicoscwb.model.entidade.PlanoEconomico;
+import br.com.intranet.cenopservicoscwb.model.entidade.ProtocoloGsv;
+import br.com.intranet.cenopservicoscwb.model.pdf.GerarPdf;
 import br.com.intranet.cenopservicoscwb.model.util.Utils;
 import br.com.intranet.cenopservicoscwb.util.Util;
 import com.itextpdf.text.DocumentException;
@@ -33,21 +40,90 @@ import javax.servlet.http.Part;
 public class ControleListaCompleta implements Serializable {
 
     private BigDecimal saldoNaDataBase;
-    private String estadoTela = "recolhido";
+    private String estadoTela = "buscar";
     private Part file;
     private ListaCompletaDAO<Calculo, Object> listaCompletaDAO;
+    private PlanoEconomicoDAO<PlanoEconomico, Object> planoEconomicoDAO;
+    private Calculo calculo;
+    private MetodologiaDAO<Metodologia, Object> metodologiaDAO;
+    
    
     
     
     public ControleListaCompleta() {
 
         listaCompletaDAO = new ListaCompletaDAO<>();
+        planoEconomicoDAO = new PlanoEconomicoDAO<>();
+        metodologiaDAO = new MetodologiaDAO<>();
+        calculo = new Calculo();
+        
     }
     
     
     
+    public void editar(Calculo calculo){
+        
+        setCalculo(calculo);
+        mudarParaEditar();
+        
+    }
     
     
+     public void downloadPdfResumo(ProtocoloGsv protocoloGsv) throws DocumentException, ParseException, FileNotFoundException, IOException {
+
+        try {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = fc.getExternalContext();
+
+            externalContext.responseReset();
+            externalContext.setResponseContentType("application/pdf");
+            externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\"" + "Resumo de Calculo" + " - " + protocoloGsv.getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + protocoloGsv.getCdPrc().toString() + ".pdf\"");
+
+            //FileInputStream inputStream = new FileInputStream(new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + "NPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "/"  + "Resumo de Calculo" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString()+ ".pdf"));
+            FileInputStream inputStream = new FileInputStream(new File("/opt/apache-tomcat-8.5.39/webapps/utilitario/" + "NPJ" + protocoloGsv.getNpj().getNrPrc().toString() + "/" + "Resumo de Calculo" + " - " + protocoloGsv.getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + protocoloGsv.getCdPrc().toString() + ".pdf"));
+            //FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "\\"+ "Resumo de Calculo" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() +  ".pdf"));
+            OutputStream out = externalContext.getResponseOutputStream();
+            byte[] buffer = new byte[1024];
+            int lenght;
+
+            while ((lenght = inputStream.read(buffer)) > 0) {
+                out.write(buffer);
+            }
+
+            out.flush();
+            fc.responseComplete();
+        } catch (Exception e) {
+            Util.mensagemErro(Util.getMensagemErro(e));
+
+        }
+
+    }
+
+    public void removeLinhaCalculo(Calculo calculo) {
+
+        try {
+
+            calculo.setFuncionario(null);
+            calculo.setCliente(null);
+            calculo.setExpurgo(null);
+            calculo.setPlanoEconomico(null);
+
+            if (getListaCompletaDAO().deletar(calculo)) {
+
+               calculo.getProtocoloGsv().getListaCalculo().remove(calculo);
+
+                Util.mensagemInformacao(getListaCompletaDAO().getMensagem());
+
+            } else {
+                Util.mensagemErro(getListaCompletaDAO().getMensagem());
+            }
+
+        } catch (Exception e) {
+            Util.mensagemErro(Util.getMensagemErro(e));
+        }
+
+    }
+
     
     
     public void testeValidaCalculo(Integer  index){
@@ -136,6 +212,43 @@ public class ControleListaCompleta implements Serializable {
     
     
     
+     public void avaliarParaSalvar() throws ParseException, IOException, DocumentException, Exception {
+       
+
+        
+        
+  
+            GerarPdf gerarPdf = new GerarPdf();
+
+       
+
+            MotorCalculoPoupanca motorCalculoPoupanca = new MotorCalculoPoupanca();
+            motorCalculoPoupanca.calcular(getCalculo());
+
+            atualizarCalculo(getCalculo());
+            gerarPdf.gerarDocumentoResumo(getCalculo().getProtocoloGsv());
+            
+            mudarParaBuscar();
+        
+        
+       
+        
+        
+
+    }
+    
+      public void atualizarCalculo(Calculo calculo) {
+
+        if (getListaCompletaDAO().atualizar(calculo)) {
+
+            Util.mensagemInformacao(getListaCompletaDAO().getMensagem());
+        } else {
+            Util.mensagemErro(getListaCompletaDAO().getMensagem());
+
+        }
+
+    }
+    
     
     
     
@@ -201,6 +314,61 @@ public class ControleListaCompleta implements Serializable {
         this.listaCompletaDAO = listaCompletaDAO;
     }
 
+    /**
+     * @return the calculo
+     */
+    public Calculo getCalculo() {
+        return calculo;
+    }
+
+    /**
+     * @param calculo the calculo to set
+     */
+    public void setCalculo(Calculo calculo) {
+        this.calculo = calculo;
+    }
+
+    private void mudarParaEditar() {
+        setEstadoTela("editar");
+    }
+    private void mudarParaBuscar() {
+        setEstadoTela("buscar");
+    }
+
+    public boolean isEditar(){
+        return  "editar".equals(getEstadoTela());
+    }
+    public boolean isBuscar(){
+        return  "buscar".equals(getEstadoTela());
+    }
+
+    /**
+     * @return the planoEconomicoDAO
+     */
+    public PlanoEconomicoDAO<PlanoEconomico, Object> getPlanoEconomicoDAO() {
+        return planoEconomicoDAO;
+    }
+
+    /**
+     * @param planoEconomicoDAO the planoEconomicoDAO to set
+     */
+    public void setPlanoEconomicoDAO(PlanoEconomicoDAO<PlanoEconomico, Object> planoEconomicoDAO) {
+        this.planoEconomicoDAO = planoEconomicoDAO;
+    }
+
+    /**
+     * @return the metodologiaDAO
+     */
+    public MetodologiaDAO<Metodologia, Object> getMetodologiaDAO() {
+        return metodologiaDAO;
+    }
+
+    /**
+     * @param metodologiaDAO the metodologiaDAO to set
+     */
+    public void setMetodologiaDAO(MetodologiaDAO<Metodologia, Object> metodologiaDAO) {
+        this.metodologiaDAO = metodologiaDAO;
+    }
    
 
     

@@ -3,10 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/jocimar/NetBeansProjects/gcp/src/java/br/com/intranet/cenopservicoscwb/controller/ControleAcesso.java</file>
-            <file>file:/home/jocimar/NetBeansProjects/gcp/src/java/br/com/intranet/cenopservicoscwb/dao/UsuarioDAO.java</file>
             <file>file:/home/jocimar/NetBeansProjects/gcp/web/calculo.xhtml</file>
+            <file>file:/home/jocimar/NetBeansProjects/gcp/web/listacompleta.xhtml</file>
+            <file>file:/home/jocimar/NetBeansProjects/gcp/src/java/br/com/intranet/cenopservicoscwb/dao/CalculoDAO.java</file>
+            <file>file:/home/jocimar/NetBeansProjects/gcp/src/java/br/com/intranet/cenopservicoscwb/dao/ListaCompletaDAO.java</file>
             <file>file:/home/jocimar/NetBeansProjects/gcp/src/java/br/com/intranet/cenopservicoscwb/controller/ControleCalculo.java</file>
+            <file>file:/home/jocimar/NetBeansProjects/gcp/src/java/br/com/intranet/cenopservicoscwb/controller/ControleListaCompleta.java</file>
         </group>
     </open-files>
 </project-private>

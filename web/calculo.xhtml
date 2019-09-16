@@ -382,10 +382,6 @@
                                     <f:ajax listener="#{controleCalculo.upload(c)}" execute=":istagem" render=":listagem"></f:ajax>
                                 </h:inputFile>
 
-                                <h:commandLink  id="removerLinha" rendered="#{c.valorFinal ne null}">
-                                    <f:ajax listener="#{controleCalculo.removeLinhaCalculo(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
-                                    <h:graphicImage  width="20px" library="img" name="negative.png" title="Excluir" ></h:graphicImage>                                    
-                                </h:commandLink>
 
                             
 

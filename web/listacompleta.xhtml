@@ -15,9 +15,20 @@
 
 
         <ui:define name="conteudo">
-            
+
+
+
+
+
+
+
+
+
+
+
+
             <h:form id="formFiltro">
-                 <h:panelGrid columns="11" id="painelFiltro"  >
+                <h:panelGrid columns="11" id="painelFiltro" rendered="#{controleListaCompleta.isBuscar()}" >
                     <h:outputLabel value="Tipo Filtro"></h:outputLabel>
                     <h:selectOneMenu value="#{controleListaCompleta.listaCompletaDAO.ordem}" style="width: 200px;height: 30px">
                         <f:selectItem noSelectionOption="true" itemValue="selecione" itemLabel="selecione"></f:selectItem>
@@ -39,22 +50,140 @@
                     </h:inputText>
                 </h:panelGrid>
 
-                
+
             </h:form>
 
 
+
+
+
+
             <h:form prependId="false" enctype="multipart/form-data">
-                
-                
-                
-                
 
 
-                <h:dataTable value="#{controleListaCompleta.listaCompletaDAO.listaObjetos}" var="c" class="table table-hover" id="listagem">
+                <h:commandButton value=" Clique aqui para Atualizar o  Cálculo" class="btn btn-link" rendered="#{controleListaCompleta.isEditar()}">
+                    <f:ajax listener="#{controleListaCompleta.avaliarParaSalvar()}" execute=":gridEdicao" render="@all" event="click"></f:ajax>
+                </h:commandButton>
+
+                <h:panelGrid id="gridEdicao" columns="2" rendered="#{controleListaCompleta.isEditar()}">
+                    <h:outputLabel value="NPJ:"></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.calculo.protocoloGsv.npj.nrPrc}" style="height: 30px;width: 150px" disabled="true"></h:inputText>
+
+                    <h:outputLabel value="GSV:"></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.calculo.protocoloGsv.cdPrc}" style="height: 30px;width: 150px" disabled="true"></h:inputText>
+
+                    <h:outputLabel value="Metodologia:"></h:outputLabel>
+                   
+                    <h:selectOneMenu value="#{controleListaCompleta.calculo.metodologia}" style="height: 30px;width: 140px;" >
+                        <f:converter converterId="converterMetodologia"></f:converter>
+                        <f:selectItems value="#{controleListaCompleta.metodologiaDAO.listaTodos}" var="p" itemLabel="#{p.nomeMetodologia}"></f:selectItems>
+                    </h:selectOneMenu>
+
+
+                    <h:outputLabel value="CPF:"></h:outputLabel>
+                    <p:inputMask mask="999.999.999-30" value="#{controleListaCompleta.calculo.cliente.cpf}" style="height: 30px;width: 150px" >
+                        <f:validator validatorId="validaCpf"></f:validator>
+                        <f:ajax execute="@this" render="@this" event="blur"></f:ajax>
+                    </p:inputMask>
+
+                    <h:outputLabel value="Nome:"></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.calculo.cliente.nomeCliente}" style="height: 30px;width: 400px" ></h:inputText>
+
+                    <h:outputLabel value="Banco:"></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.calculo.nomeBanco}" style="height: 30px;width: 150px" ></h:inputText>
+
+                    <h:outputLabel value="Agência:"></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.calculo.numeroAgencia}" style="height: 30px;width: 150px" ></h:inputText>
+
+                    <h:outputLabel value="Conta:"></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.calculo.numeroConta}" style="height: 30px;width: 150px" >
+                        <f:converter converterId="converterConta"></f:converter>
+                        <f:ajax execute="@this" render="@this" event="blur"></f:ajax>
+                    </h:inputText>
+
+                    <h:outputLabel value="Plano:"></h:outputLabel>
+                    <h:selectOneMenu id="plano" value="#{controleListaCompleta.calculo.planoEconomico}" style="height: 30px;width: 120px">
+                        <f:converter converterId="converterPlano"></f:converter>
+                        <f:selectItems value="#{controleListaCompleta.planoEconomicoDAO.listaTodos}" var="p" itemLabel="#{p.nomePlanoEconomico}"></f:selectItems>
+                        <f:ajax execute="@this" render="@this" event="change"></f:ajax>
+                    </h:selectOneMenu>
+
+
+
+                    <h:outputLabel value="Dia Base:"></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.calculo.diaBase}" style="height: 30px;width: 150px" ></h:inputText>
+
+                    <h:outputLabel value="Saldo Base:"></h:outputLabel>
+                    <h:inputText id="saldoBase" value="#{controleListaCompleta.calculo.saldoBase}" style="height: 30px;width: 150px" >
+                        <f:converter converterId="converterMoneySaldoBase"></f:converter>
+                        <f:ajax execute="saldoBase" render="saldoBase" event="blur"></f:ajax>
+                    </h:inputText>
+
+                    <h:outputLabel value="Indice:"></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.calculo.listaPeriodoCalculo.get(0).indice.nomeIndice}" style="height: 30px;width: 150px" ></h:inputText>
+
+                    <h:outputLabel value="Início Correção:"></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.calculo.listaPeriodoCalculo.get(0).dataInicioCalculo}" style="height: 30px;width: 150px" >
+                        <f:converter converterId="converterDate"></f:converter>
+                    </h:inputText>
+
+                    <h:outputLabel value="Fim Correção:"></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.calculo.listaPeriodoCalculo.get(0).dataFinalCalculo}" style="height: 30px;width: 150px" >
+                        <f:converter converterId="converterDate"></f:converter>
+                    </h:inputText>
+
+                    <h:outputLabel value="Juros Mora:"></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.calculo.mora.dataInicio}" style="height: 30px;width: 150px" >
+                        <f:converter converterId="converterDate"></f:converter>
+                    </h:inputText>
+
+                    <h:outputLabel value="Início juros Rem."></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.calculo.juroRemuneratorio.dataInicio}" style="height: 30px;width: 150px" >
+                        <f:converter converterId="converterDate"></f:converter>
+                    </h:inputText>
+
+                    <h:outputLabel value="Fim juros Rem."></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.calculo.juroRemuneratorio.dataFinal}" style="height: 30px;width: 150px" >
+                        <f:converter converterId="converterDate"></f:converter>
+                    </h:inputText>
+
+                    <h:outputLabel value="Honorário %:"></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.calculo.honorario.taxaHonorario}" style="height: 30px;width: 150px" >
+                        <f:converter converterId="converterMoney"></f:converter>
+                    </h:inputText>
+
+                    <h:outputLabel value="Valor Honorário:"></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.calculo.honorario.valorHonorario}" style="height: 30px;width: 150px" >
+                        <f:converter converterId="converterMoney"></f:converter>
+                    </h:inputText>
+
+                    <h:outputLabel value="Multa %:"></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.calculo.multa.taxaMulta}" style="height: 30px;width: 150px" >
+                        <f:converter converterId="converterMoney"></f:converter>
+                    </h:inputText>
+
+                    <h:outputLabel value="Expurgo:"></h:outputLabel>
+                    <h:inputText value="#{controleListaCompleta.calculo.expurgo.marcador}" style="height: 30px;width: 150px" ></h:inputText>
+
+
+
+                </h:panelGrid>
+
+
+
+
+
+
+
+
+
+
+
+                <h:dataTable value="#{controleListaCompleta.listaCompletaDAO.listaObjetos}" var="c" class="table table-hover" id="listagem" rendered="#{controleListaCompleta.isBuscar()}">
 
                     <f:facet name="header">
-                            #{controleListaCompleta.listaCompletaDAO.mensagemNavegacao()}
-                        </f:facet>
+                        #{controleListaCompleta.listaCompletaDAO.mensagemNavegacao()}
+                    </f:facet>
 
                     <h:column>
                         <f:facet name="header">NPJ</f:facet>
@@ -72,7 +201,7 @@
 
                     <h:column>
                         <f:facet name="header">Funci</f:facet>
-                        <h:outputText value="#{c.funcionario.chaveFunci}"></h:outputText>
+                        <h:outputLabel value="#{c.funcionario.chaveFunci}"  onclick="window.open('https://humanograma.intranet.bb.com.br/#{c.funcionario.chaveFunci}')" title="Verificar  a chave : #{c.funcionario.chaveFunci}"></h:outputLabel>
 
                     </h:column>
                     <h:column>
@@ -80,16 +209,16 @@
                         <h:outputText value="#{c.dataRealizacaoCalculo}"></h:outputText>
 
                     </h:column>
-                   
-                    <h:column >
-                            <f:facet name="header">PCOND</f:facet>
 
-                            <h:selectBooleanCheckbox id="checkPcond" value="#{c.pcond}">
-                                <f:ajax   listener="#{controleCalculo.alterarParametrosParaPcond(c)}" execute=":listagem" render=":listagem" event="click"></f:ajax>
-                            </h:selectBooleanCheckbox>
-                        </h:column>
-                    
-                    
+                    <h:column >
+                        <f:facet name="header">PCOND</f:facet>
+
+                        <h:selectBooleanCheckbox id="checkPcond" value="#{c.pcond}">
+                            <f:ajax   listener="#{controleCalculo.alterarParametrosParaPcond(c)}" execute=":listagem" render=":listagem" event="click"></f:ajax>
+                        </h:selectBooleanCheckbox>
+                    </h:column>
+
+
                     <h:column>
                         <f:facet name="header">Valor Final </f:facet>
                         <h:outputText value="#{c.valorFinal}">
@@ -110,6 +239,23 @@
 
                             <h:graphicImage  width="20px" library="img" name="lupa.png" title="Visualizar Cálculo" ></h:graphicImage>                                    
                         </h:commandLink> 
+
+                        <h:commandLink actionListener="#{controleListaCompleta.downloadPdfResumo(c.protocoloGsv)}">
+
+                            <h:graphicImage  width="20px" library="img" name="file.png" title="Imprimir resumo de cálculos vinculados ao protocolo  #{c.protocoloGsv.cdPrc}">
+
+                            </h:graphicImage>                                    
+                        </h:commandLink>  
+
+                        <h:commandLink  id="removerLinha" onclick="if (!confirm('Deseja realmente excluir?'))
+                                    return false" >
+                            <f:ajax listener="#{controleListaCompleta.removeLinhaCalculo(c)}" execute="@this" render=":listagem" event="click" ></f:ajax>
+                            <h:graphicImage  width="20px" library="img" name="trash.png" title="Excluir" ></h:graphicImage>                                    
+                        </h:commandLink>
+                        <h:commandLink  id="editar" >
+                            <f:ajax listener="#{controleListaCompleta.editar(c)}" execute="@this" render="@all" event="click" ></f:ajax>
+                            <h:graphicImage  width="20px" library="img" name="pencil.png" title="Editar" ></h:graphicImage>                                    
+                        </h:commandLink>
 
                     </h:column>
 
