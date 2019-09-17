@@ -18,7 +18,6 @@ public class PlanoEconomicoDAO<T, E> extends DAOGenerico<PlanoEconomico, Object>
         classePersistente = PlanoEconomico.class;
         ordem = "id";
         maximoObjeto = 50; 
-        em.clear();
     }
     
 }

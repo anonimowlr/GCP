@@ -43,7 +43,7 @@
                     <h:inputText value="#{controleListaCompleta.listaCompletaDAO.filtro}" style="width: 200px; height: 30px">
                         <f:ajax  execute="painelFiltro" render="listagem" event="keyup"   ></f:ajax>    
                     </h:inputText>
-                    <h:outputLabel value="QUANDIDADE NA TELA"></h:outputLabel>
+                    <h:outputLabel value="QUANTIDADE NA TELA"></h:outputLabel>
                     <h:inputText value="#{controleListaCompleta.listaCompletaDAO.maximoObjeto}" style="width: 90px; height: 30px">
                         <f:ajax  execute="painelFiltro" render="listagem" event="change"   ></f:ajax>    
                     </h:inputText>
@@ -80,9 +80,8 @@
 
 
                     <h:outputLabel value="CPF:"></h:outputLabel>
-                    <p:inputMask mask="999.999.999-30" value="#{controleListaCompleta.calculo.cliente.cpf}" style="height: 30px;width: 150px" >
-                        <f:validator validatorId="validaCpf"></f:validator>
-                        <f:ajax execute="@this" render="@this" event="blur"></f:ajax>
+                    <p:inputMask validator="validaCpf" mask="999.999.999-99" value="#{controleListaCompleta.calculo.cliente.cpf}" style="height: 30px;width: 150px" >
+                         <f:ajax listener="#{controleCalculo.alterarClienteCalculo(c)}" execute="cpf" render="cpf nomeCliente" event="change"></f:ajax>
                     </p:inputMask>
 
                     <h:outputLabel value="Nome:"></h:outputLabel>
@@ -119,7 +118,7 @@
                     </h:inputText>
 
                     <h:outputLabel value="Indice:"></h:outputLabel>
-                    <h:inputText value="#{controleListaCompleta.calculo.listaPeriodoCalculo.get(0).indice.nomeIndice}" style="height: 30px;width: 150px" ></h:inputText>
+                    <h:inputText value="#{controleListaCompleta.calculo.listaPeriodoCalculo.get(0).indice.nomeIndice}" style="height: 30px;width: 150px" disabled="true" ></h:inputText>
 
                     <h:outputLabel value="Início Correção:"></h:outputLabel>
                     <h:inputText value="#{controleListaCompleta.calculo.listaPeriodoCalculo.get(0).dataInicioCalculo}" style="height: 30px;width: 150px" >
@@ -162,8 +161,10 @@
                     </h:inputText>
 
                     <h:outputLabel value="Expurgo:"></h:outputLabel>
-                    <h:inputText value="#{controleListaCompleta.calculo.expurgo.marcador}" style="height: 30px;width: 150px" ></h:inputText>
-
+                     <h:selectOneMenu value="#{controleListaCompleta.calculo.expurgo}" style="height: 30px;width: 50px">
+                                <f:converter converterId="converterExpurgo"></f:converter>
+                                <f:selectItems value="#{controleListaCompleta.expurgoDAO.listaTodos}" var="p" itemLabel="#{p.marcador}"></f:selectItems>
+                    </h:selectOneMenu>
 
 
                 </h:panelGrid>
@@ -244,7 +245,7 @@
                             <h:graphicImage  width="20px" library="img" name="trash.png" title="Excluir" ></h:graphicImage>                                    
                         </h:commandLink>
                         <h:commandLink  id="editar" >
-                            <f:ajax listener="#{controleListaCompleta.editar(c)}" execute="@this" render="@all" event="click" ></f:ajax>
+                            <f:ajax listener="#{controleListaCompleta.editar(c)}" execute="@all" render="@all" event="click" ></f:ajax>
                             <h:graphicImage  width="20px" library="img" name="pencil.png" title="Editar" ></h:graphicImage>                                    
                         </h:commandLink>
 

@@ -19,7 +19,6 @@ public class ClienteDAO<T, E> extends DAOGenerico<Cliente, Object> {
         classePersistente = Cliente.class;
         ordem = "id";
         maximoObjeto = 100000;
-        em.clear();
 
     }
 

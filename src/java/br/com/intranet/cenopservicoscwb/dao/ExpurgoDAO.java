@@ -18,6 +18,5 @@ public class ExpurgoDAO<T, E> extends DAOGenerico<Expurgo, Object>{
         classePersistente = Expurgo.class;
         ordem = "id";
         maximoObjeto = 50; 
-        em.clear();
     }
 }

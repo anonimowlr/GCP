@@ -5,7 +5,6 @@
  */
 package br.com.intranet.cenopservicoscwb.dao;
 
-import br.com.intranet.cenopservicoscwb.model.entidade.Calculo;
 import br.com.intranet.cenopservicoscwb.model.entidade.ProtocoloGsv;
 
 /**
@@ -20,7 +19,6 @@ public class ProtocoloGsvDAO<T, E> extends DAOGenerico<ProtocoloGsv, Object>{
         classePersistente = ProtocoloGsv.class;
         ordem = "cdPrc";
         maximoObjeto = 50;
-        em.clear();
         
     }
     

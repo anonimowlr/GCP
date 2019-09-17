@@ -18,6 +18,5 @@ public class MetodologiaDAO<T, E> extends DAOGenerico<Metodologia, Object>{
         classePersistente = Metodologia.class;
         ordem = "id";
         maximoObjeto = 50;   
-        em.clear();
     }
 }

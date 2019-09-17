@@ -20,7 +20,6 @@ public class PeriodoDAO<T, E> extends DAOGenerico<PeriodoCalculo, Object>{
         classePersistente = PeriodoCalculo.class;
         ordem = "id";
         maximoObjeto = 1000;
-        em.clear();
     }
     
 }

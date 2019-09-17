@@ -5,11 +5,13 @@
  */
 package br.com.intranet.cenopservicoscwb.controller;
 
+import br.com.intranet.cenopservicoscwb.dao.ExpurgoDAO;
 import br.com.intranet.cenopservicoscwb.dao.ListaCompletaDAO;
 import br.com.intranet.cenopservicoscwb.dao.MetodologiaDAO;
 import br.com.intranet.cenopservicoscwb.dao.PlanoEconomicoDAO;
 import br.com.intranet.cenopservicoscwb.model.calculo.MotorCalculoPoupanca;
 import br.com.intranet.cenopservicoscwb.model.entidade.Calculo;
+import br.com.intranet.cenopservicoscwb.model.entidade.Expurgo;
 import br.com.intranet.cenopservicoscwb.model.entidade.Metodologia;
 import br.com.intranet.cenopservicoscwb.model.entidade.PlanoEconomico;
 import br.com.intranet.cenopservicoscwb.model.entidade.ProtocoloGsv;
@@ -46,6 +48,7 @@ public class ControleListaCompleta implements Serializable {
     private PlanoEconomicoDAO<PlanoEconomico, Object> planoEconomicoDAO;
     private Calculo calculo;
     private MetodologiaDAO<Metodologia, Object> metodologiaDAO;
+    private ExpurgoDAO<Expurgo, Object> expurgoDAO;
     
    
     
@@ -55,6 +58,7 @@ public class ControleListaCompleta implements Serializable {
         listaCompletaDAO = new ListaCompletaDAO<>();
         planoEconomicoDAO = new PlanoEconomicoDAO<>();
         metodologiaDAO = new MetodologiaDAO<>();
+        expurgoDAO = new ExpurgoDAO<>();
         calculo = new Calculo();
         
     }
@@ -368,6 +372,20 @@ public class ControleListaCompleta implements Serializable {
      */
     public void setMetodologiaDAO(MetodologiaDAO<Metodologia, Object> metodologiaDAO) {
         this.metodologiaDAO = metodologiaDAO;
+    }
+
+    /**
+     * @return the expurgoDAO
+     */
+    public ExpurgoDAO<Expurgo, Object> getExpurgoDAO() {
+        return expurgoDAO;
+    }
+
+    /**
+     * @param expurgoDAO the expurgoDAO to set
+     */
+    public void setExpurgoDAO(ExpurgoDAO<Expurgo, Object> expurgoDAO) {
+        this.expurgoDAO = expurgoDAO;
     }
    
 
