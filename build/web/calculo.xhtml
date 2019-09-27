@@ -17,32 +17,29 @@
         <ui:define name="conteudo">
 
             <div id="divRemuneracaoEsperada">
-
                 <div id="divRemuneracaoEsperacadaFilha" align="right" style="padding: 10px">
-
-
                     <h:form id="formRemuneracaoEsperada" >
                         <p:panelGrid columns="2" rendered="#{controleCalculo.saldoNaDataBase ne null}" >
 
-
-                            <h:outputLabel value="Saldo Base:"></h:outputLabel>
+                            <h:outputLabel value="Saldo Base:"></h:outputLabel>                            
                             <h:outputText value="#{controleCalculo.calculo.saldoBase}" style="color: red">
                                 <f:converter converterId="converterMoneySaldoBase"></f:converter>
                             </h:outputText>
 
-                            <h:outputLabel value="Remuneração  Creditada:"></h:outputLabel>
+                            <h:outputLabel value="Remuneração Creditada:"></h:outputLabel>                            
                             <h:outputText value="#{controleCalculo.calculo.remuneracaoBasica}" style="color: red">
                                 <f:converter converterId="converterMoneySaldoBase"></f:converter>
                             </h:outputText>
+                            
                             <h:outputLabel value="Juros Creditados:"></h:outputLabel>
                             <h:outputText value="#{controleCalculo.calculo.jurosCreditado}" style="color: red">
                                 <f:converter converterId="converterMoneySaldoBase"></f:converter>
                             </h:outputText>
+                            
                             <h:outputLabel value="Saldo na data base:"></h:outputLabel>
                             <h:outputText value="#{controleCalculo.saldoNaDataBase}" style="color: red">
                                 <f:converter converterId="converterMoneySaldoBase"></f:converter>
                             </h:outputText>
-
 
                         </p:panelGrid>
                     </h:form>
@@ -67,26 +64,14 @@
                         <h:inputText id="protocoloGsv" value="#{controleCalculo.protocoloGsv.cdPrc}" style="height: 30px;width: 150px">
                             <f:converter converterId="converterInt"></f:converter>
                             <f:ajax listener="#{controleCalculo.avaliarAlteracaoParametros()}" execute="@all" render="@all" event="change" ></f:ajax>
-                        </h:inputText>  
-
-
-
-
-
-
-
+                        </h:inputText>
                     </h:panelGrid>
                 </div>
 
 
 
 
-
-
                 <div class="table-responsive">
-
-
-
 
                     <h:dataTable value="#{controleCalculo.protocoloGsv.listaCalculo}"  var="c" class="table table-hover" id="listagem" >
 
@@ -97,30 +82,14 @@
                             </h:commandLink>
 
                             <h:commandLink actionListener="#{controleCalculo.imprimirTodos()}">
-
                                 <h:graphicImage  width="20px" library="img" name="print.jpg" title="Imprimir Todos os cálculos" rendered="#{controleCalculo.editar}" ></h:graphicImage>                                    
                             </h:commandLink>  
 
                             <h:commandLink actionListener="#{controleCalculo.downloadPdfResumo()}">
-
                                 <h:graphicImage  width="20px" library="img" name="file.png" title="Imprimir resumo de cálculos vinculados ao protocolo  #{controleCalculo.protocoloGsv.cdPrc}"  rendered="#{controleCalculo.editar}">
-
                                 </h:graphicImage>                                    
-                            </h:commandLink>  
-
-
-
-
-
-
-
+                            </h:commandLink>
                         </f:facet>
-
-
-
-
-
-
 
 
                         <h:column>
@@ -131,21 +100,19 @@
                             </h:selectOneMenu>
                         </h:column>
 
-
+                        
                         <h:column>
-                            <f:facet name="header">CPF </f:facet>
+                            <f:facet name="header">CPF</f:facet>
                             <p:inputMask id="cpf" validator="validaCpf"  value="#{c.cliente.cpf}" style="width: 150px;height: 30px"  mask="999.999.999-99"  placeholder="informe o CPF" required="true" requiredMessage="Informe O CPF" >
                                 <f:ajax listener="#{controleCalculo.alterarClienteCalculo(c)}" execute="cpf" render="cpf nomeCliente" event="change"></f:ajax>
-
                             </p:inputMask>                                           
                         </h:column>
 
 
                         <h:column>
-                            <f:facet name="header">Nome </f:facet>
+                            <f:facet name="header">Nome</f:facet>
                             <h:inputText id="nomeCliente" value="#{c.cliente.nomeCliente}" style="height: 30px;width: 150px" required="true" requiredMessage="Informe o nome do cliente." >
                                 <f:ajax execute="@this" render="@this" event="change"></f:ajax>
-
                             </h:inputText>                                               
                         </h:column>
 
@@ -158,7 +125,6 @@
                                 <f:selectItem itemValue="BESC" itemLabel="BESC"></f:selectItem>                            
                             </h:selectOneMenu>
                         </h:column>
-
 
 
                         <h:column>
@@ -175,10 +141,8 @@
                             <h:inputText id="conta" value="#{c.numeroConta}" style="height: 30px;width: 100px">
                                 <f:converter converterId="converterConta"></f:converter>
                                 <f:ajax execute="conta" render="conta" event="change"></f:ajax>
-
                             </h:inputText>                                               
                         </h:column>
-
 
 
                         <h:column>
@@ -191,24 +155,14 @@
                         </h:column>
 
 
-
-
                         <h:column >
                             <f:facet name="header">Saldo Base</f:facet>
                             <h:inputText id="saldoBase" value="#{c.saldoBase}" style="height: 30px;width: 100px">
-
-
-
                                 <f:converter converterId="converterMoneySaldoBase"></f:converter>
-
                                 <f:ajax  listener="#{controleCalculo.calcularParaConferencia(c)}"  execute=":listagem" render="@this :formRemuneracaoEsperada :listagem" event="blur"></f:ajax>
                             </h:inputText>                                               
                         </h:column>
-
-
-
-
-
+                        
 
                         <h:column >
                             <f:facet name="header">Dia Base</f:facet>
@@ -218,26 +172,10 @@
                         </h:column>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         <h:column>
                             <f:facet name="header"><p style="font-size: 11pt; font: bold;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Índice&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inicio Correção &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fim Correção</p></f:facet>
                             <h:dataTable value="#{c.listaPeriodoCalculo}" var="d" id="tabelaListaPeriodo">
-
+                                
                                 <h:column>
                                     <h:selectOneMenu value="#{d.indice}" style="height: 30px;width: 120px">
                                         <f:converter converterId="converterIndice"></f:converter>
@@ -251,13 +189,12 @@
                                         <f:converter converterId="converterDate"></f:converter>
                                     </p:inputMask>
                                 </h:column> 
+                                
                                 <h:column>
                                     <p:inputMask  mask="99/99/9999" id="dataFinal" value="#{d.dataFinalCalculo}" style="width: 100px;height: 30px" >
                                         <f:converter converterId="converterDate"></f:converter>
                                     </p:inputMask>
                                 </h:column> 
-
-
 
                             </h:dataTable>                                        
                         </h:column>
@@ -268,7 +205,6 @@
                             <p:inputMask  mask="99/99/9999"  value="#{c.mora.dataInicio}" style="width: 100px;height: 30px" >
                                 <f:converter converterId="converterDate"></f:converter>
                             </p:inputMask>
-
                         </h:column>
 
                         <h:column>
@@ -278,6 +214,7 @@
                             </p:inputMask>                        
                         </h:column>
 
+                        
                         <h:column>
                             <f:facet name="header">Fim Juros Rem.</f:facet>
                             <p:inputMask  mask="99/99/9999"  value="#{c.juroRemuneratorio.dataFinal}" style="width: 100px;height: 30px" >
@@ -286,34 +223,30 @@
                         </h:column>
 
 
-
                         <h:column>
                             <f:facet name="header">Honorário %</f:facet>
                             <h:inputText value="#{c.honorario.taxaHonorario}" style="width: 70px;height: 30px" >
                                 <f:converter converterId="converterMoney"></f:converter>
                                 <f:ajax execute="@this" render="valorHonorario" event="blur"></f:ajax>
-
                             </h:inputText>
-
                         </h:column>
+                        
+                        
                         <h:column>
                             <f:facet name="header">Valor Honorário</f:facet>
                             <h:inputText  id="valorHonorario" value="#{c.honorario.valorHonorario}" disabled="#{c.honorario.taxaHonorario > 0}" style="width: 80px;height: 30px" >
                                 <f:converter converterId="converterMoneySaldoBase"></f:converter>
                                 <f:ajax execute="@this" render="@this" event="blur"></f:ajax>
                             </h:inputText>
-
                         </h:column>
+                        
+                        
                         <h:column>
                             <f:facet name="header">Multa %</f:facet>
                             <h:inputText value="#{c.multa.taxaMulta}" style="width: 70px;height: 30px" >
                                 <f:converter converterId="converterMoney"></f:converter>
                             </h:inputText>
-
                         </h:column>
-
-
-
 
 
                         <h:column>
@@ -323,8 +256,9 @@
                                 <f:selectItems value="#{controleCalculo.expurgoDAO.listaTodos}" var="p" itemLabel="#{p.marcador}"></f:selectItems>
                             </h:selectOneMenu>
                         </h:column>
+                        
+                        
                         <h:column>
-
                             <f:facet name="header">Valor Final</f:facet>
                             <h:inputText id="valorFinal" value="#{c.valorFinal}" style="height: 30px;width: 100px; background-color: #E3E3E3; font-style: italic" disabled="true">
                                 <f:converter converterId="converterMoney"></f:converter>
@@ -334,54 +268,35 @@
 
                         <h:column >
                             <f:facet name="header">PCOND</f:facet>
-
                             <h:selectBooleanCheckbox id="checkPcond" value="#{c.pcond}">
                                 <f:ajax   listener="#{controleCalculo.alterarParametrosParaPcond(c)}" execute=":listagem" render=":listagem" event="click"></f:ajax>
                             </h:selectBooleanCheckbox>
                         </h:column>
 
 
-
-
-
                         <h:column id="acoes">
-                           
-
                                 <f:facet name="header">Ações</f:facet>
-
                                 <h:commandLink id="acaoSalvar">
-
                                     <f:ajax listener="#{controleCalculo.avaliarParaSalvar(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
                                     <h:graphicImage  width="20px" library="img" name="save.png" title="Salvar/Atualizar este cálculo" ></h:graphicImage>  
-                                </h:commandLink>  
-
-
-
-
+                                </h:commandLink>
+                                
 
                                 <h:commandLink id="acaoImprimirCalculoIndividual" actionListener="#{controleCalculo.avaliarParaImprimir(c)}" rendered="#{c.valorFinal ne null  }">
-
                                     <h:graphicImage  width="20px" library="img" name="print.jpg" title="Imprimir Cálculo" ></h:graphicImage>                                    
-                                </h:commandLink>  
-
-
-
+                                </h:commandLink>
+                                
 
                                 <h:outputLabel for="file"  class="upload"  >
-                                    <h:graphicImage   width="20px" library="img" name="up.png" title="Vincular imagem de extrato à conta informada" >
-
-                                    </h:graphicImage>
+                                    <h:graphicImage   width="20px" library="img" name="up.png" title="Vincular imagem de extrato à conta informada" ></h:graphicImage>
                                 </h:outputLabel>
+                                
+                                
                                 <h:inputFile  id="file"  value="#{controleCalculo.file}" title="Selecione um arquivo" label="Carregar arquivo"   class="upload"  style="display: none">
                                     <f:ajax listener="#{controleCalculo.upload(c)}" execute=":istagem" render=":listagem"></f:ajax>
                                 </h:inputFile>
 
-
-                            
-
-
                         </h:column>
-
 
                     </h:dataTable>
 

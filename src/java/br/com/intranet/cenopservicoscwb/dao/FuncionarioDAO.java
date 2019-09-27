@@ -49,4 +49,15 @@ public class FuncionarioDAO<T,E> extends DAOGenerico<Funcionario, Object>{
     }
     
     
+    
+    // "getSingleResult" do método acima não aceita retorno "null", por isso utiliado o método abaixo com "getResultList"
+    public List<Funcionario> localizarFuncionarioPorChaveLista(String chaveSessao) {
+
+        TypedQuery<Funcionario> query = em.createQuery(
+        "SELECT c FROM Funcionario c WHERE c.chaveFunci = :name", classePersistente);
+        return query.setParameter("name", chaveSessao).getResultList();
+    }
+
+    
+    
 }

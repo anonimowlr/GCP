@@ -19,48 +19,28 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter(value = "converterConta")
 public class ConverterConta implements  Serializable,Converter{
-
-   
-            
-    
-    
-    
-    
-    
     
     @Override // da tela para o objeto
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
    
-            try{
-                Long retorno = Long.parseLong(Utils.tratarVariavel(string));
-               
-                return  retorno;
-            } catch (Exception ex) {
-                
-                   return  null;
-            
-            
-            }
+        try {
+            String retorno = Utils.tratarVariavelConta(string);
+            return retorno;
+        } catch (Exception ex) {
+            return null;
+        }
         
-    
     }
  
     @Override   // do objeto para a tela;
     public String getAsString(FacesContext fc, UIComponent uic, Object o) {
 
-             if(o== null || o.equals(" ")){
-                 return null;
-             }
-                
-             
-             Long obj = (Long) o;
-             
-             String retorno =Utils.tratarConta(o.toString());
-             
-             
-             return  retorno;
-    }
-    
-    
+        if (o == null || o.equals(" ")) {
+            return null;
+        }
+        String obj =  (String) o;
+        String retorno = Utils.tratarContaTexto((String) o);
+        return retorno;
+    }  
     
 }

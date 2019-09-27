@@ -16,46 +16,34 @@
 
         <ui:define name="conteudo">
 
-
-
-
-
-
-
-
-
-
-
             <h:form id="formFiltro">
                 <h:panelGrid columns="11" id="painelFiltro" rendered="#{controleListaCompleta.isBuscar()}" >
                     <h:outputLabel value="Tipo Filtro"></h:outputLabel>
                     <h:selectOneMenu value="#{controleListaCompleta.listaCompletaDAO.ordem}" style="width: 200px;height: 30px">
-                        <f:selectItem noSelectionOption="true" itemValue="selecione" itemLabel="selecione"></f:selectItem>
                         <f:selectItem itemValue="protocoloGsv.npj.nrPrc" itemLabel="NPJ"></f:selectItem>
                         <f:selectItem itemValue="protocoloGsv.cdPrc" itemLabel="GSV"></f:selectItem>
                         <f:selectItem itemValue="funcionario.chaveFunci" itemLabel="FUNCIONÁRIO RESPONSÁVEL"></f:selectItem>
                         <f:selectItem itemValue="dataRealizacaoCalculo" itemLabel="DATA"></f:selectItem>
+                        <f:selectItem itemValue="cliente.cpf" itemLabel="CPF"></f:selectItem>
                         <f:selectItem itemValue="pcond" itemLabel="PCOND"></f:selectItem>
-                        <f:ajax     execute="@this" render="listagem" event="change" ></f:ajax>
+                        <f:ajax     execute="@this" render="painelFiltro" event="change" ></f:ajax>
                     </h:selectOneMenu>
 
                     <h:outputLabel value="Filtro"></h:outputLabel>
-                    <h:inputText value="#{controleListaCompleta.listaCompletaDAO.filtro}" style="width: 200px; height: 30px">
+                    <h:inputText value="#{controleListaCompleta.listaCompletaDAO.filtro}" style="width: 200px; height: 30px" rendered="#{controleListaCompleta.listaCompletaDAO.ordem ne 'cliente.cpf'}">
                         <f:ajax  execute="painelFiltro" render="listagem" event="keyup"   ></f:ajax>    
                     </h:inputText>
+                    <p:inputMask mask="999.999.999-99" id="filtroCpf" value="#{controleListaCompleta.listaCompletaDAO.filtro}" style="width: 200px; height: 30px" rendered="#{controleListaCompleta.listaCompletaDAO.ordem eq 'cliente.cpf'}">
+                        <f:ajax  execute="painelFiltro" render="listagem" event="keyup"   ></f:ajax>    
+                    </p:inputMask>
                     <h:outputLabel value="QUANTIDADE NA TELA"></h:outputLabel>
                     <h:inputText value="#{controleListaCompleta.listaCompletaDAO.maximoObjeto}" style="width: 90px; height: 30px">
                         <f:ajax  execute="painelFiltro" render="listagem" event="change"   ></f:ajax>    
                     </h:inputText>
                 </h:panelGrid>
 
-
             </h:form>
-
-
-
-
-
+            
 
             <h:form prependId="false" enctype="multipart/form-data">
 
@@ -169,12 +157,6 @@
 
                 </h:panelGrid>
                 
-
-
-
-
-
-
 
                 <h:dataTable value="#{controleListaCompleta.listaCompletaDAO.listaObjetos}" var="c" class="table table-hover" id="listagem" rendered="#{controleListaCompleta.isBuscar()}">
 

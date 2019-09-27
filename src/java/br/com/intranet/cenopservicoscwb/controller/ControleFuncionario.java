@@ -5,7 +5,9 @@
  */
 package br.com.intranet.cenopservicoscwb.controller;
 
+import br.com.intranet.cenopservicoscwb.dao.FuncionarioDAO;
 import br.com.intranet.cenopservicoscwb.model.entidade.Funcionario;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -19,25 +21,35 @@ import javax.servlet.http.HttpSession;
 @ManagedBean
 @SessionScoped
 public class ControleFuncionario {
-    
-    
-    
-    
-    
-    
-    private boolean  cargoGerencial = false;
+  
+    private boolean cargoGerencial = false;
+    private boolean funcionarioComAcesso = false;
+    private FuncionarioDAO<Funcionario, Object> funcionarioDAO;
 
     private FacesContext fc = FacesContext.getCurrentInstance();
     private HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
 
-    private Funcionario usuario = (Funcionario) session.getAttribute("usuarioLogado");
-    
-    
+    private Funcionario usuario = (Funcionario) session.getAttribute("usuarioLogado");    
+
     @PostConstruct
-    public void init(){
+    public void init() {
+        funcionarioDAO = new FuncionarioDAO<>();
         mudarParaCargoGerencial();
+        verificarAcessoFuncionario();
+    }
+
+    public void mudarParaCargoGerencial() {
+        if (getUsuario().getCodigoFuncao() == 4665 || getUsuario().getCodigoFuncao() == 4750 || getUsuario().getMatriculaFunci()== 5078775 || getUsuario().getMatriculaFunci() == 7864599) {
+            this.setCargoGerencial(true);
+        }
     }
     
+    public void verificarAcessoFuncionario(){
+        List<Funcionario> funcionario = getFuncionarioDAO().localizarFuncionarioPorChaveLista(usuario.getChaveFunci());
+        if(funcionario.size() > 0){
+            this.setFuncionarioComAcesso(true);
+        }
+    }
 
     /**
      * @return the usuario
@@ -95,15 +107,32 @@ public class ControleFuncionario {
         this.session = session;
     }
 
-    
-    
-    public void mudarParaCargoGerencial(){
-        if(usuario.getCodigoFuncao()== 4665 || usuario.getCodigoFuncao()== 4750 || usuario.getCodigoFuncao()== 7001){
-            this.cargoGerencial=true;
-            
-        }
-        
+    /**
+     * @return the funcionarioComAcesso
+     */
+    public boolean isFuncionarioComAcesso() {
+        return funcionarioComAcesso;
     }
-    
-    
+
+    /**
+     * @param funcionarioComAcesso the funcionarioComAcesso to set
+     */
+    public void setFuncionarioComAcesso(boolean funcionarioComAcesso) {
+        this.funcionarioComAcesso = funcionarioComAcesso;
+    }
+
+        /**
+     * @return the funcionarioDAO
+     */
+    public FuncionarioDAO<Funcionario, Object> getFuncionarioDAO() {
+        return funcionarioDAO;
+    }
+
+    /**
+     * @param funcionarioDAO the funcionarioDAO to set
+     */
+    public void setFuncionarioDAO(FuncionarioDAO<Funcionario, Object> funcionarioDAO) {
+        this.funcionarioDAO = funcionarioDAO;
+    }
+
 }

@@ -36,18 +36,18 @@ public class UsuarioDAO {
                 funci.setNomeGerente(tabela.getString("gerente"));
                 funci.setCodigoFuncao(tabela.getInt("funcao"));
                 
-            } else{
-               funci.setChaveFunci(chave);
+            } else {
+                funci.setChaveFunci(chave);
                 funci.setNomeFunci(nomeFuncionario);
                 funci.setMatriculaFunci(Integer.parseInt(Utils.tratarVariavel(chave)));
-                
+
             }
             tabela.close();
         } catch (SQLException e) {
         } finally{
             try{tabela.close();} catch(SQLException e){}
             try{busca.close();} catch(SQLException e){}
-           // try{con.close();} catch(SQLException e){} //  não está sendo fechada a conexao para acamada de jpa pegar a que estiver aberta
+            try{con.close();} catch(SQLException e){}
         }
         
         

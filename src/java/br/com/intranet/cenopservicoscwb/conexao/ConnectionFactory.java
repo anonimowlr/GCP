@@ -1,41 +1,24 @@
-
 package br.com.intranet.cenopservicoscwb.conexao;
-
-
-
 
 import br.com.intranet.cenopservicoscwb.util.ErroSistema;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-
-
 public class ConnectionFactory {
-    
     
     private static  Connection con = null;
    
     private static final String DB_DRIVER ="com.mysql.jdbc.Driver";
-   
-
-    
     
         private static final String DB_USER ="calculopoupanca";
   
         private static final String DB_PASSWORD ="calculopoupanca";
-      
-    
 
-   
-    
-    
-    
     
     public static Connection conectar(String banco) throws ErroSistema{
         
-         String DB_CONEXAO ="jdbc:mysql://172.20.0.33/" + banco;
-       
+         String DB_CONEXAO ="jdbc:mysql://172.20.0.33/" + banco;       
         
         try {
             Class.forName(DB_DRIVER);
@@ -49,15 +32,7 @@ public class ConnectionFactory {
         } catch (SQLException ex) {
             throw new ErroSistema("Não foi possível conectar ao banco de dados",ex);
             
-        } 
-            
-        
-        
-        
-        
-        
-        
-        
+        }
     
     }
 
@@ -72,8 +47,6 @@ public class ConnectionFactory {
                 
                 throw new ErroSistema("Erro ao fechar a conexão com o banco de dados",ex);
             }
-        }
-        
-    }
-    
+        }        
+    }    
 }

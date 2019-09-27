@@ -41,6 +41,17 @@ public class Util {
         
     } 
     
+    
+     public static void mensagemAlerta(String msg){
+        
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        facesContext.getExternalContext().getFlash().setKeepMessages(true);
+        FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_WARN,msg, "");
+        facesContext.addMessage(null, facesMessage);
+        
+    } 
+    
+    
     public static void mensagemErro(String msg){
         
         FacesContext facesContext = FacesContext.getCurrentInstance();
