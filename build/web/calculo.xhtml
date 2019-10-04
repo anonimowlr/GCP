@@ -97,6 +97,7 @@
                             <h:selectOneMenu value="#{c.metodologia}" style="height: 30px;width: 140px;" >
                                 <f:converter converterId="converterMetodologia"></f:converter>
                                 <f:selectItems value="#{controleCalculo.metodologiaDAO.listaTodos}" var="p" itemLabel="#{p.nomeMetodologia}"></f:selectItems>
+                                <f:ajax  listener="#{controleCalculo.configuraLinhaPj(c)}"  execute="@this" render=":listagem" event="change"></f:ajax>
                             </h:selectOneMenu>
                         </h:column>
 
@@ -169,7 +170,7 @@
                             <h:inputText id="diaBase" value="#{c.diaBase}" style="height: 30px;width: 30px">
                                 <f:ajax listener="#{controleCalculo.atribuirDataInicialPlano(c)}" execute=":listagem" render=":listagem" event="blur" ></f:ajax>
                             </h:inputText>                                               
-                        </h:column>
+                        </h:column>                        
 
 
                         <h:column>
@@ -187,6 +188,7 @@
                                 <h:column>
                                     <p:inputMask  mask="99/99/9999" id="dataInicio" value="#{d.dataInicioCalculo}" style="width: 100px;height: 30px" >
                                         <f:converter converterId="converterDate"></f:converter>
+                                        <f:ajax listener="#{controleCalculo.teste(c)}" execute=":listagem" render="@this :formRemuneracaoEsperada :listagem" event="blur"></f:ajax>
                                     </p:inputMask>
                                 </h:column> 
                                 
