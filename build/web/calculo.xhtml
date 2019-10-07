@@ -103,8 +103,11 @@
 
                         
                         <h:column>
-                            <f:facet name="header">CPF</f:facet>
-                            <p:inputMask id="cpf" validator="validaCpf"  value="#{c.cliente.cpf}" style="width: 150px;height: 30px"  mask="999.999.999-99"  placeholder="informe o CPF" required="true" requiredMessage="Informe O CPF" >
+                            <f:facet name="header">CPF/CNPJ</f:facet>
+                            <p:inputMask id="cpf" validator="validaCpf"  value="#{c.cliente.cpf}" style="width: 150px;height: 30px"  mask="999.999.999-99"  placeholder="informe o CPF" required="true" requiredMessage="Informe O CPF" rendered="#{c.metodologia.id ne 2}" >
+                                <f:ajax listener="#{controleCalculo.alterarClienteCalculo(c)}" execute="cpf" render="cpf nomeCliente" event="change"></f:ajax>
+                            </p:inputMask>                                           
+                            <p:inputMask id="CNPJ" validator="validaCnpj"  value="#{c.cliente.cpf}" style="width: 150px;height: 30px"  mask="99.999.999/9999-99"  placeholder="informe o CNPJ" required="true" requiredMessage="Informe O CNPJ" rendered="#{c.metodologia.id eq 2}" >
                                 <f:ajax listener="#{controleCalculo.alterarClienteCalculo(c)}" execute="cpf" render="cpf nomeCliente" event="change"></f:ajax>
                             </p:inputMask>                                           
                         </h:column>
@@ -167,7 +170,7 @@
 
                         <h:column >
                             <f:facet name="header">Dia Base</f:facet>
-                            <h:inputText id="diaBase" value="#{c.diaBase}" style="height: 30px;width: 30px">
+                            <h:inputText id="diaBase" value="#{c.diaBase}" style="height: 30px;width: 30px" rendered="#{c.metodologia.id ne 2}">
                                 <f:ajax listener="#{controleCalculo.atribuirDataInicialPlano(c)}" execute=":listagem" render=":listagem" event="blur" ></f:ajax>
                             </h:inputText>                                               
                         </h:column>                        
@@ -188,7 +191,7 @@
                                 <h:column>
                                     <p:inputMask  mask="99/99/9999" id="dataInicio" value="#{d.dataInicioCalculo}" style="width: 100px;height: 30px" >
                                         <f:converter converterId="converterDate"></f:converter>
-                                        <f:ajax listener="#{controleCalculo.teste(c)}" execute=":listagem" render="@this :formRemuneracaoEsperada :listagem" event="blur"></f:ajax>
+                                        <f:ajax listener="#{controleCalculo.calcularParaConferencia(c)}" execute=":listagem" render="@this :formRemuneracaoEsperada :listagem" event="blur"></f:ajax>
                                     </p:inputMask>
                                 </h:column> 
                                 
