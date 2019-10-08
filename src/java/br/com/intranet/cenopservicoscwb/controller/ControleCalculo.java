@@ -488,9 +488,13 @@ public class ControleCalculo implements Serializable {
                 case 2:
                     motorCalculoPoupanca.calcularPj(calculo);
                     break;
+                 case 3:
+                    motorCalculoPoupanca.calcularDiferencaApadecoCumprimentoSentenca(calculo);
+                    break;
 
                 default:
                     Util.mensagemErro(calculo.getMetodologia().getNomeMetodologia() + "não é uma metodologia válida");
+                    return;
             }
 
             salvarCalculo(calculo);
@@ -509,9 +513,13 @@ public class ControleCalculo implements Serializable {
                 case 2:
                     motorCalculoPoupanca.calcularPj(calculo);
                     break;
+                case 3:
+                    motorCalculoPoupanca.calcularDiferencaApadecoCumprimentoSentenca(calculo);
+                    break;
 
                 default:
                     Util.mensagemErro(calculo.getMetodologia().getNomeMetodologia() + "não é uma metodologia válida");
+                    return;
             }
 
             atualizarCalculo(calculo);
@@ -786,6 +794,12 @@ public class ControleCalculo implements Serializable {
         Funcionario usuario = (Funcionario) session.getAttribute("usuarioLogado");
 
         try {
+            
+            if(calculo.getMetodologia().getId()== 3  ){
+              calculo.getMora().setDataInicio(new Date("07/01/1994"));           
+            }
+            
+            
 
             calculo.setDataRealizacaoCalculo(Calendar.getInstance().getTime());
             calculo.getCliente().setNomeCliente(calculo.getCliente().getNomeCliente().toUpperCase());
