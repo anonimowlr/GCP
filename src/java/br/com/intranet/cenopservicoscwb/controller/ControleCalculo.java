@@ -396,21 +396,38 @@ public class ControleCalculo implements Serializable {
                 }
                 break;
 
-//            case 2:
-//                if (calculo.getPlanoEconomico().getId().equals(1)) {
-//                    calculo.getListaPeriodoCalculo().get(0).setDataInicioCalculo(Utils.getDataPlanoVerao(calculo.getDiaBase().toString()));
-//                    try {
-//
-//                        if (calculo.getListaPeriodoCalculo().get(0).getDataFinalCalculo() != null) {
-//                            return;
-//
-//                        }
-//                        calculo.getListaPeriodoCalculo().get(getCalculo().getListaPeriodoCalculo().size() - 1).setDataFinalCalculo(Utils.getDataAtualFormatoMysql());
-//                    } catch (Exception ex) {
-//                        Util.mensagemInformacao(Util.getMensagemErro(ex));
-//                    }
-//                }
-//                break;
+            case 3 :
+                if (calculo.getPlanoEconomico().getId().equals(1)) {
+                    calculo.getListaPeriodoCalculo().get(0).setDataInicioCalculo(Utils.getDataPlanoVerao(calculo.getDiaBase().toString()));
+                    try {
+
+                        if (calculo.getListaPeriodoCalculo().get(0).getDataFinalCalculo() != null) {
+                            return;
+
+                        }
+                        calculo.getListaPeriodoCalculo().get(getCalculo().getListaPeriodoCalculo().size() - 1).setDataFinalCalculo(Utils.getDataAtualFormatoMysql());
+                    } catch (Exception ex) {
+                        Util.mensagemInformacao(Util.getMensagemErro(ex));
+                    }
+                }
+                break;
+                
+                case 4 :
+                if (calculo.getPlanoEconomico().getId().equals(1)) {
+                    calculo.getListaPeriodoCalculo().get(0).setDataInicioCalculo(Utils.getDataPlanoVerao(calculo.getDiaBase().toString()));
+                    try {
+
+                        if (calculo.getListaPeriodoCalculo().get(0).getDataFinalCalculo() != null) {
+                            return;
+
+                        }
+                        calculo.getListaPeriodoCalculo().get(getCalculo().getListaPeriodoCalculo().size() - 1).setDataFinalCalculo(Utils.getDataAtualFormatoMysql());
+                    } catch (Exception ex) {
+                        Util.mensagemInformacao(Util.getMensagemErro(ex));
+                    }
+                }
+                break;
+                
         }
 
     }
@@ -795,8 +812,13 @@ public class ControleCalculo implements Serializable {
 
         try {
             
-            if(calculo.getMetodologia().getId()== 3  ){
-              calculo.getMora().setDataInicio(new Date("07/01/1994"));           
+            
+            
+            
+            
+            if(calculo.getMetodologia().getId()== 3 ||  calculo.getMetodologia().getId()== 4 ){
+              calculo.getMora().setDataInicio(new Date("07/01/1994"));    
+              calculo.setPcond(false);
             }
             
             

@@ -273,7 +273,7 @@
 
                         <h:column >
                             <f:facet name="header">PCOND</f:facet>
-                            <h:selectBooleanCheckbox id="checkPcond" value="#{c.pcond}">
+                            <h:selectBooleanCheckbox id="checkPcond" value="#{c.pcond}" rendered="#{c.metodologia.id ne 3}">
                                 <f:ajax   listener="#{controleCalculo.alterarParametrosParaPcond(c)}" execute=":listagem" render=":listagem" event="click"></f:ajax>
                             </h:selectBooleanCheckbox>
                         </h:column>
