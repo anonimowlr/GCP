@@ -393,6 +393,19 @@ public class ControleCalculo implements Serializable {
                     } catch (Exception ex) {
                         Util.mensagemInformacao(Util.getMensagemErro(ex));
                     }
+                } else if (calculo.getPlanoEconomico().getId().equals(2)) {
+                    calculo.getListaPeriodoCalculo().get(0).setDataInicioCalculo(Utils.getDataPlanoBresser(calculo.getDiaBase().toString()));
+                    try {
+
+                        if (calculo.getListaPeriodoCalculo().get(0).getDataFinalCalculo() != null) {
+                            return;
+
+                        }
+                        calculo.getListaPeriodoCalculo().get(getCalculo().getListaPeriodoCalculo().size() - 1).setDataFinalCalculo(Utils.getDataAtualFormatoMysql());
+                    } catch (Exception ex) {
+                        Util.mensagemInformacao(Util.getMensagemErro(ex));
+                    }
+
                 }
                 break;
 
@@ -409,6 +422,19 @@ public class ControleCalculo implements Serializable {
                     } catch (Exception ex) {
                         Util.mensagemInformacao(Util.getMensagemErro(ex));
                     }
+                }else if (calculo.getPlanoEconomico().getId().equals(2)) {
+                    calculo.getListaPeriodoCalculo().get(0).setDataInicioCalculo(Utils.getDataPlanoBresser(calculo.getDiaBase().toString()));
+                    try {
+
+                        if (calculo.getListaPeriodoCalculo().get(0).getDataFinalCalculo() != null) {
+                            return;
+
+                        }
+                        calculo.getListaPeriodoCalculo().get(getCalculo().getListaPeriodoCalculo().size() - 1).setDataFinalCalculo(Utils.getDataAtualFormatoMysql());
+                    } catch (Exception ex) {
+                        Util.mensagemInformacao(Util.getMensagemErro(ex));
+                    }
+
                 }
                 break;
                 
@@ -508,6 +534,9 @@ public class ControleCalculo implements Serializable {
                  case 3:
                     motorCalculoPoupanca.calcularDiferencaApadecoCumprimentoSentenca(calculo);
                     break;
+                 case 4:
+                    motorCalculoPoupanca.calcular(calculo);
+                    break;
 
                 default:
                     Util.mensagemErro(calculo.getMetodologia().getNomeMetodologia() + "não é uma metodologia válida");
@@ -532,6 +561,9 @@ public class ControleCalculo implements Serializable {
                     break;
                 case 3:
                     motorCalculoPoupanca.calcularDiferencaApadecoCumprimentoSentenca(calculo);
+                    break;
+                case 4:
+                    motorCalculoPoupanca.calcular(calculo);
                     break;
 
                 default:
