@@ -506,6 +506,8 @@ public class ControleCalculo implements Serializable {
         setCalculo(calculo);
         
         
+        
+        
         if(calculo.getMetodologia().getId() == 2){
             calculo.setDiaBase(Utils.getDia(calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo()));
         }
@@ -545,6 +547,7 @@ public class ControleCalculo implements Serializable {
                     motorCalculoPoupanca.calcularDiferencaApadecoCumprimentoSentenca(calculo);
                     break;
                  case 4:
+                     
                     motorCalculoPoupanca.calcular(calculo);
                     break;
 
@@ -871,6 +874,13 @@ public class ControleCalculo implements Serializable {
               calculo.getMora().setDataInicio(new Date("07/01/1994"));    
               calculo.setPcond(false);
             }
+            
+            if( calculo.getMetodologia().getId()== 4 ){
+              calculo.getJuroRemuneratorio().setDataInicio(calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo());
+              calculo.getJuroRemuneratorio().setDataFinal(calculo.getListaPeriodoCalculo().get(0).getDataFinalCalculo());
+              calculo.setPcond(false);
+            }
+            
             
             
 
