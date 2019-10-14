@@ -878,7 +878,10 @@ public class ControleCalculo implements Serializable {
             if( calculo.getMetodologia().getId()== 4 ){
               calculo.getJuroRemuneratorio().setDataInicio(calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo());
               calculo.getJuroRemuneratorio().setDataFinal(calculo.getListaPeriodoCalculo().get(0).getDataFinalCalculo());
+              Indice indice  = getCalculoDAO().getEm().find(Indice.class, 1);
+              calculo.getListaPeriodoCalculo().get(0).setIndice(indice);
               calculo.setPcond(false);
+              calculo.getExpurgo().setMarcador("S");
             }
             
             
