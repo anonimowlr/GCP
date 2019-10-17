@@ -870,7 +870,7 @@ public class ControleCalculo implements Serializable {
             
             
             
-            if(calculo.getMetodologia().getId()== 3 ||  calculo.getMetodologia().getId()== 4 ){
+            if(calculo.getMetodologia().getId()== 3){
               calculo.getMora().setDataInicio(new Date("07/01/1994"));    
               calculo.setPcond(false);
               Indice indice = getIndiceDAO().getEm().find(Indice.class, 3);
@@ -879,9 +879,7 @@ public class ControleCalculo implements Serializable {
             
             if( calculo.getMetodologia().getId()== 4 ){
               calculo.getJuroRemuneratorio().setDataInicio(calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo());
-              calculo.getJuroRemuneratorio().setDataFinal(calculo.getListaPeriodoCalculo().get(0).getDataFinalCalculo());
-              Indice indice  = getCalculoDAO().getEm().find(Indice.class, 1);
-              calculo.getListaPeriodoCalculo().get(0).setIndice(indice);
+              calculo.getJuroRemuneratorio().setDataFinal(calculo.getListaPeriodoCalculo().get(0).getDataFinalCalculo());              
               calculo.setPcond(false);
              
               Expurgo expurgo = getExpurgoDAO().getEm().find(Expurgo.class, 2);

@@ -45,13 +45,6 @@
                         #{f.nomeFunci}                    
                     </h:column>
                     
-                    <h:column>
-                        <f:facet name="header">Ações</f:facet>
-                        <h:commandLink onclick="if (!confirm('Deseja realmente excluir?'))return false">
-                            <f:ajax listener="#{controleAcesso.excluir(f)}" execute="@form" render="@form" event="click" ></f:ajax>
-                            <h:graphicImage  width="20px" library="img" name="trash.png" title="Excluir funcionário" ></h:graphicImage>                                    
-                        </h:commandLink>                   
-                    </h:column>
                 </h:dataTable>
                 
                 
