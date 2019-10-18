@@ -882,9 +882,6 @@ public class ControleCalculo implements Serializable {
               calculo.getJuroRemuneratorio().setDataFinal(calculo.getListaPeriodoCalculo().get(0).getDataFinalCalculo());              
               calculo.setPcond(false);
              
-              Expurgo expurgo = getExpurgoDAO().getEm().find(Expurgo.class, 2);
-              
-              calculo.setExpurgo(expurgo);
             }
             
             
