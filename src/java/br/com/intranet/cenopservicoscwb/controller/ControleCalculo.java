@@ -582,7 +582,7 @@ public class ControleCalculo implements Serializable {
 
     }
 
-    public void alterarParametrosParaPcond(Calculo calculo) throws ParseException, IOException, DocumentException {
+    public void alterarParametrosParaPcond(Calculo calculoParaPcond) throws ParseException, IOException, DocumentException {
 
         if (!calculo.isPcond()) {
             return;
