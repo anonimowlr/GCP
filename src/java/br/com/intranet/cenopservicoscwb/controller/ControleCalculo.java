@@ -64,7 +64,8 @@ import javax.servlet.http.Part;
 @ManagedBean
 @ViewScoped
 public class ControleCalculo implements Serializable {
-    FileInputStream inputStream ;
+
+    FileInputStream inputStream;
     private BigDecimal saldoNaDataBase;
     private String estadoTela = "recolhido";
     private Part file;
@@ -252,27 +253,20 @@ public class ControleCalculo implements Serializable {
         }
 
     }
-    
-    
-    
-    public void configuraLinhaPj(Calculo calculo){
-        if(calculo.getMetodologia().getId()==2){
+
+    public void configuraLinhaPj(Calculo calculo) {
+        if (calculo.getMetodologia().getId() == 2) {
             calculo.getListaPeriodoCalculo().get(0).setDataInicioCalculo(null);
         }
-        
-        
+
     }
-    
 
     public void calcularParaConferencia(Calculo calculo) {
 
-        
-        
-        if(calculo.getMetodologia().getId() == 2 && calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo() ==null){
+        if (calculo.getMetodologia().getId() == 2 && calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo() == null) {
             return;
         }
-        
-        
+
         setCalculo(calculo);
 
         MotorCalculoPoupanca motorCalculoPoupanca = new MotorCalculoPoupanca();
@@ -305,23 +299,22 @@ public class ControleCalculo implements Serializable {
                 Util.mensagemErro("Não foi possivel criar diretório para a imagem!!");
                 return;
             }
-            
-            if(Utils.getIpHost().equals("172.20.0.33")){
-                
-            Files.copy(is, new java.io.File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + calculo.getCliente().getCpf() + "/" + calculo.getNumeroConta(), getCalculo().getArquivo().getNomeArquivo()).toPath());
-            } else if(Utils.getIpHost().equals("192.168.1.101")){
-                
-            Files.copy(is, new java.io.File("C:\\Users\\PC_LENOVO\\Desktop\\DistribuidorPoupancaTeste\\" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + calculo.getCliente().getCpf() + "/" + calculo.getNumeroConta(), getCalculo().getArquivo().getNomeArquivo()).toPath());
-            }else{
-            Files.copy(is, new java.io.File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + calculo.getCliente().getCpf() + "/" + calculo.getNumeroConta(), getCalculo().getArquivo().getNomeArquivo()).toPath());
-                
+
+            if (Utils.getIpHost().equals("172.20.0.33")) {
+
+                Files.copy(is, new java.io.File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + calculo.getCliente().getCpf() + "/" + calculo.getNumeroConta(), getCalculo().getArquivo().getNomeArquivo()).toPath());
+            } else if (Utils.getIpHost().equals("192.168.1.101")) {
+
+                Files.copy(is, new java.io.File("C:\\Users\\PC_LENOVO\\Desktop\\DistribuidorPoupancaTeste\\" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + calculo.getCliente().getCpf() + "/" + calculo.getNumeroConta(), getCalculo().getArquivo().getNomeArquivo()).toPath());
+            } else {
+                Files.copy(is, new java.io.File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + calculo.getCliente().getCpf() + "/" + calculo.getNumeroConta(), getCalculo().getArquivo().getNomeArquivo()).toPath());
+
             }
 
             //Files.copy(is, new java.io.File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + calculo.getCliente().getCpf() + "/" + calculo.getNumeroConta(), getCalculo().getArquivo().getNomeArquivo()).toPath());
             //Files.copy(is, new java.io.File("C:\\Users\\f7864599\\Desktop\\DistribuidorPoupancaTeste\\" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + calculo.getCliente().getCpf() + "/" + calculo.getNumeroConta(), getCalculo().getArquivo().getNomeArquivo()).toPath());
             //Files.copy(is, new java.io.File("/home/jocimar/Área de Trabalho/TestePlanilha/" + getCalculo().getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + getCalculo().getProtocoloGsv().getCdPrc().toString() + "/" + getCalculo().getCliente().getCpf() + "/" + getCalculo().getNumeroConta(), getCalculo().getArquivo().getNomeArquivo()).toPath());
             //getComplementoPoupanca().setImagemExtrato(fileName);
-
             Util.mensagemInformacao(getArquivo().getNomeArquivo() + tipoArquivo + " Enviado com sucesso!!");
 
         } catch (Exception ex) {
@@ -419,7 +412,7 @@ public class ControleCalculo implements Serializable {
                 }
                 break;
 
-            case 3 :
+            case 3:
                 if (calculo.getPlanoEconomico().getId().equals(1)) {
                     calculo.getListaPeriodoCalculo().get(0).setDataInicioCalculo(Utils.getDataPlanoVerao(calculo.getDiaBase().toString()));
                     try {
@@ -432,7 +425,7 @@ public class ControleCalculo implements Serializable {
                     } catch (Exception ex) {
                         Util.mensagemInformacao(Util.getMensagemErro(ex));
                     }
-                }else if (calculo.getPlanoEconomico().getId().equals(2)) {
+                } else if (calculo.getPlanoEconomico().getId().equals(2)) {
                     calculo.getListaPeriodoCalculo().get(0).setDataInicioCalculo(Utils.getDataPlanoBresser(calculo.getDiaBase().toString()));
                     try {
 
@@ -447,8 +440,8 @@ public class ControleCalculo implements Serializable {
 
                 }
                 break;
-                
-                case 4 :
+
+            case 4:
                 if (calculo.getPlanoEconomico().getId().equals(1)) {
                     calculo.getListaPeriodoCalculo().get(0).setDataInicioCalculo(Utils.getDataPlanoVerao(calculo.getDiaBase().toString()));
                     try {
@@ -463,7 +456,7 @@ public class ControleCalculo implements Serializable {
                     }
                 }
                 break;
-                
+
         }
 
     }
@@ -504,18 +497,10 @@ public class ControleCalculo implements Serializable {
 
     public void avaliarParaSalvar(Calculo calculo) throws ParseException, IOException, DocumentException, Exception {
         setCalculo(calculo);
-        
-        
-        
-        
-        if(calculo.getMetodologia().getId() == 2){
+
+        if (calculo.getMetodologia().getId() == 2) {
             calculo.setDiaBase(Utils.getDia(calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo()));
         }
-        
-        
-        
-        
-        
 
         if (calculo.getMora().getDataInicio().after(calculo.getListaPeriodoCalculo().get(calculo.getListaPeriodoCalculo().size() - 1).getDataFinalCalculo())) {
 
@@ -543,11 +528,11 @@ public class ControleCalculo implements Serializable {
                 case 2:
                     motorCalculoPoupanca.calcularPj(calculo);
                     break;
-                 case 3:
+                case 3:
                     motorCalculoPoupanca.calcularDiferencaApadecoCumprimentoSentenca(calculo);
                     break;
-                 case 4:
-                     
+                case 4:
+
                     motorCalculoPoupanca.calcular(calculo);
                     break;
 
@@ -556,8 +541,11 @@ public class ControleCalculo implements Serializable {
                     return;
             }
 
-            salvarCalculo(calculo);
-            gerarPdf.gerarDocumentoResumo(calculo.getProtocoloGsv());
+            if (calculo.isPcond() == false) {
+
+                salvarCalculo(calculo);
+                gerarPdf.gerarDocumentoResumo(calculo.getProtocoloGsv());
+            }
 
         } else {
 
@@ -584,8 +572,12 @@ public class ControleCalculo implements Serializable {
                     return;
             }
 
-            atualizarCalculo(calculo);
-            gerarPdf.gerarDocumentoResumo(calculo.getProtocoloGsv());
+            if (calculo.isPcond() == false) {
+
+                salvarCalculo(calculo);
+                gerarPdf.gerarDocumentoResumo(calculo.getProtocoloGsv());
+            }
+
         }
 
     }
@@ -704,9 +696,19 @@ public class ControleCalculo implements Serializable {
 
     }
 
-    public void avaliarParaImprimir(Calculo calculo) throws DocumentException, ParseException, IOException {
+    public void avaliarParaImprimir(Calculo calculo) throws DocumentException, ParseException, IOException, Exception {
         if (calculo.isPcond()) {
-            downloadPcond(calculo);
+
+            Calculo calculoParaPcond = new Calculo();
+            calculoParaPcond.setSaldoBase(calculo.getSaldoBase());
+            calculoParaPcond.setCliente(calculo.getCliente());
+            calculoParaPcond.setNomeBanco(calculo.getNomeBanco());
+            calculoParaPcond.setNumeroAgencia(calculo.getNumeroAgencia());
+            calculoParaPcond.setNumeroConta(calculo.getNumeroConta());
+            calculoParaPcond.setDiaBase(calculo.getDiaBase());
+
+            gerarDocumentoPcondSemSalvar(calculoParaPcond);
+            downloadPcond(calculoParaPcond);
         } else {
             downloadPdf(calculo);
         }
@@ -720,31 +722,24 @@ public class ControleCalculo implements Serializable {
 
             externalContext.responseReset();
             externalContext.setResponseContentType("application/pdf");
-            externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\""  + "CALCULO DEFESA" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarContaTexto(calculo.getNumeroConta()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf\"");
+            externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\"" + "CALCULO DEFESA" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarContaTexto(calculo.getNumeroConta()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf\"");
 
-            if(Utils.getIpHost().equals("172.20.0.33")){
-                
-              inputStream = new FileInputStream(new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + "NPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + "CALCULO DEFESA" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarContaTexto(calculo.getNumeroConta()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf"));
-                
-            }else if(Utils.getIpHost().equals("192.168.1.101")){
+            if (Utils.getIpHost().equals("172.20.0.33")) {
+
+                inputStream = new FileInputStream(new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + "NPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + "CALCULO DEFESA" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarContaTexto(calculo.getNumeroConta()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf"));
+
+            } else if (Utils.getIpHost().equals("192.168.1.101")) {
                 inputStream = new FileInputStream(new File("C:\\Users\\PC_LENOVO\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + "CALCULO DEFESA" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf"));
-                
-            }else{
+
+            } else {
                 inputStream = new FileInputStream(new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + "CALCULO DEFESA" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf"));
-                
+
             }
-            
-            
-            
-            
-            
 
             //FileInputStream inputStream = new FileInputStream(new File("/opt/apache-tomcat-8.5.39/webapps/utilitario/" + "NPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf"));
             //FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\f7864599\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarContaTexto(calculo.getNumeroConta()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf"));
             OutputStream out = externalContext.getResponseOutputStream();
-            
-            
-            
+
             byte[] buffer = new byte[1024];
             int lenght;
 
@@ -769,25 +764,21 @@ public class ControleCalculo implements Serializable {
 
             externalContext.responseReset();
             externalContext.setResponseContentType("application/pdf");
-            externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\"" + "PCOND" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarContaTexto(calculo.getNumeroConta()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf\"");
+            externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\"" + "CALCULO INTERNO (PCOND)" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarContaTexto(calculo.getNumeroConta()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf\"");
 
-            
-            
-            if(Utils.getIpHost().equals("172.20.0.33")){
-                
-                 inputStream = new FileInputStream(new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + "PCONDNPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + "PCOND" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarContaTexto(calculo.getNumeroConta()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf"));
-                
-            }else if(Utils.getIpHost().equals("192.168.1.101")){
-           
-                 inputStream = new FileInputStream(new File("C:\\Users\\PC_LENOVO\\Desktop\\DistribuidorPoupancaTeste\\" + "PCONDNPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + "PCOND" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) +  ".pdf"));
-                
-            } else{
-                 inputStream = new FileInputStream(new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + "PCONDNPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + "PCOND" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) +  ".pdf"));
-                
+            if (Utils.getIpHost().equals("172.20.0.33")) {
+
+                inputStream = new FileInputStream(new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + "PCONDNPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + "CALCULO INTERNO (PCOND)" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarContaTexto(calculo.getNumeroConta()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf"));
+
+            } else if (Utils.getIpHost().equals("192.168.1.101")) {
+
+                inputStream = new FileInputStream(new File("C:\\Users\\PC_LENOVO\\Desktop\\DistribuidorPoupancaTeste\\" + "PCONDNPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + "CALCULO INTERNO (PCOND)" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf"));
+
+            } else {
+                inputStream = new FileInputStream(new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + "PCONDNPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + "CALCULO INTERNO (PCOND)" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf"));
+
             }
-            
-            
-            
+
             //FileInputStream inputStream = new FileInputStream(new File("/opt/apache-tomcat-8.5.39/webapps/utilitario/" + "PCONDNPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + "PCOND" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf"));
             //FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\f7864599\\Desktop\\DistribuidorPoupancaTeste\\" + "PCONDNPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + "PCOND" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarContaTexto(calculo.getNumeroConta()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf"));
             OutputStream out = externalContext.getResponseOutputStream();
@@ -816,26 +807,19 @@ public class ControleCalculo implements Serializable {
             externalContext.responseReset();
             externalContext.setResponseContentType("application/pdf");
             externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\"" + "Resumo de Calculo" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() + ".pdf\"");
-            
-            
-                
-           if(Utils.getIpHost().equals("172.20.0.33")){
-                
-              inputStream = new FileInputStream(new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + "NPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + "Resumo de Calculo" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() + ".pdf"));
-                
-            }else if (Utils.getIpHost().equals("192.168.1.101")){
-           
-             inputStream = new FileInputStream(new File("C:\\Users\\PC_LENOVO\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "\\"+ "Resumo de Calculo" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() +  ".pdf"));
-                
+
+            if (Utils.getIpHost().equals("172.20.0.33")) {
+
+                inputStream = new FileInputStream(new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + "NPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + "Resumo de Calculo" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() + ".pdf"));
+
+            } else if (Utils.getIpHost().equals("192.168.1.101")) {
+
+                inputStream = new FileInputStream(new File("C:\\Users\\PC_LENOVO\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + "Resumo de Calculo" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() + ".pdf"));
+
             } else {
-             inputStream = new FileInputStream(new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "\\"+ "Resumo de Calculo" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() +  ".pdf"));
-                
+                inputStream = new FileInputStream(new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + "Resumo de Calculo" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() + ".pdf"));
+
             }
-            
-
-
-
-
 
             //FileInputStream inputStream = new FileInputStream(new File("/opt/apache-tomcat-8.5.39/webapps/utilitario/" + "NPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + "Resumo de Calculo" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() + ".pdf"));
             //FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\f7864599\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "\\"+ "Resumo de Calculo" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() +  ".pdf"));
@@ -865,27 +849,20 @@ public class ControleCalculo implements Serializable {
         Funcionario usuario = (Funcionario) session.getAttribute("usuarioLogado");
 
         try {
-            
-            
-            
-            
-            
-            if(calculo.getMetodologia().getId()== 3){
-              calculo.getMora().setDataInicio(new Date("07/01/1994"));    
-              calculo.setPcond(false);
-              Indice indice = getIndiceDAO().getEm().find(Indice.class, 3);
-              calculo.getListaPeriodoCalculo().get(0).setIndice(indice);
+
+            if (calculo.getMetodologia().getId() == 3) {
+                calculo.getMora().setDataInicio(new Date("07/01/1994"));
+                calculo.setPcond(false);
+                Indice indice = getIndiceDAO().getEm().find(Indice.class, 3);
+                calculo.getListaPeriodoCalculo().get(0).setIndice(indice);
             }
-            
-            if( calculo.getMetodologia().getId()== 4 ){
-              calculo.getJuroRemuneratorio().setDataInicio(calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo());
-              calculo.getJuroRemuneratorio().setDataFinal(calculo.getListaPeriodoCalculo().get(0).getDataFinalCalculo());              
-              calculo.setPcond(false);
-             
+
+            if (calculo.getMetodologia().getId() == 4) {
+                calculo.getJuroRemuneratorio().setDataInicio(calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo());
+                calculo.getJuroRemuneratorio().setDataFinal(calculo.getListaPeriodoCalculo().get(0).getDataFinalCalculo());
+                calculo.setPcond(false);
+
             }
-            
-            
-            
 
             calculo.setDataRealizacaoCalculo(Calendar.getInstance().getTime());
             calculo.getCliente().setNomeCliente(calculo.getCliente().getNomeCliente().toUpperCase());
@@ -1327,6 +1304,14 @@ public class ControleCalculo implements Serializable {
      */
     public void setPeriodoDAO(PeriodoDAO<PeriodoDAO, Object> periodoDAO) {
         this.periodoDAO = periodoDAO;
+    }
+
+    private void gerarDocumentoPcondSemSalvar(Calculo calculoParaPcond) throws ParseException, IOException, DocumentException, Exception {
+
+        alterarParametrosParaPcond(calculoParaPcond);
+        MotorCalculoPoupanca motorCalculo = new MotorCalculoPoupanca();
+        motorCalculo.calcular(calculoParaPcond);
+
     }
 
 }

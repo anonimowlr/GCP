@@ -273,8 +273,8 @@
 
                         <h:column >
                             <f:facet name="header">PCOND</f:facet>
-                            <h:selectBooleanCheckbox id="checkPcond" value="#{c.pcond}" rendered="#{c.metodologia.id ne 3}">
-                                <f:ajax   listener="#{controleCalculo.alterarParametrosParaPcond(c)}" execute=":listagem" render=":listagem" event="click"></f:ajax>
+                            <h:selectBooleanCheckbox id="checkPcond" value="#{c.pcond}" rendered="#{c.metodologia.id ne 3 and c.valorFinal > 0}">
+                                <f:ajax    execute=":listagem" render=":listagem" event="click"></f:ajax>
                             </h:selectBooleanCheckbox>
                         </h:column>
 
@@ -283,7 +283,7 @@
                                 <f:facet name="header">Ações</f:facet>
                                 <h:commandLink id="acaoSalvar">
                                     <f:ajax listener="#{controleCalculo.avaliarParaSalvar(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
-                                    <h:graphicImage  width="20px" library="img" name="save.png" title="Salvar/Atualizar este cálculo" ></h:graphicImage>  
+                                    <h:graphicImage  width="20px" library="img" name="save.png" title="Salvar/Atualizar este cálculo"  rendered="#{c.pcond eq false}" ></h:graphicImage>  
                                 </h:commandLink>
                                 
 
