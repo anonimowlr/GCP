@@ -574,7 +574,7 @@ public class ControleCalculo implements Serializable {
 
             if (calculo.isPcond() == false) {
 
-                salvarCalculo(calculo);
+                atualizarCalculo(calculo);
                 gerarPdf.gerarDocumentoResumo(calculo.getProtocoloGsv());
             }
 
@@ -584,33 +584,33 @@ public class ControleCalculo implements Serializable {
 
     public void alterarParametrosParaPcond(Calculo calculoParaPcond) throws ParseException, IOException, DocumentException {
 
-        if (!calculo.isPcond()) {
+        if (!calculoParaPcond.isPcond()) {
             return;
         }
 
-        calculo.getListaPeriodoCalculo().get(0).setDataFinalCalculo(Utils.getDataHoraAtualMysqlDate());
-        calculo.getListaPeriodoCalculo().get(0).setIndice(indiceDAO.localizar(1));
-        calculo.setMora(calculo.getMora());
-        calculo.setHonorario(calculo.getHonorario());
-        calculo.setMulta(calculo.getMulta());
-        calculo.setPlanoEconomico(getPlanoEconomicoDAO().localizar(1));
+        calculoParaPcond.getListaPeriodoCalculo().get(0).setDataFinalCalculo(Utils.getDataHoraAtualMysqlDate());
+        calculoParaPcond.getListaPeriodoCalculo().get(0).setIndice(indiceDAO.localizar(1));
+        calculoParaPcond.setMora(calculoParaPcond.getMora());
+        calculoParaPcond.setHonorario(calculoParaPcond.getHonorario());
+        calculoParaPcond.setMulta(calculoParaPcond.getMulta());
+        calculoParaPcond.setPlanoEconomico(getPlanoEconomicoDAO().localizar(1));
 
         Mora mora = new Mora();
 
-        if (calculo.getNomeBanco().equals("BB")) {
+        if (calculoParaPcond.getNomeBanco().equals("BB")) {
             mora.setDataInicio(new Date("06/08/1993"));
 
-        } else if (calculo.getNomeBanco().equals("BNC")) {
+        } else if (calculoParaPcond.getNomeBanco().equals("BNC")) {
             mora.setDataInicio(new Date("06/21/1993"));
 
         } else {
             mora.setDataInicio(new Date("05/19/1993"));
         }
 
-        calculo.setMora(mora);
+        calculoParaPcond.setMora(mora);
 
-        calculo.setExpurgo(expurgoDAO.localizar(2));
-        calculo.setJuroRemuneratorio(new JuroRemuneratorio());
+        calculoParaPcond.setExpurgo(expurgoDAO.localizar(2));
+        calculoParaPcond.setJuroRemuneratorio(new JuroRemuneratorio());
 
     }
 
@@ -706,6 +706,15 @@ public class ControleCalculo implements Serializable {
             calculoParaPcond.setNumeroAgencia(calculo.getNumeroAgencia());
             calculoParaPcond.setNumeroConta(calculo.getNumeroConta());
             calculoParaPcond.setDiaBase(calculo.getDiaBase());
+            calculoParaPcond.setListaPeriodoCalculo(calculo.getListaPeriodoCalculo());
+            calculoParaPcond.setMora(calculo.getMora());
+            calculoParaPcond.setMetodologia(calculo.getMetodologia());
+            calculoParaPcond.setHonorario(calculo.getHonorario());
+            calculoParaPcond.setMulta(calculo.getMulta());
+            calculoParaPcond.setProtocoloGsv(calculo.getProtocoloGsv());
+            calculoParaPcond.setFuncionario(calculo.getFuncionario());
+            
+            calculoParaPcond.setPcond(true);
 
             gerarDocumentoPcondSemSalvar(calculoParaPcond);
             downloadPcond(calculoParaPcond);
