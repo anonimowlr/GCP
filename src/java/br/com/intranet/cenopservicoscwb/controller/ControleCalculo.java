@@ -869,8 +869,8 @@ public class ControleCalculo implements Serializable {
             if (calculo.getMetodologia().getId() == 4) {
                 calculo.getJuroRemuneratorio().setDataInicio(calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo());
                 calculo.getJuroRemuneratorio().setDataFinal(calculo.getListaPeriodoCalculo().get(0).getDataFinalCalculo());
-                Expurgo expurgo  =  expurgoDAO.localizar(2);
-                calculo.setExpurgo(expurgo);
+                Expurgo expurgoParaApadecoJuroRem  =  getExpurgoDAO().localizar(2);
+                calculo.setExpurgo(expurgoParaApadecoJuroRem);
                 calculo.setPcond(false);
 
             }
