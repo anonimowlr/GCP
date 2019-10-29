@@ -146,7 +146,7 @@ public class ControleCalculo implements Serializable {
                 salvar();
                 setCalculo(new Calculo());
                 getCalculo().setCliente(getCliente());
-                getCliente().adicionarCalculo(getCalculo());
+//                getCliente().adicionarCalculo(getCalculo());
                 getCalculo().setMora(getMora());
                 getCalculo().setMulta(getMulta());
                 getCalculo().setHonorario(getHonorario());
@@ -591,8 +591,10 @@ public class ControleCalculo implements Serializable {
         calculoParaPcond.getListaPeriodoCalculo().get(0).setDataFinalCalculo(Utils.getDataHoraAtualMysqlDate());
         calculoParaPcond.getListaPeriodoCalculo().get(0).setIndice(indiceDAO.localizar(1));
         calculoParaPcond.setMora(calculoParaPcond.getMora());
-        calculoParaPcond.setHonorario(calculoParaPcond.getHonorario());
-        calculoParaPcond.setMulta(calculoParaPcond.getMulta());
+        Honorario honorarioPcond = new Honorario();
+        calculoParaPcond.setHonorario(honorarioPcond);
+        Multa multaPcond = new Multa();
+        calculoParaPcond.setMulta(multaPcond);
         calculoParaPcond.setPlanoEconomico(getPlanoEconomicoDAO().localizar(1));
 
         Mora mora = new Mora();
@@ -869,7 +871,7 @@ public class ControleCalculo implements Serializable {
             if (calculo.getMetodologia().getId() == 4) {
                 calculo.getJuroRemuneratorio().setDataInicio(calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo());
                 calculo.getJuroRemuneratorio().setDataFinal(calculo.getListaPeriodoCalculo().get(0).getDataFinalCalculo());
-                Expurgo expurgoParaApadecoJuroRem  =  getExpurgoDAO().localizar(2);
+                Expurgo expurgoParaApadecoJuroRem  =  getExpurgoDAO().getEm().find(Expurgo.class, 2);
                 calculo.setExpurgo(expurgoParaApadecoJuroRem);
                 calculo.setPcond(false);
 

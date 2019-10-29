@@ -22,7 +22,7 @@ public class CalculoDAO<T, E> extends DAOGenerico<Calculo, Object>{
         classePersistente = Calculo.class;
         ordem = "id";
         maximoObjeto = 1000;
-        //em.clear();
+        em.clear();
     }
 
     public List<Calculo> consultaCalculoCpf(String cpf) {
