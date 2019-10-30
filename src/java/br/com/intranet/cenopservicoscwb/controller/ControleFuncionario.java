@@ -10,7 +10,7 @@ import br.com.intranet.cenopservicoscwb.model.entidade.Funcionario;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
  * @author f5078775
  */
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class ControleFuncionario {
   
     private boolean cargoGerencial = false;

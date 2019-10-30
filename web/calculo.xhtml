@@ -30,12 +30,12 @@
                             <h:outputText value="#{controleCalculo.calculo.remuneracaoBasica}" style="color: red">
                                 <f:converter converterId="converterMoneySaldoBase"></f:converter>
                             </h:outputText>
-                            
+
                             <h:outputLabel value="Juros Creditados:"></h:outputLabel>
                             <h:outputText value="#{controleCalculo.calculo.jurosCreditado}" style="color: red">
                                 <f:converter converterId="converterMoneySaldoBase"></f:converter>
                             </h:outputText>
-                            
+
                             <h:outputLabel value="Saldo na data base:"></h:outputLabel>
                             <h:outputText value="#{controleCalculo.saldoNaDataBase}" style="color: red">
                                 <f:converter converterId="converterMoneySaldoBase"></f:converter>
@@ -87,8 +87,19 @@
 
                             <h:commandLink actionListener="#{controleCalculo.downloadPdfResumo()}">
                                 <h:graphicImage  width="20px" library="img" name="file.png" title="Imprimir resumo de cálculos vinculados ao protocolo  #{controleCalculo.protocoloGsv.cdPrc}"  rendered="#{controleCalculo.editar}">
+                               
                                 </h:graphicImage>                                    
                             </h:commandLink>
+                            
+                            
+                            <h:commandLink >
+                                <h:graphicImage  width="20px" library="img" name="file.png" title="Gerar resumo PCOND vinculados ao protocolo  #{controleCalculo.protocoloGsv.cdPrc}"  rendered="#{controleCalculo.editar}">
+                                </h:graphicImage>                                    
+                                    <f:ajax listener="#{controleCalculo.gerarResumoPcond()}" execute="@this" render="@this" event="click" ></f:ajax>
+                            </h:commandLink>
+                            
+                            
+                            
                         </f:facet>
 
 
@@ -101,7 +112,7 @@
                             </h:selectOneMenu>
                         </h:column>
 
-                        
+
                         <h:column>
                             <f:facet name="header">CPF/CNPJ</f:facet>
                             <p:inputMask id="cpf" validator="validaCpf"  value="#{c.cliente.cpf}" style="width: 150px;height: 30px"  mask="999.999.999-99"  placeholder="informe o CPF" required="true" requiredMessage="Informe O CPF" rendered="#{c.metodologia.id ne 2}" >
@@ -166,7 +177,7 @@
                                 <f:ajax  listener="#{controleCalculo.calcularParaConferencia(c)}"  execute=":listagem" render="@this :formRemuneracaoEsperada :listagem" event="blur"></f:ajax>
                             </h:inputText>                                               
                         </h:column>
-                        
+
 
                         <h:column >
                             <f:facet name="header">Dia Base</f:facet>
@@ -179,7 +190,7 @@
                         <h:column>
                             <f:facet name="header"><p style="font-size: 11pt; font: bold;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Índice&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inicio Correção &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fim Correção</p></f:facet>
                             <h:dataTable value="#{c.listaPeriodoCalculo}" var="d" id="tabelaListaPeriodo">
-                                
+
                                 <h:column>
                                     <h:selectOneMenu value="#{d.indice}" style="height: 30px;width: 120px">
                                         <f:converter converterId="converterIndice"></f:converter>
@@ -194,7 +205,7 @@
                                         <f:ajax listener="#{controleCalculo.calcularParaConferencia(c)}" execute=":listagem" render="@this :formRemuneracaoEsperada :listagem" event="blur"></f:ajax>
                                     </p:inputMask>
                                 </h:column> 
-                                
+
                                 <h:column>
                                     <p:inputMask  mask="99/99/9999" id="dataFinal" value="#{d.dataFinalCalculo}" style="width: 100px;height: 30px" >
                                         <f:converter converterId="converterDate"></f:converter>
@@ -219,7 +230,7 @@
                             </p:inputMask>                        
                         </h:column>
 
-                        
+
                         <h:column>
                             <f:facet name="header">Fim Juros Rem.</f:facet>
                             <p:inputMask  mask="99/99/9999"  value="#{c.juroRemuneratorio.dataFinal}" style="width: 100px;height: 30px" rendered="#{c.metodologia.id ne 3}">
@@ -235,8 +246,8 @@
                                 <f:ajax execute="@this" render="valorHonorario" event="blur"></f:ajax>
                             </h:inputText>
                         </h:column>
-                        
-                        
+
+
                         <h:column>
                             <f:facet name="header">Valor Honorário</f:facet>
                             <h:inputText  id="valorHonorario" value="#{c.honorario.valorHonorario}" disabled="#{c.honorario.taxaHonorario > 0}" style="width: 80px;height: 30px" >
@@ -244,8 +255,8 @@
                                 <f:ajax execute="@this" render="@this" event="blur"></f:ajax>
                             </h:inputText>
                         </h:column>
-                        
-                        
+
+
                         <h:column>
                             <f:facet name="header">Multa %</f:facet>
                             <h:inputText value="#{c.multa.taxaMulta}" style="width: 70px;height: 30px" >
@@ -261,8 +272,8 @@
                                 <f:selectItems value="#{controleCalculo.expurgoDAO.listaTodos}" var="p" itemLabel="#{p.marcador}"></f:selectItems>
                             </h:selectOneMenu>
                         </h:column>
-                        
-                        
+
+
                         <h:column>
                             <f:facet name="header">Valor Final</f:facet>
                             <h:inputText id="valorFinal" value="#{c.valorFinal}" style="height: 30px;width: 100px; background-color: #E3E3E3; font-style: italic" disabled="true">
@@ -280,26 +291,33 @@
 
 
                         <h:column id="acoes">
-                                <f:facet name="header">Ações</f:facet>
-                                <h:commandLink id="acaoSalvar">
-                                    <f:ajax listener="#{controleCalculo.avaliarParaSalvar(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
-                                    <h:graphicImage  width="20px" library="img" name="save.png" title="Salvar/Atualizar este cálculo"  rendered="#{c.pcond eq false}" ></h:graphicImage>  
-                                </h:commandLink>
-                                
+                            <f:facet name="header">Ações</f:facet>
+                            <h:commandLink id="acaoSalvar">
+                                <f:ajax listener="#{controleCalculo.avaliarParaSalvar(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
+                                <h:graphicImage  width="20px" library="img" name="save.png" title="Salvar/Atualizar este cálculo"  rendered="#{c.pcond eq false}" ></h:graphicImage>  
+                            </h:commandLink>
 
-                                <h:commandLink id="acaoImprimirCalculoIndividual" actionListener="#{controleCalculo.avaliarParaImprimir(c)}" rendered="#{c.valorFinal ne null  }">
-                                    <h:graphicImage  width="20px" library="img" name="print.jpg" title="Imprimir Cálculo" ></h:graphicImage>                                    
-                                </h:commandLink>
-                                
 
-                                <h:outputLabel for="file"  class="upload"  >
-                                    <h:graphicImage   width="20px" library="img" name="up.png" title="Vincular imagem de extrato à conta informada" ></h:graphicImage>
-                                </h:outputLabel>
-                                
-                                
-                                <h:inputFile  id="file"  value="#{controleCalculo.file}" title="Selecione um arquivo" label="Carregar arquivo"   class="upload"  style="display: none">
-                                    <f:ajax listener="#{controleCalculo.upload(c)}" execute=":istagem" render=":listagem"></f:ajax>
-                                </h:inputFile>
+                            <h:commandLink id="acaoImprimirCalculoIndividual" actionListener="#{controleCalculo.avaliarParaImprimir(c)}" rendered="#{c.valorFinal ne null  }">
+                                <h:graphicImage  width="20px" library="img" name="print.jpg" title="Imprimir Cálculo" ></h:graphicImage>                                    
+                            </h:commandLink>
+
+
+                            <h:outputLabel for="file"  class="upload"  >
+                                <h:graphicImage   width="20px" library="img" name="up.png" title="Vincular imagem de extrato à conta informada" ></h:graphicImage>
+                            </h:outputLabel>
+
+
+                            <h:commandLink  id="removerLinha" onclick="if (!confirm('Deseja realmente excluir?'))
+                                        return false" >
+                                <f:ajax listener="#{controleCalculo.removeLinhaCalculo(c)}" execute="@this" render=":listagem" event="click" ></f:ajax>
+                                <h:graphicImage  width="20px" library="img" name="trash.png" title="Excluir" ></h:graphicImage>                                    
+                            </h:commandLink>
+
+
+                            <h:inputFile  id="file"  value="#{controleCalculo.file}" title="Selecione um arquivo" label="Carregar arquivo"   class="upload"  style="display: none">
+                                <f:ajax listener="#{controleCalculo.upload(c)}" execute=":istagem" render=":listagem"></f:ajax>
+                            </h:inputFile>
 
                         </h:column>
 
