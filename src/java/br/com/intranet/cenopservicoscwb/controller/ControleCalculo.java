@@ -95,6 +95,8 @@ public class ControleCalculo implements Serializable {
     private Atualizacao atualizacao;
     private PeriodoCalculo periodoCalculo;
     private List<Calculo> listaCalculoPcond;
+    private Calculo calculoParaPcond;
+    
 
     public ControleCalculo() {
 
@@ -106,8 +108,6 @@ public class ControleCalculo implements Serializable {
         cliente = new Cliente();
         mora = new Mora();
         juroRemuneratorio = new JuroRemuneratorio();
-        honorario = new Honorario();
-        multa = new Multa();
         calculoDAO = new CalculoDAO<>();
         expurgoDAO = new ExpurgoDAO<>();
         protocoloGsvDAO = new ProtocoloGsvDAO<>();
@@ -117,6 +117,7 @@ public class ControleCalculo implements Serializable {
         funcionarioDAO = new FuncionarioDAO<>();
         clienteDAO = new ClienteDAO<>();
         listaCalculoPcond = new ArrayList<>();
+        calculoParaPcond = new Calculo();
 
     }
 
@@ -142,6 +143,8 @@ public class ControleCalculo implements Serializable {
                 if (protocoloGsv == null) {
                     getNpj().adicionarProtocolo(getProtocoloGsv());
                     getProtocoloGsv().setNpj(getNpj());
+                    getProtocoloGsv().setHonorario(new Honorario());
+                    getProtocoloGsv().setMulta(new Multa());
 
                 }
 
@@ -150,8 +153,7 @@ public class ControleCalculo implements Serializable {
                 getCalculo().setCliente(getCliente());
 //                getCliente().adicionarCalculo(getCalculo());
                 getCalculo().setMora(getMora());
-                getCalculo().setMulta(getMulta());
-                getCalculo().setHonorario(getHonorario());
+               
                 getCalculo().setJuroRemuneratorio(getJuroRemuneratorio());
                 getCalculo().setArquivo(getArquivo());
                 getProtocoloGsv().adicionarCalculo(getCalculo());
@@ -169,44 +171,107 @@ public class ControleCalculo implements Serializable {
     }
     
     
-    public void gerarResumoPcond(){
+    public void gerarResumoPcond() throws ParseException, IOException, DocumentException, Exception{
         
-        this.listaCalculoPcond.clear();
+       
+        
+        
+        getListaCalculoPcond().clear();
         
         for (Calculo calculo : getProtocoloGsv().getListaCalculo()) {
             
             if(calculo.isPcond()== true){
-                this.listaCalculoPcond.add(calculo);
-            }
-        
-        }
-        
-        
-        if(this.listaCalculoPcond.isEmpty()){
-                Util.mensagemErro("Selecione pelo menos um cálculo para gerar o resumo!!");
-        }
-        
-        
-        
-        if(this.listaCalculoPcond.isEmpty()== false){
-            
-            for (Calculo c : this.listaCalculoPcond) {
                 
-                 Util.mensagemInformacao("saldo calculo selecionado" +  c.getSaldoBase() );
+                setCalculoParaPcond(new Calculo());
+                
+                adicionarValorAtributosCalcPcond(calculo);
+                
+                
+                
             }
+        
+        }
+        
+        
+        if(getListaCalculoPcond().isEmpty()){
+                Util.mensagemErro("Selecione pelo menos um cálculo para gerar o resumo de PCOND!!");
+                
+        
+        }
+        
+        
+        
+        if(getListaCalculoPcond().isEmpty()== false){
             
+           GerarPdf gerarPdf = new GerarPdf();
+           gerarPdf.gerarDocumentoResumoPcond(getProtocoloGsv(),getListaCalculoPcond());
+                   
+           
+            donwloadResumoPcond();
             
             
             
         }
         
-        Util.mensagemInformacao("Tamanho da lista" + this.listaCalculoPcond.size() );
+        
         
         
         
         
         
     }
+    
+    
+    
+   
+    
+    
+    public void donwloadResumoPcond(){
+        
+         try {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = fc.getExternalContext();
+
+            externalContext.responseReset();
+            externalContext.setResponseContentType("application/pdf");
+            externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\"" + "Resumo de Calculo Interno (PCOND)" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() + ".pdf\"");
+
+            if (Utils.getIpHost().equals("172.20.0.33")) {
+
+                setInputStream(new FileInputStream(new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + "NPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + "Resumo de Calculo Interno (PCOND)" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() + ".pdf")));
+
+            } else if (Utils.getIpHost().equals("192.168.1.101")) {
+
+                setInputStream(new FileInputStream(new File("C:\\Users\\PC_LENOVO\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + getCalculo().getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + "Resumo de Calculo Interno (PCOND)" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() + ".pdf")));
+
+            } else {
+                setInputStream(new FileInputStream(new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + getCalculo().getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + "Resumo de Calculo Interno (PCOND)" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() + ".pdf")));
+
+            }
+
+            //FileInputStream inputStream = new FileInputStream(new File("/opt/apache-tomcat-8.5.39/webapps/utilitario/" + "NPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + "Resumo de Calculo" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() + ".pdf"));
+            //FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\f7864599\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "\\"+ "Resumo de Calculo" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() +  ".pdf"));
+            //FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\f7864599\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + "Resumo de Calculo" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() + ".pdf"));
+            OutputStream out = externalContext.getResponseOutputStream();
+            byte[] buffer = new byte[1024];
+            int lenght;
+
+            while ((lenght = getInputStream().read(buffer)) > 0) {
+                out.write(buffer);
+            }
+
+            out.flush();
+            fc.responseComplete();
+        } catch (Exception e) {
+            Util.mensagemErro(Util.getMensagemErro(e));
+
+        }
+
+         
+        
+        
+    }
+    
     
     
 
@@ -249,16 +314,12 @@ public class ControleCalculo implements Serializable {
 
             setMora(new Mora());
             setCliente(getCalculo().getCliente());
-            setHonorario(new Honorario());
-            setMulta(new Multa());
             setJuroRemuneratorio(new JuroRemuneratorio());
             setArquivo(new Arquivo());
 
             getCalculo().setCliente(getCliente());
             //getCliente().adicionarCalculo(getCalculo());
             getCalculo().setMora(getMora());
-            getCalculo().setHonorario(getHonorario());
-            getCalculo().setMulta(getMulta());
             getCalculo().setJuroRemuneratorio(getJuroRemuneratorio());
             getProtocoloGsv().adicionarCalculo(getCalculo());
 
@@ -742,28 +803,53 @@ public class ControleCalculo implements Serializable {
         }
 
     }
+    
+    
+    public void adicionarValorAtributosCalcPcond(Calculo calculo) throws Exception{
+            getCalculoParaPcond().setSaldoBase(calculo.getSaldoBase());
+            getCalculoParaPcond().setCliente(calculo.getCliente());
+            getCalculoParaPcond().setNomeBanco(calculo.getNomeBanco());
+            getCalculoParaPcond().setNumeroAgencia(calculo.getNumeroAgencia());
+            getCalculoParaPcond().setNumeroConta(calculo.getNumeroConta());
+            getCalculoParaPcond().setDiaBase(calculo.getDiaBase());
+            getCalculoParaPcond().setListaPeriodoCalculo(calculo.getListaPeriodoCalculo());
+            getCalculoParaPcond().setMora(calculo.getMora());
+            getCalculoParaPcond().setMetodologia(calculo.getMetodologia());
+            getCalculoParaPcond().setHonorario(calculo.getHonorario());
+            getCalculoParaPcond().setMulta(calculo.getMulta());
+            getCalculoParaPcond().setProtocoloGsv(calculo.getProtocoloGsv());
+            getCalculoParaPcond().setFuncionario(calculo.getFuncionario());
+            
+            getCalculoParaPcond().setPcond(true);
+            alterarParametrosParaPcond(getCalculoParaPcond());
+            MotorCalculoPoupanca motorCalculoPoupanca = new MotorCalculoPoupanca();
+            motorCalculoPoupanca.calcularPcondparaListaResumo(getCalculoParaPcond());
+            getListaCalculoPcond().add(getCalculoParaPcond());
+    }
+    
+    
 
     public void avaliarParaImprimir(Calculo calculo) throws DocumentException, ParseException, IOException, Exception {
         if (calculo.isPcond()) {
 
-            Calculo calculoParaPcond = new Calculo();
-            calculoParaPcond.setSaldoBase(calculo.getSaldoBase());
-            calculoParaPcond.setCliente(calculo.getCliente());
-            calculoParaPcond.setNomeBanco(calculo.getNomeBanco());
-            calculoParaPcond.setNumeroAgencia(calculo.getNumeroAgencia());
-            calculoParaPcond.setNumeroConta(calculo.getNumeroConta());
-            calculoParaPcond.setDiaBase(calculo.getDiaBase());
-            calculoParaPcond.setListaPeriodoCalculo(calculo.getListaPeriodoCalculo());
-            calculoParaPcond.setMora(calculo.getMora());
-            calculoParaPcond.setMetodologia(calculo.getMetodologia());
-            calculoParaPcond.setHonorario(calculo.getHonorario());
-            calculoParaPcond.setMulta(calculo.getMulta());
-            calculoParaPcond.setProtocoloGsv(calculo.getProtocoloGsv());
-            calculoParaPcond.setFuncionario(calculo.getFuncionario());
             
-            calculoParaPcond.setPcond(true);
+            getCalculoParaPcond().setSaldoBase(calculo.getSaldoBase());
+            getCalculoParaPcond().setCliente(calculo.getCliente());
+            getCalculoParaPcond().setNomeBanco(calculo.getNomeBanco());
+            getCalculoParaPcond().setNumeroAgencia(calculo.getNumeroAgencia());
+            getCalculoParaPcond().setNumeroConta(calculo.getNumeroConta());
+            getCalculoParaPcond().setDiaBase(calculo.getDiaBase());
+            getCalculoParaPcond().setListaPeriodoCalculo(calculo.getListaPeriodoCalculo());
+            getCalculoParaPcond().setMora(calculo.getMora());
+            getCalculoParaPcond().setMetodologia(calculo.getMetodologia());
+            getCalculoParaPcond().setHonorario(calculo.getHonorario());
+            getCalculoParaPcond().setMulta(calculo.getMulta());
+            getCalculoParaPcond().setProtocoloGsv(calculo.getProtocoloGsv());
+            getCalculoParaPcond().setFuncionario(calculo.getFuncionario());
+            
+            getCalculoParaPcond().setPcond(true);
 
-            gerarDocumentoPcondSemSalvar(calculoParaPcond);
+            gerarDocumentoPcondSemSalvar(getCalculoParaPcond());
             downloadPcond(calculoParaPcond);
         } else {
             downloadPdf(calculo);
@@ -1398,6 +1484,20 @@ public class ControleCalculo implements Serializable {
      */
     public void setListaCalculoPcond(List<Calculo> listaCalculoPcond) {
         this.listaCalculoPcond = listaCalculoPcond;
+    }
+
+    /**
+     * @return the calculoParaPcond
+     */
+    public Calculo getCalculoParaPcond() {
+        return calculoParaPcond;
+    }
+
+    /**
+     * @param calculoParaPcond the calculoParaPcond to set
+     */
+    public void setCalculoParaPcond(Calculo calculoParaPcond) {
+        this.calculoParaPcond = calculoParaPcond;
     }
 
 }

@@ -48,12 +48,41 @@
 
 
 
+            <div id="honorMulta" align="left" style="width: 30%">
+                <h:form id="formHonorarioMulta">
+                    <h:panelGrid columns="2" id="panelGrid">
+                        <h:outputLabel value="Honorário % :"></h:outputLabel>
+                        <h:inputText value="#{controleCalculo.protocoloGsv.honorario.taxaHonorario}" rendered="#{controleCalculo.recolhido == false}" style="height: 30px;width: 80px">
+                            <f:converter converterId="converterMoney"></f:converter>
+                            <f:ajax execute="@this" render="valorHonorario" event="blur"></f:ajax>
+                        </h:inputText>
+
+                        <h:outputLabel value="Valor Honorário :"></h:outputLabel>
+                        <h:inputText id="valorHonorario" value="#{controleCalculo.protocoloGsv.honorario.valorHonorario}" rendered="#{controleCalculo.recolhido == false}" style="height: 30px;width: 80px">
+                            <f:converter converterId="converterMoney"></f:converter>
+                            <f:ajax execute="@this" render="@this" event="blur"></f:ajax>
+                        </h:inputText>
+                        <h:outputLabel value="Multa :"></h:outputLabel>
+                        <h:inputText  value="#{controleCalculo.protocoloGsv.multa.taxaMulta}" rendered="#{controleCalculo.recolhido == false}" style="height: 30px;width: 70px">
+                            <f:converter converterId="converterMoney"></f:converter>
+                            <f:ajax execute="@this" render="@this" event="blur"></f:ajax>
+                        </h:inputText>
+
+                    </h:panelGrid>
+                </h:form>
+            </div>
+
+
+
+
+
+
             <h:form  id="formPrincipal" prependId="false" enctype="multipart/form-data" >
 
 
 
                 <div id="divNpjProtocolo" align="left" style="width: 30%">
-                    <h:panelGrid columns="5" id="panelGrid">
+                    <h:panelGrid columns="2" id="panelGrid">
                         <h:outputLabel value="NPJ: "></h:outputLabel>
                         <p:inputMask  mask="9999/9999999-999" id="npj" value="#{controleCalculo.npj.nrPrc}" style="height: 30px;width: 200px">
                             <f:converter converterId="converterBigInt"></f:converter>
@@ -65,6 +94,8 @@
                             <f:converter converterId="converterInt"></f:converter>
                             <f:ajax listener="#{controleCalculo.avaliarAlteracaoParametros()}" execute="@all" render="@all" event="change" ></f:ajax>
                         </h:inputText>
+
+
                     </h:panelGrid>
                 </div>
 
@@ -77,7 +108,7 @@
 
                         <f:facet name="header">
                             <h:commandLink>
-                                <f:ajax listener="#{controleCalculo.duplicar()}" execute="@all" render=":listagem :formRemuneracaoEsperada" event="click"></f:ajax>
+                                <f:ajax listener="#{controleCalculo.duplicar()}" execute="@all" render=":listagem :formRemuneracaoEsperada :formHonorarioMulta " event="click"></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="add.png" title="Adicionar Linha" ></h:graphicImage>                                  
                             </h:commandLink>
 
@@ -87,19 +118,19 @@
 
                             <h:commandLink actionListener="#{controleCalculo.downloadPdfResumo()}">
                                 <h:graphicImage  width="20px" library="img" name="file.png" title="Imprimir resumo de cálculos vinculados ao protocolo  #{controleCalculo.protocoloGsv.cdPrc}"  rendered="#{controleCalculo.editar}">
-                               
+
                                 </h:graphicImage>                                    
                             </h:commandLink>
-                            
-                            
-                            <h:commandLink >
+
+
+                            <h:commandLink actionListener="#{controleCalculo.gerarResumoPcond()}" onclick="if (!confirm('Tempo de procesamento do resumo aproximadamente 25 segundos. Confirma?'))
+                                        return false" >
                                 <h:graphicImage  width="20px" library="img" name="file.png" title="Gerar resumo PCOND vinculados ao protocolo  #{controleCalculo.protocoloGsv.cdPrc}"  rendered="#{controleCalculo.editar}">
                                 </h:graphicImage>                                    
-                                    <f:ajax listener="#{controleCalculo.gerarResumoPcond()}" execute="@this" render="@this" event="click" ></f:ajax>
                             </h:commandLink>
-                            
-                            
-                            
+
+
+
                         </f:facet>
 
 
@@ -174,7 +205,7 @@
                             <f:facet name="header">Saldo Base</f:facet>
                             <h:inputText id="saldoBase" value="#{c.saldoBase}" style="height: 30px;width: 100px">
                                 <f:converter converterId="converterMoneySaldoBase"></f:converter>
-                                <f:ajax  listener="#{controleCalculo.calcularParaConferencia(c)}"  execute=":listagem" render="@this :formRemuneracaoEsperada :listagem" event="blur"></f:ajax>
+                                <f:ajax  listener="#{controleCalculo.calcularParaConferencia(c)}"  execute=":listagem" render="@this :formRemuneracaoEsperada :listagem " event="blur"></f:ajax>
                             </h:inputText>                                               
                         </h:column>
 
@@ -239,30 +270,6 @@
                         </h:column>
 
 
-                        <h:column>
-                            <f:facet name="header">Honorário %</f:facet>
-                            <h:inputText value="#{c.honorario.taxaHonorario}" style="width: 70px;height: 30px" >
-                                <f:converter converterId="converterMoney"></f:converter>
-                                <f:ajax execute="@this" render="valorHonorario" event="blur"></f:ajax>
-                            </h:inputText>
-                        </h:column>
-
-
-                        <h:column>
-                            <f:facet name="header">Valor Honorário</f:facet>
-                            <h:inputText  id="valorHonorario" value="#{c.honorario.valorHonorario}" disabled="#{c.honorario.taxaHonorario > 0}" style="width: 80px;height: 30px" >
-                                <f:converter converterId="converterMoneySaldoBase"></f:converter>
-                                <f:ajax execute="@this" render="@this" event="blur"></f:ajax>
-                            </h:inputText>
-                        </h:column>
-
-
-                        <h:column>
-                            <f:facet name="header">Multa %</f:facet>
-                            <h:inputText value="#{c.multa.taxaMulta}" style="width: 70px;height: 30px" >
-                                <f:converter converterId="converterMoney"></f:converter>
-                            </h:inputText>
-                        </h:column>
 
 
                         <h:column>

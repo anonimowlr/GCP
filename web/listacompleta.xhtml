@@ -218,11 +218,6 @@
                             </h:graphicImage>                                    
                         </h:commandLink> 
 
-                        <h:commandLink  id="removerLinha" onclick="if (!confirm('Deseja realmente excluir?'))
-                                    return false" >
-                            <f:ajax listener="#{controleListaCompleta.removeLinhaCalculo(c)}" execute="@this" render=":listagem" event="click" ></f:ajax>
-                            <h:graphicImage  width="20px" library="img" name="trash.png" title="Excluir" ></h:graphicImage>                                    
-                        </h:commandLink>
                         <h:commandLink  id="editar" >
                             <f:ajax listener="#{controleListaCompleta.editar(c)}" execute="@all" render="@all" event="click" ></f:ajax>
                             <h:graphicImage  width="20px" library="img" name="pencil.png" title="Editar" ></h:graphicImage>                                    
