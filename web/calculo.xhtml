@@ -48,41 +48,13 @@
 
 
 
-            <div id="honorMulta" align="left" style="width: 30%">
-                <h:form id="formHonorarioMulta">
-                    <h:panelGrid columns="2" id="panelGrid">
-                        <h:outputLabel value="Honorário % :"></h:outputLabel>
-                        <h:inputText value="#{controleCalculo.protocoloGsv.honorario.taxaHonorario}" rendered="#{controleCalculo.recolhido == false}" style="height: 30px;width: 80px">
-                            <f:converter converterId="converterMoney"></f:converter>
-                            <f:ajax execute="@this" render="valorHonorario" event="blur"></f:ajax>
-                        </h:inputText>
-
-                        <h:outputLabel value="Valor Honorário :"></h:outputLabel>
-                        <h:inputText id="valorHonorario" value="#{controleCalculo.protocoloGsv.honorario.valorHonorario}" rendered="#{controleCalculo.recolhido == false}" style="height: 30px;width: 80px">
-                            <f:converter converterId="converterMoney"></f:converter>
-                            <f:ajax execute="@this" render="@this" event="blur"></f:ajax>
-                        </h:inputText>
-                        <h:outputLabel value="Multa :"></h:outputLabel>
-                        <h:inputText  value="#{controleCalculo.protocoloGsv.multa.taxaMulta}" rendered="#{controleCalculo.recolhido == false}" style="height: 30px;width: 70px">
-                            <f:converter converterId="converterMoney"></f:converter>
-                            <f:ajax execute="@this" render="@this" event="blur"></f:ajax>
-                        </h:inputText>
-
-                    </h:panelGrid>
-                </h:form>
-            </div>
-
-
-
-
-
-
             <h:form  id="formPrincipal" prependId="false" enctype="multipart/form-data" >
 
 
 
                 <div id="divNpjProtocolo" align="left" style="width: 30%">
-                    <h:panelGrid columns="2" id="panelGrid">
+
+                    <h:panelGrid columns="11" id="panelGrid">
                         <h:outputLabel value="NPJ: "></h:outputLabel>
                         <p:inputMask  mask="9999/9999999-999" id="npj" value="#{controleCalculo.npj.nrPrc}" style="height: 30px;width: 200px">
                             <f:converter converterId="converterBigInt"></f:converter>
@@ -96,7 +68,24 @@
                         </h:inputText>
 
 
+
                     </h:panelGrid>
+                    <h:panelGrid columns="6">
+                        <h:panelGroup id="grupoHonorMulta">
+
+                            <h:outputLabel value="Multa % : " rendered="#{controleCalculo.editar}"></h:outputLabel>
+                            <h:inputText id="txMulta" value="#{controleCalculo.multa.taxaMulta}"  rendered="#{controleCalculo.editar}" style="height: 30px;width: 150px" >
+                                <f:converter converterId="converterMoneySaldoBase"></f:converter>
+                                <f:ajax  execute="@this" render="@this" event="blur"></f:ajax>
+                            </h:inputText>
+                            <h:outputLabel value="Honorario % : " rendered="#{controleCalculo.editar}"></h:outputLabel>
+                            <h:inputText id="txHonorario" value="#{controleCalculo.honorario.taxaHonorario}"  rendered="#{controleCalculo.editar}" style="height: 30px;width: 150px" >
+                                <f:converter converterId="converterMoneySaldoBase"></f:converter>
+                                <f:ajax  execute="@this" render="@this" event="blur"></f:ajax>
+                            </h:inputText>
+                        </h:panelGroup>
+                    </h:panelGrid>
+
                 </div>
 
 
@@ -108,7 +97,7 @@
 
                         <f:facet name="header">
                             <h:commandLink>
-                                <f:ajax listener="#{controleCalculo.duplicar()}" execute="@all" render=":listagem :formRemuneracaoEsperada :formHonorarioMulta " event="click"></f:ajax>
+                                <f:ajax listener="#{controleCalculo.duplicar()}" execute="@all" render=":listagem :formRemuneracaoEsperada  :grupoHonorMulta" event="click"></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="add.png" title="Adicionar Linha" ></h:graphicImage>                                  
                             </h:commandLink>
 
@@ -118,19 +107,12 @@
 
                             <h:commandLink actionListener="#{controleCalculo.downloadPdfResumo()}">
                                 <h:graphicImage  width="20px" library="img" name="file.png" title="Imprimir resumo de cálculos vinculados ao protocolo  #{controleCalculo.protocoloGsv.cdPrc}"  rendered="#{controleCalculo.editar}">
-
                                 </h:graphicImage>                                    
                             </h:commandLink>
-
-
-                            <h:commandLink actionListener="#{controleCalculo.gerarResumoPcond()}" onclick="if (!confirm('Tempo de procesamento do resumo aproximadamente 25 segundos. Confirma?'))
-                                        return false" >
-                                <h:graphicImage  width="20px" library="img" name="file.png" title="Gerar resumo PCOND vinculados ao protocolo  #{controleCalculo.protocoloGsv.cdPrc}"  rendered="#{controleCalculo.editar}">
+                            <h:commandLink actionListener="#{controleCalculo.gerarResumoPcond()}">
+                                <h:graphicImage  width="20px" library="img" name="file.png" title="Imprimir resumo de PCOND vinculados ao protocolo  #{controleCalculo.protocoloGsv.cdPrc}"  rendered="#{controleCalculo.editar}">
                                 </h:graphicImage>                                    
                             </h:commandLink>
-
-
-
                         </f:facet>
 
 
@@ -138,7 +120,7 @@
                             <f:facet name="header">Metodologia</f:facet>
                             <h:selectOneMenu value="#{c.metodologia}" style="height: 30px;width: 140px;" >
                                 <f:converter converterId="converterMetodologia"></f:converter>
-                                <f:selectItems value="#{controleCalculo.metodologiaDAO.listaTodos}" var="p" itemLabel="#{p.nomeMetodologia}"></f:selectItems>
+                                <f:selectItems value="#{controleCalculo.metodologiaDAO.listaTodos}" var="p" itemLabel="#{p.nomeMetodologia}"  ></f:selectItems>
                                 <f:ajax  listener="#{controleCalculo.configuraLinhaPj(c)}"  execute="@this" render=":listagem" event="change"></f:ajax>
                             </h:selectOneMenu>
                         </h:column>
@@ -205,7 +187,7 @@
                             <f:facet name="header">Saldo Base</f:facet>
                             <h:inputText id="saldoBase" value="#{c.saldoBase}" style="height: 30px;width: 100px">
                                 <f:converter converterId="converterMoneySaldoBase"></f:converter>
-                                <f:ajax  listener="#{controleCalculo.calcularParaConferencia(c)}"  execute=":listagem" render="@this :formRemuneracaoEsperada :listagem " event="blur"></f:ajax>
+                                <f:ajax  listener="#{controleCalculo.calcularParaConferencia(c)}"  execute=":listagem" render="@this :formRemuneracaoEsperada :listagem" event="blur"></f:ajax>
                             </h:inputText>                                               
                         </h:column>
 
@@ -315,16 +297,15 @@
                             </h:outputLabel>
 
 
-                            <h:commandLink  id="removerLinha" onclick="if (!confirm('Deseja realmente excluir?'))
-                                        return false" >
-                                <f:ajax listener="#{controleCalculo.removeLinhaCalculo(c)}" execute="@this" render=":listagem" event="click" ></f:ajax>
-                                <h:graphicImage  width="20px" library="img" name="trash.png" title="Excluir" ></h:graphicImage>                                    
-                            </h:commandLink>
-
-
                             <h:inputFile  id="file"  value="#{controleCalculo.file}" title="Selecione um arquivo" label="Carregar arquivo"   class="upload"  style="display: none">
                                 <f:ajax listener="#{controleCalculo.upload(c)}" execute=":istagem" render=":listagem"></f:ajax>
                             </h:inputFile>
+
+                            <h:commandLink  id="removerLinha" onclick="if (!confirm('Deseja realmente excluir?'))
+                                        return false" >
+                                <f:ajax listener="#{controleCalculo.removeLinhaCalculo(c)}" execute="@this" render=":listagem" event="click" ></f:ajax>
+                                <h:graphicImage  width="20px" library="img" name="trash.png" title="Excluir"   rendered="#{c.id ne null}"></h:graphicImage>                                    
+                            </h:commandLink>
 
                         </h:column>
 
@@ -340,4 +321,3 @@
     </ui:composition>
 
 </html>
-

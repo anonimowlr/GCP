@@ -96,7 +96,6 @@ public class ControleCalculo implements Serializable {
     private PeriodoCalculo periodoCalculo;
     private List<Calculo> listaCalculoPcond;
     private Calculo calculoParaPcond;
-    
 
     public ControleCalculo() {
 
@@ -108,6 +107,9 @@ public class ControleCalculo implements Serializable {
         cliente = new Cliente();
         mora = new Mora();
         juroRemuneratorio = new JuroRemuneratorio();
+        honorario = new Honorario();
+        calculoParaPcond = new Calculo();
+        multa = new Multa();
         calculoDAO = new CalculoDAO<>();
         expurgoDAO = new ExpurgoDAO<>();
         protocoloGsvDAO = new ProtocoloGsvDAO<>();
@@ -116,8 +118,8 @@ public class ControleCalculo implements Serializable {
         indiceDAO = new IndiceDAO<>();
         funcionarioDAO = new FuncionarioDAO<>();
         clienteDAO = new ClienteDAO<>();
-        listaCalculoPcond = new ArrayList<>();
-        calculoParaPcond = new Calculo();
+        protocoloGsv.setMulta(multa);
+        protocoloGsv.setHonorario(honorario);
 
     }
 
@@ -136,6 +138,17 @@ public class ControleCalculo implements Serializable {
                 setNpj(protocoloGsv.getNpj());
                 setProtocoloGsv(protocoloGsv);
                 getNpj().adicionarProtocolo(getProtocoloGsv());
+                if (getProtocoloGsv().getMulta() != null) {
+
+                    setMulta(getProtocoloGsv().getMulta());
+                    getProtocoloGsv().setMulta(getMulta());
+                    setHonorario(getProtocoloGsv().getHonorario());
+                    getProtocoloGsv().setHonorario(getProtocoloGsv().getHonorario());
+                } else{
+                    getProtocoloGsv().setMulta(getMulta());
+                    getProtocoloGsv().setHonorario(getHonorario());
+                }
+
                 return;
 
             } else {
@@ -143,17 +156,22 @@ public class ControleCalculo implements Serializable {
                 if (protocoloGsv == null) {
                     getNpj().adicionarProtocolo(getProtocoloGsv());
                     getProtocoloGsv().setNpj(getNpj());
-                    getProtocoloGsv().setHonorario(new Honorario());
-                    getProtocoloGsv().setMulta(new Multa());
+
+                }
+                if (protocoloGsv != null && protocoloGsv.getMulta() != null) {
+
+                    setMulta(protocoloGsv.getMulta());
+                    getProtocoloGsv().setMulta(getMulta());
+                    setHonorario(protocoloGsv.getHonorario());
+                    getProtocoloGsv().setHonorario(getHonorario());
 
                 }
 
                 salvar();
                 setCalculo(new Calculo());
                 getCalculo().setCliente(getCliente());
-//                getCliente().adicionarCalculo(getCalculo());
+                // getCliente().adicionarCalculo(getCalculo());
                 getCalculo().setMora(getMora());
-               
                 getCalculo().setJuroRemuneratorio(getJuroRemuneratorio());
                 getCalculo().setArquivo(getArquivo());
                 getProtocoloGsv().adicionarCalculo(getCalculo());
@@ -169,66 +187,42 @@ public class ControleCalculo implements Serializable {
         }
 
     }
-    
-    
-    public void gerarResumoPcond() throws ParseException, IOException, DocumentException, Exception{
-        
-       
-        
-        
+
+    public void gerarResumoPcond() throws ParseException, IOException, DocumentException, Exception {
+
         getListaCalculoPcond().clear();
-        
+
         for (Calculo calculo : getProtocoloGsv().getListaCalculo()) {
-            
-            if(calculo.isPcond()== true){
-                
+
+            if (calculo.isPcond() == true) {
+
                 setCalculoParaPcond(new Calculo());
-                
+
                 adicionarValorAtributosCalcPcond(calculo);
-                
-                
-                
+
             }
-        
+
         }
-        
-        
-        if(getListaCalculoPcond().isEmpty()){
-                Util.mensagemErro("Selecione pelo menos um cálculo para gerar o resumo de PCOND!!");
-                
-        
+
+        if (getListaCalculoPcond().isEmpty()) {
+            Util.mensagemErro("Selecione pelo menos um cálculo para gerar o resumo de PCOND!!");
+
         }
-        
-        
-        
-        if(getListaCalculoPcond().isEmpty()== false){
-            
-           GerarPdf gerarPdf = new GerarPdf();
-           gerarPdf.gerarDocumentoResumoPcond(getProtocoloGsv(),getListaCalculoPcond());
-                   
-           
+
+        if (getListaCalculoPcond().isEmpty() == false) {
+
+            GerarPdf gerarPdf = new GerarPdf();
+            gerarPdf.gerarDocumentoResumoPcond(getProtocoloGsv(), getListaCalculoPcond());
+
             donwloadResumoPcond();
-            
-            
-            
+
         }
-        
-        
-        
-        
-        
-        
-        
+
     }
-    
-    
-    
-   
-    
-    
-    public void donwloadResumoPcond(){
-        
-         try {
+
+    public void donwloadResumoPcond() {
+
+        try {
             FacesContext fc = FacesContext.getCurrentInstance();
             ExternalContext externalContext = fc.getExternalContext();
 
@@ -267,16 +261,11 @@ public class ControleCalculo implements Serializable {
 
         }
 
-         
-        
-        
     }
-    
-    
-    
 
     public void duplicar() throws ParseException, IOException, DocumentException, Exception {
 
+        getCalculoDAO().getEm().clear();
         if (getSaldoNaDataBase() != null) {
             setSaldoNaDataBase(null);
 
@@ -803,36 +792,32 @@ public class ControleCalculo implements Serializable {
         }
 
     }
-    
-    
-    public void adicionarValorAtributosCalcPcond(Calculo calculo) throws Exception{
-            getCalculoParaPcond().setSaldoBase(calculo.getSaldoBase());
-            getCalculoParaPcond().setCliente(calculo.getCliente());
-            getCalculoParaPcond().setNomeBanco(calculo.getNomeBanco());
-            getCalculoParaPcond().setNumeroAgencia(calculo.getNumeroAgencia());
-            getCalculoParaPcond().setNumeroConta(calculo.getNumeroConta());
-            getCalculoParaPcond().setDiaBase(calculo.getDiaBase());
-            getCalculoParaPcond().setListaPeriodoCalculo(calculo.getListaPeriodoCalculo());
-            getCalculoParaPcond().setMora(calculo.getMora());
-            getCalculoParaPcond().setMetodologia(calculo.getMetodologia());
-            getCalculoParaPcond().setHonorario(calculo.getHonorario());
-            getCalculoParaPcond().setMulta(calculo.getMulta());
-            getCalculoParaPcond().setProtocoloGsv(calculo.getProtocoloGsv());
-            getCalculoParaPcond().setFuncionario(calculo.getFuncionario());
-            
-            getCalculoParaPcond().setPcond(true);
-            alterarParametrosParaPcond(getCalculoParaPcond());
-            MotorCalculoPoupanca motorCalculoPoupanca = new MotorCalculoPoupanca();
-            motorCalculoPoupanca.calcularPcondparaListaResumo(getCalculoParaPcond());
-            getListaCalculoPcond().add(getCalculoParaPcond());
+
+    public void adicionarValorAtributosCalcPcond(Calculo calculo) throws Exception {
+        getCalculoParaPcond().setSaldoBase(calculo.getSaldoBase());
+        getCalculoParaPcond().setCliente(calculo.getCliente());
+        getCalculoParaPcond().setNomeBanco(calculo.getNomeBanco());
+        getCalculoParaPcond().setNumeroAgencia(calculo.getNumeroAgencia());
+        getCalculoParaPcond().setNumeroConta(calculo.getNumeroConta());
+        getCalculoParaPcond().setDiaBase(calculo.getDiaBase());
+        getCalculoParaPcond().setListaPeriodoCalculo(calculo.getListaPeriodoCalculo());
+        getCalculoParaPcond().setMora(calculo.getMora());
+        getCalculoParaPcond().setMetodologia(calculo.getMetodologia());
+        getCalculoParaPcond().setHonorario(calculo.getHonorario());
+        getCalculoParaPcond().setMulta(calculo.getMulta());
+        getCalculoParaPcond().setProtocoloGsv(calculo.getProtocoloGsv());
+        getCalculoParaPcond().setFuncionario(calculo.getFuncionario());
+
+        getCalculoParaPcond().setPcond(true);
+        alterarParametrosParaPcond(getCalculoParaPcond());
+        MotorCalculoPoupanca motorCalculoPoupanca = new MotorCalculoPoupanca();
+        motorCalculoPoupanca.calcularPcondparaListaResumo(getCalculoParaPcond());
+        getListaCalculoPcond().add(getCalculoParaPcond());
     }
-    
-    
 
     public void avaliarParaImprimir(Calculo calculo) throws DocumentException, ParseException, IOException, Exception {
         if (calculo.isPcond()) {
 
-            
             getCalculoParaPcond().setSaldoBase(calculo.getSaldoBase());
             getCalculoParaPcond().setCliente(calculo.getCliente());
             getCalculoParaPcond().setNomeBanco(calculo.getNomeBanco());
@@ -846,11 +831,11 @@ public class ControleCalculo implements Serializable {
             getCalculoParaPcond().setMulta(calculo.getMulta());
             getCalculoParaPcond().setProtocoloGsv(calculo.getProtocoloGsv());
             getCalculoParaPcond().setFuncionario(calculo.getFuncionario());
-            
+
             getCalculoParaPcond().setPcond(true);
 
             gerarDocumentoPcondSemSalvar(getCalculoParaPcond());
-            downloadPcond(calculoParaPcond);
+            downloadPcond(getCalculoParaPcond());
         } else {
             downloadPdf(calculo);
         }
@@ -1002,7 +987,7 @@ public class ControleCalculo implements Serializable {
             if (calculo.getMetodologia().getId() == 4) {
                 calculo.getJuroRemuneratorio().setDataInicio(calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo());
                 calculo.getJuroRemuneratorio().setDataFinal(calculo.getListaPeriodoCalculo().get(0).getDataFinalCalculo());
-                Expurgo expurgoParaApadecoJuroRem  =  getExpurgoDAO().getEm().find(Expurgo.class, 2);
+                Expurgo expurgoParaApadecoJuroRem = getExpurgoDAO().getEm().find(Expurgo.class, 2);
                 calculo.setExpurgo(expurgoParaApadecoJuroRem);
                 calculo.setPcond(false);
 
