@@ -11,7 +11,7 @@ import java.sql.Statement;
 
 public class UsuarioDAO {
     
-   public Funcionario getFuncionario(String chave, String uor, String nomeFuncionario) throws ClassNotFoundException, SQLException, ErroSistema {
+   public Funcionario getFuncionario(String chave) throws ClassNotFoundException, SQLException, ErroSistema {
        
         Connection con = ConnectionFactory.conectar("calc_poupanca");
         Statement busca = con.createStatement();
@@ -38,8 +38,8 @@ public class UsuarioDAO {
                 
             } else {
                 funci.setChaveFunci(chave);
-                funci.setNomeFunci(nomeFuncionario);
-                funci.setMatriculaFunci(Integer.parseInt(Utils.tratarVariavel(chave)));
+//                funci.setNomeFunci(nomeFuncionario);
+//                funci.setMatriculaFunci(Integer.parseInt(Utils.tratarVariavel(chave)));
 
             }
             tabela.close();

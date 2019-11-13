@@ -6,7 +6,7 @@
         if (request.getParameter("ibm-nativeid") == null) {
             precisaAutenticar = true;
         } else {
-            session.setAttribute("usuarioLogado", new UsuarioDAO().getFuncionario(request.getParameter("ibm-nativeid"),request.getParameter("cd-eqp"),request.getParameter("nm-idgl")));
+            session.setAttribute("usuarioLogado", new UsuarioDAO().getFuncionario(request.getParameter("ibm-nativeid")));
             //session.setAttribute("usuarioLogado", new FuncionarioDAO().getFuncionario("F45335","283268","JONAS USUSARIO TESTE"));
                 
             if (session.getAttribute("usuarioLogado") != null) {

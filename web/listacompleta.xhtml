@@ -65,9 +65,11 @@
 
 
                     <h:outputLabel value="CPF:"></h:outputLabel>
-                    <p:inputMask validator="validaCpf" mask="999.999.999-99" value="#{controleListaCompleta.calculo.cliente.cpf}" style="height: 30px;width: 150px" >
-                         <f:ajax listener="#{controleCalculo.alterarClienteCalculo(c)}" execute="cpf" render="cpf nomeCliente" event="change"></f:ajax>
-                    </p:inputMask>
+                    <p:inputText validator="validaCpfCnpj"  value="#{controleListaCompleta.calculo.cliente.cpf}" style="height: 30px;width: 150px" >
+                        
+                        <f:converter converterId="converterCpfCnpj"></f:converter>
+                        <f:ajax listener="#{controleCalculo.alterarClienteCalculo(c)}" execute="cpf" render="cpf nomeCliente" event="change"></f:ajax>
+                    </p:inputText>>
 
                     <h:outputLabel value="Nome:"></h:outputLabel>
                     <h:inputText value="#{controleListaCompleta.calculo.cliente.nomeCliente}" style="height: 30px;width: 400px" ></h:inputText>
@@ -218,10 +220,6 @@
                             </h:graphicImage>                                    
                         </h:commandLink> 
 
-                        <h:commandLink  id="editar" >
-                            <f:ajax listener="#{controleListaCompleta.editar(c)}" execute="@all" render="@all" event="click" ></f:ajax>
-                            <h:graphicImage  width="20px" library="img" name="pencil.png" title="Editar" ></h:graphicImage>                                    
-                        </h:commandLink>
 
                     </h:column>
 

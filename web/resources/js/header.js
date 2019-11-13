@@ -65,7 +65,7 @@ function  uperCaseChave(param2){
 
 
 
-function  formataConta(valor, nomeComponente){
+function  formataCpfCnpj(valor, nomeComponente){
     
    
     
@@ -98,10 +98,10 @@ function  formataConta(valor, nomeComponente){
             
         }
        
-        
+        //alert(numero);
        var nomeComponenteFormatado = "#".concat(nomeComponente);
        
-        $("#saldoBase").val((numero));
+        $(nomeComponenteFormatado).val((numero));
         
         
 }
