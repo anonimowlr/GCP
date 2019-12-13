@@ -71,9 +71,9 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Menu<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><h:link outcome="home.jsf" value="Início"></h:link></li>
-                                <li><h:link outcome="acesso.jsf" value="Concedar acesso" rendered="#{controleFuncionario.cargoGerencial}"></h:link></li>
+                                <li><h:link outcome="acesso.jsf" value="Conceder acesso" rendered="#{controleFuncionario.cargoGerencial}"></h:link></li>
                                 <li><h:link outcome="calculo.jsf" value="Calcular" rendered="#{controleFuncionario.funcionarioComAcesso}" ></h:link></li>
-                                <li><h:link outcome="listacompleta.jsf" value="Consultas" ></h:link></li>
+                                <li><h:link outcome="listacompleta.jsf" value="Consultas" rendered="#{controleFuncionario.cargoGerencial}"></h:link></li>
                                 
                             </ul>
                         </li>

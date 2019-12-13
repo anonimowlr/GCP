@@ -69,7 +69,6 @@
                         </h:inputText>
 
 
-
                     </h:panelGrid>
                     <h:panelGrid columns="6">
                         <h:panelGroup id="grupoHonorMulta">
@@ -89,14 +88,18 @@
                             <h:outputLabel value="Valor Multa R$: " rendered="#{controleCalculo.editar}">&nbsp;</h:outputLabel>
                             <h:inputText id="vlMulta" value="#{controleCalculo.multa.valorMulta}"  rendered="#{controleCalculo.editar}" style="height: 30px;width: 150px" disabled="#{controleCalculo.multa.taxaMulta > 0}" >
                                 <f:converter converterId="converterMoneySaldoBase"></f:converter>
-                                <f:ajax  execute="@this" render="@this" event="blur"></f:ajax>
+                                <f:ajax  execute="@this" render="@all" event="blur"></f:ajax>
                             </h:inputText>
                             &nbsp;&nbsp;&nbsp;
                             <h:outputLabel value="Valor Honorário R$: " rendered="#{controleCalculo.editar}">&nbsp;</h:outputLabel>
                             <h:inputText id="vlHononario" value="#{controleCalculo.honorario.valorHonorario}"  rendered="#{controleCalculo.editar}" disabled="#{controleCalculo.honorario.taxaHonorario> 0}" style="height: 30px;width: 150px" >
                                 <f:converter converterId="converterMoneySaldoBase"></f:converter>
-                                <f:ajax  execute="@this" render="@this" event="blur"></f:ajax>
+                                <f:ajax  execute="@this" render="@all" event="blur"></f:ajax>
                             </h:inputText>
+                            
+                            <h:commandButton value="Aplicar Parâmetros" class="btn btn-success" rendered="#{controleCalculo.editar}">
+                                <f:ajax listener="#{controleCalculo.gerarPdfResumo()}" execute="@all" render=":grupoHonorMulta" event="click" ></f:ajax>
+                            </h:commandButton>
 
                         </h:panelGroup>
                     </h:panelGrid>
@@ -116,12 +119,12 @@
                                 <h:graphicImage  width="20px" library="img" name="add.png" title="Adicionar Linha" ></h:graphicImage>                                  
                             </h:commandLink>
 
-                            <h:commandLink actionListener="#{controleCalculo.imprimirTodos()}">
+                            <h:commandLink actionListener="#{controleCalculo.compactarDiretorio()}">
                                 <h:graphicImage  width="20px" library="img" name="print.jpg" title="Imprimir Todos os cálculos" rendered="#{controleCalculo.editar}" ></h:graphicImage>                                    
                             </h:commandLink>  
 
                             <h:commandLink actionListener="#{controleCalculo.downloadPdfResumo()}">
-                                <h:graphicImage  width="20px" library="img" name="file.png" title="Imprimir resumo de cálculos vinculados ao protocolo  #{controleCalculo.protocoloGsv.cdPrc}"  rendered="#{controleCalculo.editar}">
+                                <h:graphicImage  width="20px" library="img" name="file.png" title="Imprimir Resumo de cálculos vinculados ao protocolo :   #{controleCalculo.protocoloGsv.cdPrc}"  rendered="#{controleCalculo.editar}">
                                 </h:graphicImage>                                    
                             </h:commandLink>
                             
@@ -184,12 +187,13 @@
 
                         <h:column>
                             <f:facet name="header">Plano Econômico</f:facet>
-                            <h:selectOneMenu id="plano" value="#{c.planoEconomico}" style="height: 30px;width: 120px">
+                            <h:selectOneMenu value="#{c.planoEconomico}" style="height: 30px;width: 120px">
                                 <f:converter converterId="converterPlano"></f:converter>
                                 <f:selectItems value="#{controleCalculo.planoEconomicoDAO.listaTodos}" var="p" itemLabel="#{p.nomePlanoEconomico}"></f:selectItems>
                                 <f:ajax execute="@this" render=":listagem" event="change"></f:ajax>
                             </h:selectOneMenu>
                         </h:column>
+                        
 
                         <h:column >
                             <f:facet name="header">Saldo Base</f:facet>
@@ -269,7 +273,7 @@
 
                         <h:column >
                             <f:facet name="header">PCOND</f:facet>
-                            <h:selectBooleanCheckbox id="checkPcond" value="#{c.pcond}" rendered="#{c.metodologia.id ne 3 and c.metodologia.id ne 4 and c.planoEconomico.id eq 1 and c.valorFinal > 0}">
+                            <h:selectBooleanCheckbox id="checkPcond" value="#{c.pcond}" >
                                 <f:ajax    execute=":listagem" render=":listagem" event="click"></f:ajax>
                             </h:selectBooleanCheckbox>
                         </h:column>
@@ -278,7 +282,7 @@
                             <f:facet name="header">Ações</f:facet>
                             <h:commandLink id="acaoSalvar">
                                 <f:ajax listener="#{controleCalculo.avaliarParaSalvar(c)}" execute=":listagem" render=":listagem  " event="click" ></f:ajax>
-                                <h:graphicImage  width="20px" library="img" name="save.png" title="Salvar/Atualizar este cálculo"  rendered="#{c.pcond eq false}" ></h:graphicImage>  
+                                <h:graphicImage  width="20px" library="img" name="save.png" title="Salvar/Atualizar este cálculo"   ></h:graphicImage>  
                             </h:commandLink>
 
                             <h:commandLink id="acaoImprimirCalculoIndividual" actionListener="#{controleCalculo.avaliarParaImprimir(c)}" rendered="#{c.valorFinal ne null  }">
