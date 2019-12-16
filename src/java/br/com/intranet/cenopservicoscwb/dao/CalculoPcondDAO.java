@@ -25,6 +25,16 @@ public class CalculoPcondDAO<T, E> extends DAOGenerico<CalculoPcond, Object>{
         maximoObjeto = 1000;
         em.clear();
     }
+    
+    
+    
+    
+     public List<CalculoPcond> localizarCalculoPcondPorProtocolo(Integer protocolo) {
+
+        TypedQuery<CalculoPcond> query = em.createQuery(
+        "SELECT c FROM CalculoPcond c WHERE c.protocoloGsv.cdPrc = :name", classePersistente);
+        return query.setParameter("name", protocolo).getResultList();
+    }
 
     
 }

@@ -765,8 +765,11 @@ public class ControleCalculo implements Serializable {
                 calculoPcond.setPlanoEconomico(calculo.getPlanoEconomico());
                 calculoPcond.setListaPeriodoCalculo(calculo.getListaPeriodoCalculo());
                 calculoPcond.setExpurgo(expurgoDAO.localizar(2));
+                calculoPcond.setProtocoloGsv(calculo.getProtocoloGsv());
+                alterarParametrosParaPcond(calculoPcond);
                 motorCalculoPoupanca.calcularPcond(calculoPcond);
                 salvarCalculoPcond(calculoPcond);
+                gerarPdf.gerarDocumentoResumoPcond(getCalculoPcondDAO().localizarCalculoPcondPorProtocolo(getProtocoloGsv().getCdPrc()));
 
             }
 
@@ -813,28 +816,28 @@ public class ControleCalculo implements Serializable {
                 calculoPcond.setPlanoEconomico(calculo.getPlanoEconomico());
                 calculoPcond.setListaPeriodoCalculo(calculo.getListaPeriodoCalculo());
                 calculoPcond.setExpurgo(expurgoDAO.localizar(2));
+                calculoPcond.setProtocoloGsv(calculo.getProtocoloGsv());
+                alterarParametrosParaPcond(calculoPcond);
+               
                 
 
                 motorCalculoPoupanca.calcularPcond(calculoPcond);
                 salvarCalculoPcond(calculoPcond);
+                
+                gerarPdf.gerarDocumentoResumoPcond(getCalculoPcondDAO().localizarCalculoPcondPorProtocolo(getProtocoloGsv().getCdPrc()));
 
             }
         }
     }
 
-    public void alterarParametrosParaPcond(Calculo calculoParaPcond) throws ParseException, IOException, DocumentException {
+    public void alterarParametrosParaPcond(CalculoPcond calculoParaPcond) throws ParseException, IOException, DocumentException {
 
-        if (!calculoParaPcond.isPcond()) {
-            return;
-        }
+       
 
         calculoParaPcond.getListaPeriodoCalculo().get(0).setDataFinalCalculo(Utils.getDataHoraAtualMysqlDate());
         calculoParaPcond.getListaPeriodoCalculo().get(0).setIndice(getIndiceDAO().localizar(1));
         calculoParaPcond.setMora(calculoParaPcond.getMora());
         Honorario honorarioPcond = new Honorario();
-        calculoParaPcond.setHonorario(honorarioPcond);
-        Multa multaPcond = new Multa();
-        calculoParaPcond.setMulta(multaPcond);
         calculoParaPcond.setPlanoEconomico(getPlanoEconomicoDAO().localizar(1));
 
         Mora mora = new Mora();
@@ -871,7 +874,7 @@ public class ControleCalculo implements Serializable {
 
     public void salvarCalculoPcond(CalculoPcond calculoPcond) {
 
-        if (getCalculoPcondDAO().salvar(calculoPcond)) {
+        if (getCalculoPcondDAO().atualizar(calculoPcond)) {
             Util.mensagemInformacao(getCalculoDAO().getMensagem());
 
         } else {
@@ -965,38 +968,19 @@ public class ControleCalculo implements Serializable {
         getCalculoParaPcond().setMulta(calculo.getMulta());
         getCalculoParaPcond().setProtocoloGsv(calculo.getProtocoloGsv());
         getCalculoParaPcond().setFuncionario(calculo.getFuncionario());
+        
 
         getCalculoParaPcond().setPcond(true);
-        alterarParametrosParaPcond(getCalculoParaPcond());
+        alterarParametrosParaPcond(getCalculoPcond());
         MotorCalculoPoupanca motorCalculoPoupanca = new MotorCalculoPoupanca();
         motorCalculoPoupanca.calcularPcondparaListaResumo(getCalculoParaPcond());
         getListaCalculoPcond().add(getCalculoParaPcond());
     }
 
     public void avaliarParaImprimir(Calculo calculo) throws DocumentException, ParseException, IOException, Exception {
-        if (calculo.isPcond()) {
-
-            getCalculoParaPcond().setSaldoBase(calculo.getSaldoBase());
-            getCalculoParaPcond().setCliente(calculo.getCliente());
-            getCalculoParaPcond().setNomeBanco(calculo.getNomeBanco());
-            getCalculoParaPcond().setNumeroAgencia(calculo.getNumeroAgencia());
-            getCalculoParaPcond().setNumeroConta(calculo.getNumeroConta());
-            getCalculoParaPcond().setDiaBase(calculo.getDiaBase());
-            getCalculoParaPcond().setListaPeriodoCalculo(calculo.getListaPeriodoCalculo());
-            getCalculoParaPcond().setMora(calculo.getMora());
-            getCalculoParaPcond().setMetodologia(calculo.getMetodologia());
-            getCalculoParaPcond().setHonorario(calculo.getHonorario());
-            getCalculoParaPcond().setMulta(calculo.getMulta());
-            getCalculoParaPcond().setProtocoloGsv(calculo.getProtocoloGsv());
-            getCalculoParaPcond().setFuncionario(calculo.getFuncionario());
-
-            getCalculoParaPcond().setPcond(true);
-
-            gerarDocumentoPcondSemSalvar(getCalculoParaPcond());
-            downloadPcond(getCalculoParaPcond());
-        } else {
+        
             downloadPdf(calculo);
-        }
+        
     }
 
     public void downloadPdf(Calculo calculo) throws DocumentException, ParseException, FileNotFoundException, IOException {
@@ -1634,13 +1618,13 @@ public class ControleCalculo implements Serializable {
         this.periodoDAO = periodoDAO;
     }
 
-    private void gerarDocumentoPcondSemSalvar(Calculo calculoParaPcond) throws ParseException, IOException, DocumentException, Exception {
-
-        alterarParametrosParaPcond(calculoParaPcond);
-        MotorCalculoPoupanca motorCalculo = new MotorCalculoPoupanca();
-        motorCalculo.calcular(calculoParaPcond);
-
-    }
+//    private void gerarDocumentoPcondSemSalvar(CalculoPcond calculoPcond) throws ParseException, IOException, DocumentException, Exception {
+//
+//        alterarParametrosParaPcond(calculoPcond);
+//        MotorCalculoPoupanca motorCalculo = new MotorCalculoPoupanca();
+//        motorCalculo.calcular(calculoParaPcond);
+//
+//    }
 
     /**
      * @return the inputStream
