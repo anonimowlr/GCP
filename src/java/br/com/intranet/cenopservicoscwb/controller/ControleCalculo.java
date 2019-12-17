@@ -274,14 +274,21 @@ public class ControleCalculo implements Serializable {
 
         if (Utils.getIpHost().equals("172.20.0.33") || Utils.getIpHost().equals("172.20.0.154")) {
             File file = new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + "NPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + "CALCULO DEFESA" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf");
-            file.delete();
+
+            if (file.exists()) {
+                file.delete();
+
+            }
 
         } else if (Utils.getIpHost().equals("192.168.1.101")) {
 
         } else {
 
             File file = new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + calculo.getProtocoloGsv().getCdPrc().toString() + "\\" + "CALCULO DEFESA" + " - " + calculo.getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) + " - " + calculo.getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getValorFinal().toString()) + ".pdf");
-            file.delete();
+            if (file.exists()) {
+                file.delete();
+
+            }
         }
 
     }
@@ -510,6 +517,13 @@ public class ControleCalculo implements Serializable {
             calculo.setExpurgo(null);
             calculo.setPlanoEconomico(null);
 
+            if (calculo.isPcond()) {
+                calculo.getCalculoPcond().setCliente(null);
+                calculo.getCalculoPcond().setFuncionario(null);
+                calculo.getCalculoPcond().setExpurgo(null);
+                calculo.getCalculoPcond().setPlanoEconomico(null);
+            }
+
             if (getCalculoDAO().deletar(calculo)) {
 
                 getProtocoloGsv().getListaCalculo().remove(calculo);
@@ -705,6 +719,35 @@ public class ControleCalculo implements Serializable {
         }
 
     }
+    
+     public void alterarClienteCalculoPcond(CalculoPcond calculo) throws ParseException, IOException, DocumentException {
+
+        try {
+
+            if (calculo.getId() != null) {
+                Cliente cliente = getClienteDAO().localizarCliente(calculo.getCliente().getCpf());
+                if (cliente != null) {
+                    calculo.setCliente(cliente);
+
+                } else {
+
+                    setCliente(new Cliente());
+                    getCliente().setNomeCliente(calculo.getCliente().getNomeCliente());
+                    getCliente().setCpf(calculo.getCliente().getCpf());
+                    calculo.setCliente(getCliente());
+
+                }
+
+            }
+
+            
+
+        } catch (Exception e) {
+            Util.mensagemErro(Util.getMensagemErro(e));
+        }
+
+    }
+
 
     public void avaliarParaSalvar(Calculo calculo) throws ParseException, IOException, DocumentException, Exception {
         setCalculo(calculo);
@@ -747,7 +790,6 @@ public class ControleCalculo implements Serializable {
                     return;
             }
 
-            salvarCalculo(calculo);
             gerarPdf.gerarDocumentoResumo(calculo.getProtocoloGsv());
 
             if (calculo.isPcond() == true) {
@@ -756,6 +798,7 @@ public class ControleCalculo implements Serializable {
                 calculoPcond.setSaldoBase(calculo.getSaldoBase());
                 calculoPcond.setMetodologia(calculo.getMetodologia());
                 calculoPcond.setCliente(calculo.getCliente());
+                alterarClienteCalculoPcond(calculoPcond);
                 calculoPcond.setFuncionario(calculo.getFuncionario());
                 calculoPcond.setNomeBanco(calculo.getNomeBanco());
                 calculoPcond.setNumeroAgencia(calculo.getNumeroAgencia());
@@ -763,14 +806,23 @@ public class ControleCalculo implements Serializable {
                 calculoPcond.setDiaBase(calculo.getDiaBase());
                 calculoPcond.setDataRealizacaoCalculo(calculo.getDataRealizacaoCalculo());
                 calculoPcond.setPlanoEconomico(calculo.getPlanoEconomico());
-                calculoPcond.setListaPeriodoCalculo(calculo.getListaPeriodoCalculo());
+
+                PeriodoCalculo periodocalculoPcond = new PeriodoCalculo();
+                periodocalculoPcond.setDataInicioCalculo(calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo());
+                periodocalculoPcond.setDataFinalCalculo((calculo.getListaPeriodoCalculo().get(calculo.getListaPeriodoCalculo().size() - 1).getDataFinalCalculo()));
+                calculoPcond.adicionarPeriodoCalculo(periodocalculoPcond);
+
                 calculoPcond.setExpurgo(expurgoDAO.localizar(2));
                 calculoPcond.setProtocoloGsv(calculo.getProtocoloGsv());
                 alterarParametrosParaPcond(calculoPcond);
                 motorCalculoPoupanca.calcularPcond(calculoPcond);
-                salvarCalculoPcond(calculoPcond);
+                //salvarCalculoPcond(calculoPcond);
+                calculo.setCalculoPcond(calculoPcond);
+                salvarCalculo(calculo);
                 gerarPdf.gerarDocumentoResumoPcond(getCalculoPcondDAO().localizarCalculoPcondPorProtocolo(getProtocoloGsv().getCdPrc()));
 
+            } else {
+                salvarCalculo(calculo);
             }
 
         } else {
@@ -798,7 +850,6 @@ public class ControleCalculo implements Serializable {
                     return;
             }
 
-            atualizarCalculo(calculo);
             gerarPdf.gerarDocumentoResumo(calculo.getProtocoloGsv());
 
             if (calculo.isPcond() == true) {
@@ -807,6 +858,7 @@ public class ControleCalculo implements Serializable {
                 calculoPcond.setSaldoBase(calculo.getSaldoBase());
                 calculoPcond.setMetodologia(calculo.getMetodologia());
                 calculoPcond.setCliente(calculo.getCliente());
+                alterarClienteCalculoPcond(calculoPcond);
                 calculoPcond.setFuncionario(calculo.getFuncionario());
                 calculoPcond.setNomeBanco(calculo.getNomeBanco());
                 calculoPcond.setNumeroAgencia(calculo.getNumeroAgencia());
@@ -814,25 +866,30 @@ public class ControleCalculo implements Serializable {
                 calculoPcond.setDiaBase(calculo.getDiaBase());
                 calculoPcond.setDataRealizacaoCalculo(calculo.getDataRealizacaoCalculo());
                 calculoPcond.setPlanoEconomico(calculo.getPlanoEconomico());
-                calculoPcond.setListaPeriodoCalculo(calculo.getListaPeriodoCalculo());
+
+                PeriodoCalculo periodocalculoPcond = new PeriodoCalculo();
+                periodocalculoPcond.setDataInicioCalculo(calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo());
+                periodocalculoPcond.setDataFinalCalculo((calculo.getListaPeriodoCalculo().get(calculo.getListaPeriodoCalculo().size() - 1).getDataFinalCalculo()));
+                calculoPcond.adicionarPeriodoCalculo(periodocalculoPcond);
+
                 calculoPcond.setExpurgo(expurgoDAO.localizar(2));
                 calculoPcond.setProtocoloGsv(calculo.getProtocoloGsv());
                 alterarParametrosParaPcond(calculoPcond);
-               
-                
 
                 motorCalculoPoupanca.calcularPcond(calculoPcond);
-                salvarCalculoPcond(calculoPcond);
-                
+                //salvarCalculoPcond(calculoPcond);
+                calculo.setCalculoPcond(calculoPcond);
+                atualizarCalculo(calculo);
+
                 gerarPdf.gerarDocumentoResumoPcond(getCalculoPcondDAO().localizarCalculoPcondPorProtocolo(getProtocoloGsv().getCdPrc()));
 
+            } else {
+                atualizarCalculo(calculo);
             }
         }
     }
 
     public void alterarParametrosParaPcond(CalculoPcond calculoParaPcond) throws ParseException, IOException, DocumentException {
-
-       
 
         calculoParaPcond.getListaPeriodoCalculo().get(0).setDataFinalCalculo(Utils.getDataHoraAtualMysqlDate());
         calculoParaPcond.getListaPeriodoCalculo().get(0).setIndice(getIndiceDAO().localizar(1));
@@ -968,7 +1025,6 @@ public class ControleCalculo implements Serializable {
         getCalculoParaPcond().setMulta(calculo.getMulta());
         getCalculoParaPcond().setProtocoloGsv(calculo.getProtocoloGsv());
         getCalculoParaPcond().setFuncionario(calculo.getFuncionario());
-        
 
         getCalculoParaPcond().setPcond(true);
         alterarParametrosParaPcond(getCalculoPcond());
@@ -978,9 +1034,9 @@ public class ControleCalculo implements Serializable {
     }
 
     public void avaliarParaImprimir(Calculo calculo) throws DocumentException, ParseException, IOException, Exception {
-        
-            downloadPdf(calculo);
-        
+
+        downloadPdf(calculo);
+
     }
 
     public void downloadPdf(Calculo calculo) throws DocumentException, ParseException, FileNotFoundException, IOException {
@@ -1625,7 +1681,6 @@ public class ControleCalculo implements Serializable {
 //        motorCalculo.calcular(calculoParaPcond);
 //
 //    }
-
     /**
      * @return the inputStream
      */
