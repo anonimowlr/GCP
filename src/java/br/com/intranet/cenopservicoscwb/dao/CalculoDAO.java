@@ -6,7 +6,6 @@
 package br.com.intranet.cenopservicoscwb.dao;
 
 import br.com.intranet.cenopservicoscwb.model.entidade.Calculo;
-import br.com.intranet.cenopservicoscwb.model.entidade.Funcionario;
 import java.util.List;
 import javax.persistence.TypedQuery;
 

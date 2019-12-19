@@ -194,38 +194,38 @@ public class ControleCalculo implements Serializable {
 
     }
 
-    public void gerarResumoPcond() throws ParseException, IOException, DocumentException, Exception {
-
-        getListaCalculoPcond().clear();
-
-        for (Calculo calculo : getProtocoloGsv().getListaCalculo()) {
-
-            if (calculo.isPcond() == true) {
-
-                setCalculoParaPcond(new Calculo());
-
-                adicionarValorAtributosCalcPcond(calculo);
-
-            }
-
-        }
-
-        if (getListaCalculoPcond().isEmpty()) {
-            Util.mensagemErro("Selecione pelo menos um cálculo para gerar o resumo de PCOND!!");
-            return;
-
-        }
-
-        if (getListaCalculoPcond().isEmpty() == false) {
-
-            GerarPdf gerarPdf = new GerarPdf();
-            gerarPdf.gerarDocumentoResumoPcond(getProtocoloGsv(), getListaCalculoPcond());
-
-            donwloadResumoPcond();
-
-        }
-
-    }
+//    public void gerarResumoPcond() throws ParseException, IOException, DocumentException, Exception {
+//
+//        getListaCalculoPcond().clear();
+//
+//        for (Calculo calculo : getProtocoloGsv().getListaCalculo()) {
+//
+//            if (calculo.isPcond() == true) {
+//
+//                setCalculoParaPcond(new Calculo());
+//
+//                adicionarValorAtributosCalcPcond(calculo);
+//
+//            }
+//
+//        }
+//
+//        if (getListaCalculoPcond().isEmpty()) {
+//            Util.mensagemErro("Selecione pelo menos um cálculo para gerar o resumo de PCOND!!");
+//            return;
+//
+//        }
+//
+//        if (getListaCalculoPcond().isEmpty() == false) {
+//
+//            GerarPdf gerarPdf = new GerarPdf();
+//            gerarPdf.gerarDocumentoResumoPcond(getProtocoloGsv(), getListaCalculoPcond());
+//
+//            donwloadResumoPcond();
+//
+//        }
+//
+//    }
 
     public void donwloadResumoPcond() {
 
@@ -292,6 +292,34 @@ public class ControleCalculo implements Serializable {
         }
 
     }
+    
+    public void excluirPdfCalculoPcond(Calculo calculo) {
+        
+        
+        if(calculo.getCalculoPcond()==null){
+         return;
+        }
+
+        if (Utils.getIpHost().equals("172.20.0.33") || Utils.getIpHost().equals("172.20.0.154")) {
+            File file = new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + "PCONDNPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + calculo.getProtocoloGsv().getCdPrc().toString() + "/" + "CALCULO INTERNO (PCOND)" + " - " + calculo.getCalculoPcond().getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) + " - " + calculo.getCalculoPcond().getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getCalculoPcond().getValorFinal().toString()) + ".pdf");
+
+            if (file.exists()) {
+                file.delete();
+
+            }
+
+        } else if (Utils.getIpHost().equals("192.168.1.101")) {
+
+        } else {
+
+            File file = new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + "PCONDNPJ" + calculo.getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + calculo.getProtocoloGsv().getCdPrc().toString() + "\\" + "CALCULO INTERNO (PCOND)" + " - " + calculo.getCalculoPcond().getCliente().getNomeCliente() + " - " + Utils.tratarConta(calculo.getNumeroConta().toString()) + " - " + calculo.getCalculoPcond().getPlanoEconomico().getNomePlanoEconomico() + " - " + Utils.converterToMoney(calculo.getCalculoPcond().getValorFinal().toString()) + ".pdf");
+            if (file.exists()) {
+                file.delete();
+
+            }
+        }
+
+    }
 
     public void compactarDiretorio() {
         Utils util = new Utils();
@@ -315,6 +343,32 @@ public class ControleCalculo implements Serializable {
         try {
             util.compactarDiretorio(dir, zipDirName);
             downloadZip();
+        } catch (Exception e) {
+        }
+
+    }
+    public void compactarDiretorioPcond() {
+        Utils util = new Utils();
+
+        File dir = null;
+        String zipDirName = null;
+
+        if (Utils.getIpHost().equals("172.20.0.33") || Utils.getIpHost().equals("172.20.0.154")) {
+
+            dir = new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + "PCONDNPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + getProtocoloGsv().getCdPrc().toString());
+            zipDirName = "/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + "PCONDNPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + getProtocoloGsv().getCdPrc().toString() + ".zip";
+
+        } else if (Utils.getIpHost().equals("192.168.1.101")) {
+
+        } else {
+            dir = new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + "PCONDNPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + getProtocoloGsv().getCdPrc().toString());
+            zipDirName = "C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + "PCONDNPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + getProtocoloGsv().getCdPrc().toString() + ".zip";
+
+        }
+
+        try {
+            util.compactarDiretorio(dir, zipDirName);
+            downloadZipPcond();
         } catch (Exception e) {
         }
 
@@ -389,7 +443,11 @@ public class ControleCalculo implements Serializable {
     public void gerarPdfResumo() throws IOException, DocumentException, ParseException {
 
         MotorCalculoPoupanca motorCalculoPoupanca = new MotorCalculoPoupanca();
-        motorCalculoPoupanca.atualizaMoraHonorarioMultaJuroRemuneratorio(getProtocoloGsv().getListaCalculo().get(0));
+//       motorCalculoPoupanca.atualizaMoraHonorarioMultaJuroRemuneratorio(getProtocoloGsv().getListaCalculo().get(0));
+        motorCalculoPoupanca.calcularHonorarioMulta(getProtocoloGsv());
+        getProtocoloGsvDAO().atualizar(getProtocoloGsv());
+        
+       
 
         GerarPdf gerarPdf = new GerarPdf();
         gerarPdf.gerarDocumentoResumo(getProtocoloGsv());
@@ -431,6 +489,21 @@ public class ControleCalculo implements Serializable {
         motorCalculoPoupanca.calcularParaConferencia(calculo);
         setSaldoNaDataBase(getCalculo().getSaldoBase().add(getCalculo().getRemuneracaoBasica().add(getCalculo().getJurosCreditado())));
 
+    }
+    
+    
+    
+    public void verificarPcond(Calculo calculo) throws IOException, DocumentException, ParseException{
+       
+        if(calculo.isPcond()== false && calculo.getCalculoPcond() != null){
+            excluirPdfCalculoPcond(calculo);
+            getCalculoPcondDAO().deletar(calculo.getCalculoPcond());
+            calculo.setCalculoPcond(null);
+            GerarPdf gerarPdf = new GerarPdf();
+            gerarPdf.gerarDocumentoResumoPcond(getCalculoPcondDAO().getListaTodos());
+            
+        }
+        
     }
 
     public void upload(Calculo calculo) {
@@ -518,10 +591,16 @@ public class ControleCalculo implements Serializable {
             calculo.setPlanoEconomico(null);
 
             if (calculo.isPcond()) {
+                excluirPdfCalculoPcond(calculo);
                 calculo.getCalculoPcond().setCliente(null);
                 calculo.getCalculoPcond().setFuncionario(null);
                 calculo.getCalculoPcond().setExpurgo(null);
                 calculo.getCalculoPcond().setPlanoEconomico(null);
+                if ( !getCalculoPcondDAO().localizarCalculoPcondPorProtocolo(getProtocoloGsv().getCdPrc()).equals(0)){
+                    GerarPdf gerarPdf = new GerarPdf();
+                    gerarPdf.gerarDocumentoResumoPcond(getCalculoPcondDAO().localizarCalculoPcondPorProtocolo(getProtocoloGsv().getCdPrc()));
+                }                
+                
             }
 
             if (getCalculoDAO().deletar(calculo)) {
@@ -530,7 +609,9 @@ public class ControleCalculo implements Serializable {
                 getProtocoloGsvDAO().salvar(getProtocoloGsv());
 
                 gerarPdfResumo();
-
+               
+                
+                
                 Util.mensagemInformacao(getCalculoDAO().getMensagem());
 
             } else {
@@ -818,16 +899,19 @@ public class ControleCalculo implements Serializable {
                 motorCalculoPoupanca.calcularPcond(calculoPcond);
                 //salvarCalculoPcond(calculoPcond);
                 calculo.setCalculoPcond(calculoPcond);
-                salvarCalculo(calculo);
+                atualizarCalculo(calculo);
                 gerarPdf.gerarDocumentoResumoPcond(getCalculoPcondDAO().localizarCalculoPcondPorProtocolo(getProtocoloGsv().getCdPrc()));
+                novo();
 
             } else {
                 salvarCalculo(calculo);
+                novo();
             }
 
         } else {
 
             excluirPdfCalculo(calculo);
+            excluirPdfCalculoPcond(calculo);
             complementarDadosCalculo(calculo);
 
             MotorCalculoPoupanca motorCalculoPoupanca = new MotorCalculoPoupanca();
@@ -882,9 +966,11 @@ public class ControleCalculo implements Serializable {
                 atualizarCalculo(calculo);
 
                 gerarPdf.gerarDocumentoResumoPcond(getCalculoPcondDAO().localizarCalculoPcondPorProtocolo(getProtocoloGsv().getCdPrc()));
+                novo();
 
             } else {
                 atualizarCalculo(calculo);
+                novo();
             }
         }
     }
@@ -947,6 +1033,9 @@ public class ControleCalculo implements Serializable {
         if (getCalculoDAO().atualizar(calculo)) {
 
             Util.mensagemInformacao(getCalculoDAO().getMensagem());
+            
+           
+            
         } else {
             Util.mensagemErro(getCalculoDAO().getMensagem());
 
@@ -1174,7 +1263,7 @@ public class ControleCalculo implements Serializable {
 
             externalContext.responseReset();
             externalContext.setResponseContentType("application/zip");
-            externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\"" + "Calculos" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() + ".zip");
+            externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\"" + "CalculosDefesa" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() + ".zip");
 
             if (Utils.getIpHost().equals("172.20.0.33") || Utils.getIpHost().equals("172.20.0.154")) {
 
@@ -1186,6 +1275,49 @@ public class ControleCalculo implements Serializable {
 
             } else {
                 setInputStream(new FileInputStream(new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + getProtocoloGsv().getCdPrc().toString() + ".zip")));
+
+            }
+
+            //FileInputStream inputStream = new FileInputStream(new File("/opt/apache-tomcat-8.5.39/webapps/utilitario/" + "NPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + "Resumo de Calculo" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() + ".pdf"));
+            //FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\f7864599\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "\\"+ "Resumo de Calculo" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() +  ".pdf"));
+            //FileInputStream inputStream = new FileInputStream(new File("C:\\Users\\f7864599\\Desktop\\DistribuidorPoupancaTeste\\" + "NPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + "Resumo de Calculo" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() + ".pdf"));
+            OutputStream out = externalContext.getResponseOutputStream();
+            byte[] buffer = new byte[1024];
+            int lenght;
+
+            while ((lenght = getInputStream().read(buffer)) > 0) {
+                out.write(buffer);
+            }
+
+            out.flush();
+            fc.responseComplete();
+        } catch (Exception e) {
+            Util.mensagemErro(Util.getMensagemErro(e));
+
+        }
+
+    }
+    
+     public void downloadZipPcond() throws DocumentException, ParseException, FileNotFoundException, IOException {
+
+        try {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            ExternalContext externalContext = fc.getExternalContext();
+
+            externalContext.responseReset();
+            externalContext.setResponseContentType("application/zip");
+            externalContext.setResponseHeader("Content-Disposition", "attachment;filename=\"" + "CalculosPcond" + " - " + getProtocoloGsv().getNpj().getNrPrc().toString() + " - " + " Protocolo Gsv" + " " + getProtocoloGsv().getCdPrc().toString() + ".zip");
+
+            if (Utils.getIpHost().equals("172.20.0.33") || Utils.getIpHost().equals("172.20.0.154")) {
+
+                setInputStream(new FileInputStream(new File("/usr/local/apache-tomcat-8.0.15/webapps/docsPoupanca/" + "PCONDNPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "/" + getProtocoloGsv().getCdPrc().toString() + ".zip")));
+
+            } else if (Utils.getIpHost().equals("192.168.1.101")) {
+
+                setInputStream(new FileInputStream(new File("C:\\Users\\PC_LENOVO\\Desktop\\DistribuidorPoupancaTeste\\" + "PCONDNPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + getProtocoloGsv().getCdPrc().toString() + ".zip")));
+
+            } else {
+                setInputStream(new FileInputStream(new File("C:\\Users\\f5078775\\Desktop\\DistribuidorPoupancaTeste\\" + "PCONDNPJ" + getProtocoloGsv().getNpj().getNrPrc().toString() + "\\" + getProtocoloGsv().getCdPrc().toString() + ".zip")));
 
             }
 

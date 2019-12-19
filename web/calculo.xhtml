@@ -96,7 +96,7 @@
                                 <f:converter converterId="converterMoneySaldoBase"></f:converter>
                                 <f:ajax  execute="@this" render="@all" event="blur"></f:ajax>
                             </h:inputText>
-                            
+                            &nbsp;&nbsp;&nbsp;
                             <h:commandButton value="Aplicar Parâmetros" class="btn btn-success" rendered="#{controleCalculo.editar}">
                                 <f:ajax listener="#{controleCalculo.gerarPdfResumo()}" execute="@all" render=":grupoHonorMulta" event="click" ></f:ajax>
                             </h:commandButton>
@@ -120,7 +120,10 @@
                             </h:commandLink>
 
                             <h:commandLink actionListener="#{controleCalculo.compactarDiretorio()}">
-                                <h:graphicImage  width="20px" library="img" name="print.jpg" title="Imprimir Todos os cálculos" rendered="#{controleCalculo.editar}" ></h:graphicImage>                                    
+                                <h:graphicImage  width="20px" library="img" name="print.jpg" title="ZIP cálculos defesa" rendered="#{controleCalculo.editar}" ></h:graphicImage>                                    
+                            </h:commandLink>  
+                            <h:commandLink actionListener="#{controleCalculo.compactarDiretorioPcond()}">
+                                <h:graphicImage  width="20px" library="img" name="print.jpg" title="ZIP cálculos PCOND" rendered="#{controleCalculo.editar}" ></h:graphicImage>                                    
                             </h:commandLink>  
 
                             <h:commandLink actionListener="#{controleCalculo.downloadPdfResumo()}">
@@ -128,10 +131,6 @@
                                 </h:graphicImage>                                    
                             </h:commandLink>
                             
-                            <h:commandLink actionListener="#{controleCalculo.gerarResumoPcond()}">
-                                <h:graphicImage  width="20px" library="img" name="file.png" title="Imprimir resumo de PCOND vinculados ao protocolo  #{controleCalculo.protocoloGsv.cdPrc}"  rendered="#{controleCalculo.editar}">
-                                </h:graphicImage>  
-                            </h:commandLink>
                         </f:facet>
 
 
@@ -216,7 +215,7 @@
                                 <h:column>
                                     <h:selectOneMenu value="#{d.indice}" style="height: 30px;width: 120px" disabled="#{c.metodologia.id eq 3}">
                                         <f:converter converterId="converterIndice"></f:converter>
-                                        <f:selectItems value="#{controleCalculo.indiceDAO.listaTodos}" var="p" itemLabel="#{p.nomeIndice}" ></f:selectItems>
+                                        <f:selectItems value="#{controleCalculo.indiceDAO.listaIndiceSemTr}" var="p" itemLabel="#{p.nomeIndice}" ></f:selectItems>
                                     </h:selectOneMenu>
                                 </h:column>
 
@@ -274,14 +273,14 @@
                         <h:column >
                             <f:facet name="header">PCOND</f:facet>
                             <h:selectBooleanCheckbox id="checkPcond" value="#{c.pcond}" >
-                                <f:ajax    execute=":listagem" render=":listagem" event="click"></f:ajax>
+                                <f:ajax  listener="#{controleCalculo.verificarPcond(c)}"    execute=":listagem" render=":listagem" event="click"></f:ajax>
                             </h:selectBooleanCheckbox>
                         </h:column>
 
                         <h:column id="acoes">
                             <f:facet name="header">Ações</f:facet>
                             <h:commandLink id="acaoSalvar">
-                                <f:ajax listener="#{controleCalculo.avaliarParaSalvar(c)}" execute=":listagem" render=":listagem  " event="click" ></f:ajax>
+                                <f:ajax listener="#{controleCalculo.avaliarParaSalvar(c)}" execute=":listagem" render=":listagem" event="click" ></f:ajax>
                                 <h:graphicImage  width="20px" library="img" name="save.png" title="Salvar/Atualizar este cálculo"   ></h:graphicImage>  
                             </h:commandLink>
 
@@ -290,7 +289,7 @@
                             </h:commandLink>
 
                             <h:outputLabel for="file"  class="upload"  >
-                                <h:graphicImage   width="20px" library="img" name="up.png" title="Vincular imagem de extrato à conta informada" ></h:graphicImage>
+                                <h:graphicImage   width="20px" library="img" name="up.png" title="Vincular imagem de extrato à conta informada" rendered="false"></h:graphicImage>
                             </h:outputLabel>
 
                             <h:inputFile  id="file"  value="#{controleCalculo.file}" title="Selecione um arquivo" label="Carregar arquivo"   class="upload"  style="display: none">

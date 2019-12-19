@@ -6,12 +6,16 @@
 package br.com.intranet.cenopservicoscwb.dao;
 
 import br.com.intranet.cenopservicoscwb.model.entidade.Indice;
+import java.util.List;
 
 /**
  *
  * @author f5078775
  */
 public class IndiceDAO<T, E> extends DAOGenerico<Indice, Object>{
+    
+    private List<Indice> listaIndiceSemTr;
+    
 
     public IndiceDAO() {
         super();
@@ -19,5 +23,17 @@ public class IndiceDAO<T, E> extends DAOGenerico<Indice, Object>{
         ordem = "id";
         maximoObjeto = 50; 
     }
+    
+    
+    
+     public List<Indice> getListaIndiceSemTr() {
+
+            String jpql = "From  Indice i where i.id <> 4  order by " + ordem;
+
+        return em.createQuery(jpql).getResultList();
+    }
+    
+    
+    
         
 }
