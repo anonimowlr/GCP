@@ -477,21 +477,107 @@ public class ControleCalculo implements Serializable {
         }
     }
 
-    public void calcularParaConferencia(Calculo calculo) {
+   public void calcularParaConferencia(Calculo calculo) {
+       setCalculo(calculo);
+       
+        boolean verificacao = true;
+        if (calculo.getMetodologia().getId() == 2) {
+            if (calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo() == null) {
+                return;
+            }
 
-        if (calculo.getMetodologia().getId() == 2 && calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo() == null) {
-            return;
+            verificacao = verificarDataInicioPlano(calculo.getListaPeriodoCalculo().get(0).getDataInicioCalculo());
         }
 
-        setCalculo(calculo);
-
-        MotorCalculoPoupanca motorCalculoPoupanca = new MotorCalculoPoupanca();
-        motorCalculoPoupanca.calcularParaConferencia(calculo);
-        setSaldoNaDataBase(getCalculo().getSaldoBase().add(getCalculo().getRemuneracaoBasica().add(getCalculo().getJurosCreditado())));
-
+        if (verificacao) {
+            setCalculo(calculo);
+            MotorCalculoPoupanca motorCalculoPoupanca = new MotorCalculoPoupanca();
+            motorCalculoPoupanca.calcularParaConferencia(calculo);
+            setSaldoNaDataBase(getCalculo().getSaldoBase().add(getCalculo().getRemuneracaoBasica().add(getCalculo().getJurosCreditado())));
+        }
     }
     
     
+    public boolean verificarDataInicioPlano(Date dtInicioPlano) {
+        Calendar dtIniPlano = Calendar.getInstance();
+        dtIniPlano.setTime(dtInicioPlano);
+
+        switch (getCalculo().getPlanoEconomico().getId()) {
+            case 1:
+                if (dtIniPlano.get(Calendar.DAY_OF_MONTH) > 15) {
+                    Util.mensagemErro("No Plano VERÃO o dia base não pode ser superior a 15");
+                    return false;
+                }                
+                if (dtIniPlano.get(Calendar.YEAR) != 1989){
+                    Util.mensagemErro("No Plano VERÃO o mês base não pode ser diferente de 02, 03 ou 04/1989");
+                    return false;
+                }
+                if (dtIniPlano.get(Calendar.MONTH) < 1 || dtIniPlano.get(Calendar.MONTH) > 3) {
+                    Util.mensagemErro("No Plano VERÃO o mês base não pode ser diferente de 02, 03 ou 04/1989");
+                    return false;
+                }
+                break;
+            case 2:
+                if (dtIniPlano.get(Calendar.DAY_OF_MONTH) > 15) {
+                    Util.mensagemErro("No Plano BRESSER o dia base não pode ser superior a 15");
+                    return false;
+                }
+                if (dtIniPlano.get(Calendar.YEAR) != 1987){
+                    Util.mensagemErro("No Plano BRESSER o mês base não pode ser diferente de 07, 08 ou 09/1987");
+                    return false;
+                }
+                if (dtIniPlano.get(Calendar.MONTH) < 6 || dtIniPlano.get(Calendar.MONTH) > 8 ) {
+                    Util.mensagemErro("No Plano BRESSER o mês base não pode ser diferente de 07, 08 ou 09/1987");
+                    return false;
+                }
+                break;
+            case 3:
+                if (dtIniPlano.get(Calendar.DAY_OF_MONTH) > 28) {
+                    Util.mensagemErro("No Plano COLLOR I - ABRIL o dia base não pode ser superior a 28");
+                    return false;
+                }
+                if(dtIniPlano.get(Calendar.YEAR) != 1990){
+                    Util.mensagemErro("No Plano COLLOR I - ABRIL o mês base não pode ser diferente de 05, 06 ou 07/1990");
+                    return false;
+                }
+                if (dtIniPlano.get(Calendar.MONTH) < 4 || dtIniPlano.get(Calendar.MONTH) > 6 ) {
+                    Util.mensagemErro("No Plano COLLOR I - ABRIL o mês base não pode ser diferente de 05, 06 ou 07/1990");
+                    return false;
+                }
+                break;
+            case 4:
+                if (dtIniPlano.get(Calendar.DAY_OF_MONTH) > 28) {
+                    Util.mensagemErro("No Plano COLLOR I - MAIO o dia base não pode ser superior a 28");
+                    return false;
+                }
+                if (dtIniPlano.get(Calendar.YEAR) != 1990){
+                    Util.mensagemErro("No Plano COLLOR I - MAIO o mês base não pode ser diferente de 06, 07 ou 08/1990");
+                    return false;
+                }
+                if (dtIniPlano.get(Calendar.MONTH) < 5 || dtIniPlano.get(Calendar.MONTH) > 7 ) {
+                    Util.mensagemErro("No Plano COLLOR I - MAIO o mês base não pode ser diferente de 06, 07 ou 08/1990");
+                    return false;
+                }
+                break;
+            case 5:
+                if (dtIniPlano.get(Calendar.DAY_OF_MONTH) > 28) {
+                    Util.mensagemErro("No Plano COLLOR II o dia base não pode ser superior a 28");
+                    return false;
+                }
+                if (dtIniPlano.get(Calendar.YEAR) != 1991){
+                    Util.mensagemErro("No Plano COLLOR II o mês base não pode ser diferente de 03, 04 ou 05/1991");
+                    return false;
+                }
+                if (dtIniPlano.get(Calendar.MONTH) < 2 || dtIniPlano.get(Calendar.MONTH) > 4 ) {
+                    Util.mensagemErro("No Plano COLLOR II o mês base não pode ser diferente de 03, 04 ou 05/1991");
+                    return false;
+                }
+                break;
+        }
+        return true;
+    }
+
+   
     
     public void verificarPcond(Calculo calculo) throws IOException, DocumentException, ParseException{
        

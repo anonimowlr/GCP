@@ -162,11 +162,9 @@ public class ControleListaCompleta implements Serializable {
         
         Calculo calculo = getListaCompletaDAO().localizar(index);
         
-        if(calculo.isPcond()){
-            downloadPcond(calculo);
-        } else{
+       
             downloadPdf(calculo);
-        }
+        
         
     }
     
